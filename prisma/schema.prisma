@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String  @id @default(uuid())
+  first_name String  @db.VarChar(100)
+  last_name  String  @db.VarChar(100)
+  email      String  @unique @db.VarChar(255)
+  password   String  @db.VarChar(255)
+  imageUrl   String? @db.Text
+
+  reviews  Review[]
+  bookings Booking[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Car {
+  id           String   @id @default(uuid())
+  brand        String
+  model        String
+  category     String
+  image        String   @db.Text // Foto principal
+  year         Int
+  pricePerHour Float
+  description  String   @db.Text
+  available    Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  specifications Json // [{ label: "Motor", value: "3.0L Twin Turbo" }, ...]
+  features       String[] // ["Bluetooth", "GPS integrado", "Teto solar"]
+
+  images   CarImage[]
+  reviews  Review[]
+  bookings Booking[]
+}
+
+model CarImage {
+  id        String   @id @default(uuid())
+  carId     String
+  url       String   @db.Text
+  createdAt DateTime @default(now())
+  car       Car      @relation(fields: [carId], references: [id])
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  carId     String
+  userId    String
+  rating    Int
+  comment   String?  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  car       Car      @relation(fields: [carId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Booking {
+  id         String        @id @default(uuid())
+  carId      String
+  userId     String
+  startDate  DateTime
+  endDate    DateTime
+  totalHours Int
+  totalPrice Float
+  status     BookingStatus @default(PENDING)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  car        Car           @relation(fields: [carId], references: [id])
+  user       User          @relation(fields: [userId], references: [id])
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
