@@ -1,7 +1,6 @@
 import prismaClient from "../../../../prisma/prisma.js";
 
 interface CreateUserType {
-  id: string;
   first_name: string;
   last_name: string;
   email: string;
