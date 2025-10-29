@@ -5,13 +5,7 @@ import type {
 } from "../../types/user.ts";
 
 import { v4 as uuidv4 } from "uuid";
-
-interface CreateUserUseCaseType {
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-}
+import type { CreateUserSchema } from "../../schemas/user.js";
 
 export class CreateUserUseCase {
   constructor(
@@ -22,7 +16,7 @@ export class CreateUserUseCase {
     this.getUserByEmailRepository = getUserByEmailRepository;
   }
 
-  async execute(params: CreateUserUseCaseType) {
+  async execute(params: CreateUserSchema) {
     const emailIsAlreadyInUse = await this.getUserByEmailRepository.execute(
       params.email
     );

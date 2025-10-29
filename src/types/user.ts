@@ -13,3 +13,12 @@ export interface IUsersRepository {
 export interface IGetUserByEmailRepository {
   execute(email: string): Promise<User | null>;
 }
+
+export interface ICreateUserUseCase {
+  execute(params: {
+    first_name: string;
+    last_name: string;
+    email: string;
+    password: string;
+  }): Promise<User>;
+}
