@@ -1,13 +1,15 @@
-import type { User } from "@prisma/client";
+import type { CreateUserSchema } from "../schemas/user.js";
+
+export type UserDTO = Omit<CreateUserSchema, "password"> & {
+  password_hash: string;
+};
+
+export type User = Omit<CreateUserSchema, "password"> & {
+  id: string;
+};
 
 export interface IUsersRepository {
-  execute(params: {
-    id: string;
-    first_name: string;
-    last_name: string;
-    email: string;
-    password: string;
-  }): Promise<User>;
+  execute(params: UserDTO): Promise<User>;
 }
 
 export interface IGetUserByEmailRepository {
@@ -15,10 +17,5 @@ export interface IGetUserByEmailRepository {
 }
 
 export interface ICreateUserUseCase {
-  execute(params: {
-    first_name: string;
-    last_name: string;
-    email: string;
-    password: string;
-  }): Promise<User>;
+  execute(params: UserDTO): Promise<User>;
 }
