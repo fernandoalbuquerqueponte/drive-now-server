@@ -1,15 +1,14 @@
 import bcrypt from "bcrypt";
 import type {
   IGetUserByEmailRepository,
-  IUsersRepository,
+  ICreateUsersRepository,
 } from "../../types/user.ts";
 
-import { v4 as uuidv4 } from "uuid";
 import type { CreateUserSchema } from "../../schemas/user.js";
 
 export class CreateUserUseCase {
   constructor(
-    private createUserRepository: IUsersRepository,
+    private createUserRepository: ICreateUsersRepository,
     private getUserByEmailRepository: IGetUserByEmailRepository
   ) {
     this.createUserRepository = createUserRepository;
@@ -25,16 +24,17 @@ export class CreateUserUseCase {
       throw new Error("Email já está em uso");
     }
 
-    const hashedPassword = bcrypt.hash(params.password, 10);
-    const userId = uuidv4();
+    const hashedPassword = await bcrypt.hash(params.password, 10);
 
-    const user = {
-      ...params,
-      id: userId,
-      password: await hashedPassword,
+    const userParams = {
+      first_name: params.first_name,
+      last_name: params.last_name,
+      imageUrl: params.imageUrl,
+      email: params.email,
+      hashedPassword: hashedPassword,
     };
 
-    const createdUser = await this.createUserRepository.execute(user);
+    const createdUser = await this.createUserRepository.execute(userParams);
 
     return createdUser;
   }
