@@ -1,9 +1,9 @@
 import type { Request } from "express";
-import type { ICreateUserUseCase } from "../../types/user.js";
 import { createUserSchema } from "../../schemas/user.js";
+import type { CreateUserUseCase } from "../../use-cases/index.js";
 
 export class CreateUserController {
-  constructor(private createUserUseCase: ICreateUserUseCase) {
+  constructor(private createUserUseCase: CreateUserUseCase) {
     this.createUserUseCase = createUserUseCase;
   }
 
@@ -20,6 +20,7 @@ export class CreateUserController {
         body: user,
       };
     } catch (error) {
+      console.error(error);
       throw new Error("Erro ao criar usuário");
     }
   }
