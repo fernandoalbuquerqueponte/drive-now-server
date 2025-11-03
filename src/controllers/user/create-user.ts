@@ -1,6 +1,7 @@
 import type { Request } from "express";
 import { createUserSchema } from "../../schemas/user.js";
 import type { CreateUserUseCase } from "../../use-cases/index.js";
+import { created, serverError } from "../helpers/http.js";
 
 export class CreateUserController {
   constructor(private createUserUseCase: CreateUserUseCase) {
@@ -15,13 +16,10 @@ export class CreateUserController {
 
       const user = await this.createUserUseCase.execute(params);
 
-      return {
-        statusCode: 201,
-        body: user,
-      };
+      return created(user);
     } catch (error) {
       console.error(error);
-      throw new Error("Erro ao criar usuário");
+      return serverError()
     }
   }
 }
