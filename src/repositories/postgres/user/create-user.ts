@@ -16,6 +16,15 @@ export class PostgresCreateUserRepository implements ICreateUsersRepository {
         imageUrl: params.imageUrl ?? null,
         password: params.hashedPassword,
       },
+      select: {
+        id: true,
+        first_name: true,
+        last_name: true,
+        email: true,
+        imageUrl: true,
+        created_at: true,
+        updated_at: true,
+      },
     });
 
     return user;
