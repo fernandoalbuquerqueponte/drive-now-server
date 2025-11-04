@@ -26,3 +26,8 @@ export const badRequest = <T>(message: string): ErrorResponse => ({
   statusCode: 400,
   body: { message },
 });
+
+export const successResponse = <T>(body: T): SuccessResponse<T> => ({
+  statusCode: 200,
+  body,
+});

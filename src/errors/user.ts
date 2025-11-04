@@ -4,3 +4,10 @@ export class UserAlreadyExistsError extends Error {
     this.name = "UserAlreadyExistsError";
   }
 }
+
+export class UserNotFoundError extends Error {
+  constructor() {
+    super("User not found.");
+    this.name = "UserNotFoundError";
+  }
+}
