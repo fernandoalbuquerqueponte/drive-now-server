@@ -15,3 +15,7 @@ export interface ICreateUsersRepository {
 export interface IGetUserByEmailRepository {
   execute(email: string): Promise<User | null>;
 }
+
+export interface IGetUserByIdRepository {
+  execute(userId: string): Promise<User | null>;
+}
