@@ -1,7 +1,8 @@
 import type { Request } from "express";
 import { createUserSchema } from "../../schemas/user.js";
 import type { CreateUserUseCase } from "../../use-cases/index.js";
-import { created, serverError } from "../helpers/http.js";
+import { badRequest, created, serverError } from "../helpers/http.js";
+import { UserAlreadyExistsError } from "../../errors/user.js";
 
 export class CreateUserController {
   constructor(private createUserUseCase: CreateUserUseCase) {
@@ -18,8 +19,12 @@ export class CreateUserController {
 
       return created(user);
     } catch (error) {
+      if (error instanceof UserAlreadyExistsError) {
+        return badRequest(error.message);
+      }
+
       console.error(error);
-      return serverError()
+      return serverError();
     }
   }
 }

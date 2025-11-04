@@ -21,3 +21,8 @@ export const serverError = <T>(): ErrorResponse => ({
     message: "Internal server error",
   },
 });
+
+export const badRequest = <T>(message: string): ErrorResponse => ({
+  statusCode: 400,
+  body: { message },
+});

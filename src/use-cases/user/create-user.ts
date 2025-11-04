@@ -5,6 +5,7 @@ import type {
 } from "../../types/user.ts";
 
 import type { CreateUserSchema } from "../../schemas/user.js";
+import { UserAlreadyExistsError } from "../../errors/user.js";
 
 export class CreateUserUseCase {
   constructor(
@@ -21,7 +22,7 @@ export class CreateUserUseCase {
     );
 
     if (emailIsAlreadyInUse) {
-      throw new Error("Email já está em uso");
+      throw new UserAlreadyExistsError(params.email);
     }
 
     const hashedPassword = await bcrypt.hash(params.password, 10);
