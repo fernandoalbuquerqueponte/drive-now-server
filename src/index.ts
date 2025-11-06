@@ -4,6 +4,9 @@ import { PostgresCreateUserRepository } from "./repositories/postgres/user/creat
 import { CreateUserController } from "./controllers/user/create-user.js";
 import { CreateUserUseCase } from "./use-cases/user/create-user.js";
 import { PostgresEmailIsAlreadyInUseUserRepository } from "./repositories/postgres/user/get-user-by-email.js";
+import { PostgresGetUserByIdRepository } from "./repositories/postgres/user/get-user-by-id.js";
+import { GetUserByIdUseCase } from "./use-cases/user/get-user-by-id.js";
+import { GetUserByIdController } from "./controllers/user/get-user-by-id.js";
 
 const app = express();
 
@@ -25,6 +28,16 @@ app.post("/api/users", async (req: Request, res: Response) => {
   const createUserController = new CreateUserController(createUserUseCase);
 
   const response = await createUserController.execute(req);
+
+  res.status(response.statusCode).send(response.body);
+});
+
+app.get("/api/users/:userId", async (req: Request, res: Response) => {
+  const getUserByIdRepository = new PostgresGetUserByIdRepository();
+  const getUserByIdUseCase = new GetUserByIdUseCase(getUserByIdRepository);
+  const getUserByIdController = new GetUserByIdController(getUserByIdUseCase);
+
+  const response = await getUserByIdController.execute(req);
 
   res.status(response.statusCode).send(response.body);
 });
