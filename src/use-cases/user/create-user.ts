@@ -6,14 +6,17 @@ import type {
 
 import type { CreateUserSchema } from "../../schemas/user.js";
 import { UserAlreadyExistsError } from "../../errors/user.js";
+import type { PasswordHasherAdapter } from "../../adapters/password-hasher.js";
 
 export class CreateUserUseCase {
   constructor(
     private createUserRepository: ICreateUsersRepository,
-    private getUserByEmailRepository: IGetUserByEmailRepository
+    private getUserByEmailRepository: IGetUserByEmailRepository,
+    private passwordHasherAdapter: PasswordHasherAdapter
   ) {
     this.createUserRepository = createUserRepository;
     this.getUserByEmailRepository = getUserByEmailRepository;
+    this.passwordHasherAdapter = passwordHasherAdapter;
   }
 
   async execute(params: CreateUserSchema) {
@@ -25,7 +28,9 @@ export class CreateUserUseCase {
       throw new UserAlreadyExistsError(params.email);
     }
 
-    const hashedPassword = await bcrypt.hash(params.password, 10);
+    const hashedPassword = await this.passwordHasherAdapter.execute(
+      params.password
+    );
 
     const userParams = {
       first_name: params.first_name,
