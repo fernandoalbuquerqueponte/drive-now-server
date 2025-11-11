@@ -37,7 +37,7 @@ export class CreateUserUseCase {
       last_name: params.last_name,
       imageUrl: params.imageUrl,
       email: params.email,
-      hashedPassword: hashedPassword,
+      password: hashedPassword,
     };
 
     const createdUser = await this.createUserRepository.execute(userParams);

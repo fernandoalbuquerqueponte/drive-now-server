@@ -1,15 +1,11 @@
 import type { CreateUserSchema } from "../schemas/user.js";
 
-export type UserDTO = Omit<CreateUserSchema, "password"> & {
-  hashedPassword: string;
-};
+export type UserDTO = CreateUserSchema;
 
-export type User = Omit<CreateUserSchema, "password"> & {
-  id: string;
-};
+export type User = Omit<CreateUserSchema, "password">;
 
 export interface ICreateUsersRepository {
-  execute(params: UserDTO): Promise<User>;
+  execute(params: User): Promise<User>;
 }
 
 export interface IGetUserByEmailRepository {
