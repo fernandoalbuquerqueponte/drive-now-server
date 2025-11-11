@@ -101,4 +101,21 @@ describe("Create User Controller", () => {
 
     expect(response.statusCode).toBe(400);
   });
+
+  it("should return 400 if password is invalid", async () => {
+    const { sut } = makeSut();
+
+    const fakeRequest = {
+      body: {
+        ...httpRequest.body,
+        password: faker.internet.password({
+          length: 5,
+        }),
+      },
+    } as unknown as Request<any, any, Partial<CreateUserSchema>>;
+
+    const response = await sut.execute(fakeRequest);
+
+    expect(response.statusCode).toBe(400);
+  });
 });
