@@ -56,4 +56,19 @@ describe("Create User Controller", () => {
 
     expect(response.statusCode).toBe(400);
   });
+
+  it("should return 400 if last_name is not provided", async () => {
+    const { sut } = makeSut();
+
+    const fakeRequest = {
+      body: {
+        ...httpRequest.body,
+        last_name: undefined,
+      },
+    } as unknown as Request<any, any, Partial<CreateUserSchema>>;
+
+    const response = await sut.execute(fakeRequest);
+
+    expect(response.statusCode).toBe(400);
+  });
 });
