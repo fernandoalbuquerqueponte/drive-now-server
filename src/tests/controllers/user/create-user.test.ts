@@ -71,4 +71,19 @@ describe("Create User Controller", () => {
 
     expect(response.statusCode).toBe(400);
   });
+
+  it("should return 400 if email is not provided", async () => {
+    const { sut } = makeSut();
+
+    const fakeRequest = {
+      body: {
+        ...httpRequest.body,
+        email: undefined,
+      },
+    } as unknown as Request<any, any, Partial<CreateUserSchema>>;
+
+    const response = await sut.execute(fakeRequest);
+
+    expect(response.statusCode).toBe(400);
+  });
 });
