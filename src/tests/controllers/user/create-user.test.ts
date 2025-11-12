@@ -144,4 +144,13 @@ describe("Create User Controller", () => {
     expect(executeSpy).toHaveBeenCalledWith(httpRequest.body);
     expect(executeSpy).toHaveBeenCalledTimes(1);
   });
+
+  it("should return 500 if CreateUserUseCase throws", async () => {
+    const { sut, createUserUseCase } = makeSut();
+    jest.spyOn(createUserUseCase, "execute").mockRejectedValueOnce(new Error());
+
+    const response = await sut.execute(httpRequest);
+
+    expect(response.statusCode).toBe(500);
+  });
 });
