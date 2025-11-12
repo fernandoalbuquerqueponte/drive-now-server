@@ -18,7 +18,7 @@ describe("Create User Controller", () => {
     const createUserUseCase = new CreateUserUseCaseStub() as CreateUserUseCase;
     const sut = new CreateUserController(createUserUseCase);
 
-    return { sut };
+    return { sut, createUserUseCase };
   };
 
   const httpRequest = {
@@ -132,5 +132,16 @@ describe("Create User Controller", () => {
     const response = await sut.execute(fakeRequest);
 
     expect(response.statusCode).toBe(400);
+  });
+
+  it("should call CreateUserUseCase with correct params", async () => {
+    const { sut, createUserUseCase } = makeSut();
+
+    const executeSpy = jest.spyOn(createUserUseCase, "execute");
+
+    await sut.execute(httpRequest);
+
+    expect(executeSpy).toHaveBeenCalledWith(httpRequest.body);
+    expect(executeSpy).toHaveBeenCalledTimes(1);
   });
 });
