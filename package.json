@@ -7,6 +7,7 @@
     "dev": "tsx watch src/index.ts",
     "test": "jest",
     "test:watch": "jest --watch --passWithNoTests --silent",
+    "test:coverage": "jest --passWithNoTests --silent --coverage",
     "seed": "tsx prisma/seed.ts"
   },
   "prisma": {
