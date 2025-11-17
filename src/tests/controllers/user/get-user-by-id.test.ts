@@ -21,7 +21,7 @@ describe("GetUserByIdController", () => {
       new GetUserByIdUseCaseStub() as unknown as GetUserByIdUseCase;
     const sut = new GetUserByIdController(getUserByIdUseCase);
 
-    return { sut };
+    return { sut, getUserByIdUseCase };
   };
 
   const httpRequest = {
@@ -54,5 +54,26 @@ describe("GetUserByIdController", () => {
     } as Partial<Request> as Request);
 
     expect(response.statusCode).toBe(400);
+  });
+
+  it("should return 400 if user id is not provided", async () => {
+    const { sut } = makeSut();
+
+    const response = await sut.execute({
+      params: {},
+    } as Partial<Request> as Request);
+
+    expect(response.statusCode).toBe(400);
+  });
+
+  it("should return 500 when GetUserByIdUseCase throw generic error", async () => {
+    const { sut, getUserByIdUseCase } = makeSut();
+    jest
+      .spyOn(getUserByIdUseCase, "execute")
+      .mockRejectedValueOnce(new Error());
+
+    const result = await sut.execute(httpRequest);
+
+    expect(result.statusCode).toBe(500);
   });
 });
