@@ -37,4 +37,22 @@ describe("GetUserByIdController", () => {
 
     expect(response.statusCode).toBe(200);
   });
+
+  it("should return 400 if userId is invalid", async () => {
+    const { sut } = makeSut();
+
+    const fake = {
+      params: {
+        userId: "faker.string.uuid()",
+      },
+    } as Request<any, any, CreateUserSchema>;
+
+    const response = await sut.execute({
+      params: {
+        userId: "invalid_id",
+      },
+    } as Partial<Request> as Request);
+
+    expect(response.statusCode).toBe(400);
+  });
 });
