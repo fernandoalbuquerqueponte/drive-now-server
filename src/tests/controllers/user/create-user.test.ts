@@ -6,6 +6,7 @@ import { CreateUserUseCase } from "../../../use-cases/index.js";
 
 import type { User } from "../../../types/user.js";
 import type { CreateUserSchema } from "../../../schemas/user.js";
+import { UserAlreadyExistsError } from "../../../errors/user.js";
 
 describe("Create User Controller", () => {
   class CreateUserUseCaseStub {
@@ -152,5 +153,18 @@ describe("Create User Controller", () => {
     const response = await sut.execute(httpRequest);
 
     expect(response.statusCode).toBe(500);
+  });
+
+  it("should return 400 if CreateUserUseCase throws UserAlreadyExistsError", async () => {
+    const { sut, createUserUseCase } = makeSut();
+    jest
+      .spyOn(createUserUseCase, "execute")
+      .mockRejectedValueOnce(
+        new UserAlreadyExistsError(faker.internet.email())
+      );
+
+    const response = await sut.execute(httpRequest);
+
+    expect(response.statusCode).toBe(400);
   });
 });
