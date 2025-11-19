@@ -31,3 +31,8 @@ export const successResponse = <T>(body: T): SuccessResponse<T> => ({
   statusCode: 200,
   body,
 });
+
+export const ok = (): SuccessResponse<{ message: string }> => ({
+  statusCode: 200,
+  body: { message: "Operation successful" },
+});
