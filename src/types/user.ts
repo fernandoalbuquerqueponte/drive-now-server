@@ -1,3 +1,4 @@
+import type { Prisma } from "@prisma/client";
 import type { CreateUserSchema } from "../schemas/user.js";
 
 export type UserDTO = CreateUserSchema;
@@ -18,4 +19,8 @@ export interface IGetUserByIdRepository {
 
 export interface IDeleteUserRepository {
   execute(userId: string): Promise<User | null>;
+}
+
+export interface IUpdateUserRepository {
+  execute(userId: string, params: Prisma.UserUpdateInput): Promise<User | null>;
 }
