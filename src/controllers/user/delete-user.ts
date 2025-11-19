@@ -4,8 +4,8 @@ import type { DeleteUserUseCase } from "../../use-cases/user/delete-user.js";
 import { checkIfIdIsValid, invalidIdResponse } from "../helpers/validation.js";
 import { userNotFoundResponse, ok, serverError } from "../helpers/index.js";
 
-interface DeleteUserParams {
-  id: string;
+export interface DeleteUserParams {
+  userId: string;
 }
 
 export class DeleteUserController {
@@ -14,7 +14,7 @@ export class DeleteUserController {
   }
   async execute(httpRequest: Request<DeleteUserParams>) {
     try {
-      const userId = httpRequest.params.id;
+      const userId = httpRequest.params.userId;
 
       const isIdValid = checkIfIdIsValid(userId);
 
