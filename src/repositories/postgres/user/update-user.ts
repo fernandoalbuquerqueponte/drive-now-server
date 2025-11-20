@@ -1,17 +1,23 @@
-import type { Prisma } from "@prisma/client";
 import prismaClient from "../../../../prisma/prisma.js";
-import type { IUpdateUserRepository, User } from "../../../types/user.js";
+import type { IUpdateUserRepository } from "../../../types/user.js";
+import type { UpdateUserSchema, User } from "../../../schemas/user.js";
 
 export class PostgresUpdateUserRepository implements IUpdateUserRepository {
   async execute(
     userId: string,
-    params: Prisma.UserUpdateInput
+    params: UpdateUserSchema
   ): Promise<User | null> {
+    const data = Object.fromEntries(
+      Object.entries(params).filter(([_, v]) => v !== undefined)
+    );
+
     const updatedUser = await prismaClient.user.update({
       where: { id: userId },
-      data: params,
+      data: data,
     });
 
-    return updatedUser;
+    const { password, ...safeUser } = updatedUser;
+
+    return safeUser;
   }
 }
