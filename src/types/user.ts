@@ -1,9 +1,8 @@
-import type { Prisma } from "@prisma/client";
-import type { CreateUserSchema } from "../schemas/user.js";
+import type { CreateUserSchema, UpdateUserSchema, User } from "../schemas/user.js";
 
-export type UserDTO = CreateUserSchema;
+export type UserDTO = CreateUserSchema ;
 
-export type User = Omit<CreateUserSchema, "password">;
+// export type User = Omit<CreateUserSchema, "password">;
 
 export interface ICreateUsersRepository {
   execute(params: User): Promise<User>;
@@ -22,5 +21,5 @@ export interface IDeleteUserRepository {
 }
 
 export interface IUpdateUserRepository {
-  execute(userId: string, params: Prisma.UserUpdateInput): Promise<User | null>;
+  execute(userId: string, params: UpdateUserSchema): Promise<User | null>;
 }

@@ -1,14 +1,22 @@
 import { z } from "zod/v4";
 
-export const createUserSchema = z.object({
-  first_name: z.string().trim().min(1, "First name is required."),
-  last_name: z.string().min(1, "Last name is required."),
-  imageUrl: z.url().optional().nullable(),
-  email: z.email().min(1, "E-mail is required."),
-  password: z
-    .string()
-    .trim()
-    .min(6, "Password must have at least 6 characters."),
+export const baseUserSchema = z.object({
+  id: z.string().uuid(),
+  first_name: z.string().trim().min(1),
+  last_name: z.string().trim().min(1),
+  imageUrl: z.string().url().nullable().optional(),
+  email: z.string().email(),
+  password: z.string().min(6),
 });
 
+// usado para criação (sem id)
+export const createUserSchema = baseUserSchema.omit({ id: true });
+
+// usado para update (parcial e sem id)
+export const updateUserSchema = createUserSchema.partial();
+
 export type CreateUserSchema = z.infer<typeof createUserSchema>;
+export type UpdateUserSchema = z.infer<typeof updateUserSchema>;
+
+// esse é o USER retornado pela aplicação:
+export type User = Omit<z.infer<typeof baseUserSchema>, "password">;
