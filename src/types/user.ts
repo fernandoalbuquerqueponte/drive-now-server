@@ -1,11 +1,15 @@
-import type { CreateUserSchema, UpdateUserSchema, User } from "../schemas/user.js";
+import type {
+  CreateUserSchema,
+  UpdateUserSchema,
+  User,
+} from "../schemas/user.js";
 
-export type UserDTO = CreateUserSchema ;
+export type UserDTO = CreateUserSchema;
 
 // export type User = Omit<CreateUserSchema, "password">;
 
 export interface ICreateUsersRepository {
-  execute(params: User): Promise<User>;
+  execute(params: CreateUserSchema): Promise<User | undefined>;
 }
 
 export interface IGetUserByEmailRepository {
