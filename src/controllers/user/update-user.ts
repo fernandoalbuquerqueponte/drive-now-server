@@ -4,7 +4,7 @@ import { ZodError } from "zod";
 
 import { updateUserSchema } from "../../schemas/user.js";
 import { checkIfIdIsValid, invalidIdResponse } from "../helpers/validation.js";
-import { badRequest, serverError } from "../helpers/http.js";
+import { badRequest, serverError, successResponse } from "../helpers/http.js";
 import { UserAlreadyExistsError } from "../../errors/user.js";
 
 export class UpdateUserController {
@@ -25,7 +25,7 @@ export class UpdateUserController {
 
       const updatedUser = await this.updateUserUseCase.execute(userId, params);
 
-      return updatedUser;
+      return successResponse(updatedUser);
     } catch (error) {
       if (error instanceof ZodError) {
         return badRequest(error.message);
