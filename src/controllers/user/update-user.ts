@@ -3,8 +3,13 @@ import type { UpdateUserUseCase } from "../../use-cases/user/update-user.js";
 import { ZodError } from "zod";
 
 import { updateUserSchema } from "../../schemas/user.js";
-import { checkIfIdIsValid, invalidIdResponse } from "../helpers/validation.js";
-import { badRequest, serverError, successResponse } from "../helpers/http.js";
+import {
+  badRequest,
+  serverError,
+  successResponse,
+  checkIfIdIsValid,
+  invalidIdResponse,
+} from "../helpers/index.js";
 import { UserAlreadyExistsError } from "../../errors/user.js";
 
 export class UpdateUserController {
