@@ -4,14 +4,19 @@ import { faker } from "@faker-js/faker";
 import { CreateUserController } from "../../../controllers/index.js";
 import { CreateUserUseCase } from "../../../use-cases/index.js";
 
-import type { User } from "../../../types/user.js";
-import type { CreateUserSchema } from "../../../schemas/user.js";
+import type { CreateUserSchema, User } from "../../../schemas/user.js";
 import { UserAlreadyExistsError } from "../../../errors/user.js";
 
 describe("Create User Controller", () => {
   class CreateUserUseCaseStub {
     async execute(user: CreateUserSchema): Promise<User> {
-      return user;
+      return {
+        id: faker.string.uuid(),
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        imageUrl: user.imageUrl ?? null,
+      };
     }
   }
 
@@ -40,7 +45,13 @@ describe("Create User Controller", () => {
     const response = await sut.execute(httpRequest);
 
     expect(response.statusCode).toBe(201);
-    expect(response.body).toEqual(httpRequest.body);
+    expect(response.body).toEqual({
+      id: expect.any(String),
+      first_name: httpRequest.body.first_name,
+      last_name: httpRequest.body.last_name,
+      email: httpRequest.body.email,
+      imageUrl: httpRequest.body.imageUrl,
+    });
   });
 
   it("should return 400 if first_name is not provided", async () => {
