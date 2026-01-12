@@ -1,6 +1,10 @@
-import type { Car } from "@prisma/client";
+import type { Car, Review } from "@prisma/client";
 import type { CreateCarSchema } from "../schemas/car.js";
 
 export interface ICreateCarRepository {
   execute(params: CreateCarSchema): Promise<Car | undefined>;
+}
+
+export interface IGetCarReviewsRepository {
+  execute(carId: string): Promise<Review[]>;
 }
