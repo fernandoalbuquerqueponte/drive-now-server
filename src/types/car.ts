@@ -8,3 +8,7 @@ export interface ICreateCarRepository {
 export interface IGetCarReviewsRepository {
   execute(carId: string): Promise<Review[]>;
 }
+
+export interface IPostgresDeleteCarRepository {
+  execute(carId: string): Promise<Car>;
+}
