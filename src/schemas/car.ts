@@ -27,4 +27,8 @@ export const createCarSchema = z.object({
     .optional(),
 });
 
+export const deleteCarSchema = z.object({
+  carId: z.uuid(),
+});
+
 export type CreateCarSchema = z.infer<typeof createCarSchema>;
