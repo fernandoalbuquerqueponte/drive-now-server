@@ -12,3 +12,7 @@ export interface IGetCarReviewsRepository {
 export interface IPostgresDeleteCarRepository {
   execute(carId: string): Promise<Car>;
 }
+
+export interface IPostgresGetCarByIdRepository {
+  execute(carId: string): Promise<Car | undefined>;
+}
