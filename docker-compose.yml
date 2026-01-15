@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:latest
+    image: postgres:16
     container_name: drive-now-postgres
     environment:
       POSTGRES_PASSWORD: password
@@ -9,7 +9,4 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./.postgres:/var/lib/postgresql/data
-
-volumes:
-  .postgres:
+      - ./.postgres:/var/lib/postgresql

@@ -54,7 +54,7 @@ model CarImage {
   carId     String
   url       String   @db.Text
   createdAt DateTime @default(now())
-  car       Car      @relation(fields: [carId], references: [id])
+  car       Car      @relation(fields: [carId], references: [id], onDelete: Cascade)
 }
 
 model Review {
@@ -65,7 +65,7 @@ model Review {
   comment   String?  @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  car       Car      @relation(fields: [carId], references: [id])
+  car       Car      @relation(fields: [carId], references: [id], onDelete: Cascade)
   user      User     @relation(fields: [userId], references: [id])
 }
 
@@ -80,7 +80,7 @@ model Booking {
   status     BookingStatus @default(PENDING)
   createdAt  DateTime      @default(now())
   updatedAt  DateTime      @updatedAt
-  car        Car           @relation(fields: [carId], references: [id])
+  car        Car           @relation(fields: [carId], references: [id], onDelete: Cascade)
   user       User          @relation(fields: [userId], references: [id])
 }
 
