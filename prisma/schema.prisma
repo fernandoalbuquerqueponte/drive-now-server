@@ -23,6 +23,7 @@ model User {
 
   reviews  Review[]
   bookings Booking[]
+  cars     Car[]
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -40,13 +41,14 @@ model Car {
   available    Boolean  @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  user_id      String
 
   specifications Json // [{ label: "Motor", value: "3.0L Twin Turbo" }, ...]
   features       String[] // ["Bluetooth", "GPS integrado", "Teto solar"]
-
-  images   CarImage[]
-  reviews  Review[]
-  bookings Booking[]
+  user           User       @relation(fields: [user_id], references: [id])
+  images         CarImage[]
+  reviews        Review[]
+  bookings       Booking[]
 }
 
 model CarImage {
@@ -66,7 +68,7 @@ model Review {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   car       Car      @relation(fields: [carId], references: [id], onDelete: Cascade)
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Booking {
