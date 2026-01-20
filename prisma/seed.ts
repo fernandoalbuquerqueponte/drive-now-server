@@ -34,15 +34,15 @@ async function main() {
         "O Audi A4 Avant combina praticidade e elegância, oferecendo conforto premium e excelente dirigibilidade.",
       image:
         "https://pofskjr7hn.ufs.sh/f/f0BnzNomkH2ygl8MwjiF2C1MY6AmLoEBtawKcrksGXnQT3x9",
+      gallery: [
+        "https://pofskjr7hn.ufs.sh/f/f0BnzNomkH2yP38QIsHOhoIcHGtpA4e53QJxVYrfSRzi0WsM",
+        "https://pofskjr7hn.ufs.sh/f/f0BnzNomkH2yaVpakVerIapuAq4NW0n7JZwBMEShe2jlT56G",
+      ],
       specifications: [
         { label: "Motor", value: "2.0L TFSI" },
         { label: "Potência", value: "190 cv" },
       ],
       features: ["Bluetooth", "Teto solar", "Ar-condicionado digital"],
-      images: [
-        "https://pofskjr7hn.ufs.sh/f/f0BnzNomkH2yP38QIsHOhoIcHGtpA4e53QJxVYrfSRzi0WsM",
-        "https://pofskjr7hn.ufs.sh/f/f0BnzNomkH2yaVpakVerIapuAq4NW0n7JZwBMEShe2jlT56G",
-      ],
     },
     {
       brand: "BMW",
@@ -53,19 +53,19 @@ async function main() {
       description: "SUV luxuoso e potente, ideal para viagens e uso urbano.",
       image:
         "https://pofskjr7hn.ufs.sh/f/f0BnzNomkH2yAiZGmgEvi1R7JsH8PpYMxzdLDEQXWohuOlUa",
+      gallery: [
+        "https://pofskjr7hn.ufs.sh/f/f0BnzNomkH2y49XEG5f1Z0GilcTBOXtnhb6RFrsVgLo5KdIe",
+      ],
       specifications: [
         { label: "Motor", value: "3.0L TwinPower Turbo" },
         { label: "Potência", value: "286 cv" },
       ],
       features: ["Câmera 360º", "Bancos em couro", "Head-up display"],
-      images: [
-        "https://pofskjr7hn.ufs.sh/f/f0BnzNomkH2y49XEG5f1Z0GilcTBOXtnhb6RFrsVgLo5KdIe",
-      ],
     },
   ];
 
   /**
-   * 3️⃣ Criar carros + imagens (ligados ao usuário)
+   * 3️⃣ Criar carros
    */
   for (const car of cars) {
     await prisma.car.create({
@@ -74,6 +74,7 @@ async function main() {
         model: car.model,
         category: car.category,
         image: car.image,
+        gallery: car.gallery,
         year: car.year,
         pricePerHour: car.pricePerHour,
         description: car.description,
@@ -81,17 +82,10 @@ async function main() {
         specifications: car.specifications,
         features: car.features,
 
-        // 🔑 RELAÇÃO CORRETA (gera user_id automaticamente)
         user: {
           connect: {
             id: user.id,
           },
-        },
-
-        images: {
-          create: car.images.map((url) => ({
-            url,
-          })),
         },
       },
     });

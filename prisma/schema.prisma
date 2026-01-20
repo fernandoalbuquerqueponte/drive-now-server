@@ -30,11 +30,13 @@ model User {
 }
 
 model Car {
-  id           String   @id @default(uuid())
-  brand        String
-  model        String
-  category     String
-  image        String   @db.Text // Foto principal
+  id       String   @id @default(uuid())
+  brand    String
+  model    String
+  category String
+  image    String   @db.Text // imagem principal
+  gallery  String[] @db.Text // galeria de imagens
+
   year         Int
   pricePerHour Float
   description  String   @db.Text
@@ -43,12 +45,13 @@ model Car {
   updatedAt    DateTime @updatedAt
   user_id      String
 
-  specifications Json // [{ label: "Motor", value: "3.0L Twin Turbo" }, ...]
-  features       String[] // ["Bluetooth", "GPS integrado", "Teto solar"]
-  user           User       @relation(fields: [user_id], references: [id])
-  images         CarImage[]
-  reviews        Review[]
-  bookings       Booking[]
+  specifications Json
+  features       String[]
+
+  user     User       @relation(fields: [user_id], references: [id])
+  reviews  Review[]
+  bookings Booking[]
+  CarImage CarImage[]
 }
 
 model CarImage {
