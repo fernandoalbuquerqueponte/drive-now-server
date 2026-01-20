@@ -4,7 +4,11 @@ export const createCarSchema = z.object({
   brand: z.string(),
   model: z.string(),
   category: z.string(),
-  image: z.string().url(),
+
+  image: z.string().url(), // imagem principal
+
+  gallery: z.array(z.string().url()).optional(), // galeria de imagens
+
   year: z.number().int(),
   pricePerHour: z.number().positive(),
   description: z.string(),
@@ -13,22 +17,17 @@ export const createCarSchema = z.object({
     z.object({
       label: z.string(),
       value: z.string(),
-    })
+    }),
   ),
 
   features: z.array(z.string()),
-
-  images: z
-    .array(
-      z.object({
-        url: z.string().url(),
-      })
-    )
-    .optional(),
 });
 
 export const deleteCarSchema = z.object({
   carId: z.uuid(),
 });
 
+export const updateCarSchema = createCarSchema.partial();
+
 export type CreateCarSchema = z.infer<typeof createCarSchema>;
+export type UpdateCarSchema = z.infer<typeof updateCarSchema>;

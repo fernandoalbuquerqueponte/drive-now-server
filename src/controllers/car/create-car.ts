@@ -11,9 +11,18 @@ export class CreateCarController {
   async execute(httpRequest: Request) {
     try {
       const params = httpRequest.body;
+      const userId = httpRequest.params.userId;
+
+      if (!userId) {
+        return badRequest("User ID is required.");
+      }
+
       await createCarSchema.parseAsync(params);
 
-      const createdCar = await this.createCarUseCase.execute(httpRequest.body);
+      const createdCar = await this.createCarUseCase.execute(
+        httpRequest.body,
+        userId,
+      );
       return created(createdCar);
     } catch (error) {
       console.error(error);

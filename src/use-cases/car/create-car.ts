@@ -5,8 +5,8 @@ export class CreateCarUseCase {
   constructor(private createCarRepository: PostgresCreateCarRepository) {
     this.createCarRepository = createCarRepository;
   }
-  async execute(params: CreateCarSchema) {
-    const createdCar = await this.createCarRepository.execute(params);
+  async execute(params: CreateCarSchema, userId: string) {
+    const createdCar = await this.createCarRepository.execute(params, userId);
 
     return createdCar;
   }
