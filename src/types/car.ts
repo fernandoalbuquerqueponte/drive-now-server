@@ -1,4 +1,4 @@
-import type { Car, Review } from "@prisma/client";
+import type { Booking, Car, Review } from "@prisma/client";
 import type { CreateCarSchema } from "../schemas/car.js";
 
 export interface ICreateCarRepository {
@@ -19,4 +19,14 @@ export interface IPostgresGetCarByIdRepository {
 
 export interface IPostgresUpdateCarRepository {
   execute(carId: string, params: CreateCarSchema): Promise<Car>;
+}
+
+export interface IPostgresReserveCarRepository {
+  execute(
+    params: Booking,
+    car: Car,
+    hours: number,
+    carId: string,
+    userId: string,
+  ): Promise<Booking>;
 }
