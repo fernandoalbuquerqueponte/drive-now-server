@@ -3,6 +3,7 @@ import {
   makeCreateCarController,
   makeDeleteCarController,
   makeGetCarReviewsController,
+  makeReserveCarController,
   makeUpdateCarController,
 } from "../factories/controllers/car.js";
 
@@ -39,3 +40,14 @@ carRoutes.patch("/:carId/:userId", async (req: Request, res: Response) => {
 
   return res.status(statusCode).send(body);
 });
+
+carRoutes.post(
+  "/reserve/:carId/:userId",
+  async (req: Request, res: Response) => {
+    const reserveCarController = makeReserveCarController();
+
+    const { body, statusCode } = await reserveCarController.execute(req);
+
+    return res.status(statusCode).send(body);
+  },
+);
