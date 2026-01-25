@@ -26,7 +26,10 @@ export class ReserveCarUseCase {
       throw new CarNotFoundError();
     }
 
-    const hours = params.endDate.getTime() - params.startDate.getTime();
+    const parsedStartDate = new Date(params.startDate);
+    const parsedEndDate = new Date(params.endDate);
+
+    const hours = parsedEndDate.getTime() - parsedStartDate.getTime();
     const totalHours = hours / (1000 * 60 * 60);
 
     if (totalHours <= 0) {

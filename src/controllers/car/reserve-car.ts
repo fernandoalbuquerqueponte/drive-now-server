@@ -17,12 +17,12 @@ export class ReserveCarController {
       await createReserveSchema.parseAsync(params);
 
       if (!carId || !userId) {
-        return badRequest("Erro ao reservar: Parâmetros ausentes");
+        return badRequest("Missing carId or userId");
       }
 
       const isCarIdValid = checkIfIdIsValid(carId);
       if (!isCarIdValid) {
-        return badRequest("Erro ao reservar: ID do carro inválido");
+        return badRequest("Invalid carId format");
       }
 
       const createdBooking = await this.reserveCarUseCase.execute(
