@@ -23,6 +23,15 @@ export const createCarSchema = z.object({
   features: z.array(z.string()),
 });
 
+export const createReserveSchema = z.object({
+  startDate: z.string().refine((date) => !isNaN(Date.parse(date)), {
+    message: "Invalid date format",
+  }),
+  endDate: z.string().refine((date) => !isNaN(Date.parse(date)), {
+    message: "Invalid date format",
+  }),
+});
+
 export const deleteCarSchema = z.object({
   carId: z.uuid(),
 });
