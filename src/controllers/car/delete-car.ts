@@ -1,9 +1,12 @@
 import type { Request } from "express";
-import { ok, serverError, successResponse } from "../helpers/http.js";
 import type { DeleteCarUseCase } from "../../use-cases/car/delete-car.js";
 import { deleteCarSchema } from "../../schemas/car.js";
 import { CarNotFoundError } from "../../errors/car.js";
-import { carNotFoundResponse } from "../helpers/car.js";
+import {
+  carNotFoundResponse,
+  serverError,
+  successResponse,
+} from "../helpers/index.js";
 
 export class DeleteCarController {
   constructor(private deleteCarUseCase: DeleteCarUseCase) {

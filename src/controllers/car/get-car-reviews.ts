@@ -1,7 +1,12 @@
 import type { Request } from "express";
 import type { GetCarReviewsUseCase } from "../../use-cases/car/get-car-reviews.js";
-import { checkIfIdIsValid, invalidIdResponse } from "../helpers/validation.js";
-import { badRequest, serverError, successResponse } from "../helpers/http.js";
+import {
+  badRequest,
+  serverError,
+  successResponse,
+  checkIfIdIsValid,
+  invalidIdResponse,
+} from "../helpers/index.js";
 
 export class GetCarReviewsController {
   constructor(private getCarReviewsUseCase: GetCarReviewsUseCase) {

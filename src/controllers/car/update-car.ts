@@ -1,8 +1,15 @@
 import type { Request } from "express";
 import type { UpdateCarUseCase } from "../../use-cases/car/update-car.js";
-import { badRequest, serverError, successResponse } from "../helpers/http.js";
-import { checkIfIdIsValid, invalidIdResponse } from "../helpers/index.js";
+import {
+  badRequest,
+  serverError,
+  successResponse,
+  checkIfIdIsValid,
+  invalidIdResponse,
+} from "../helpers/index.js";
 import { updateCarSchema } from "../../schemas/car.js";
+import { ForbiddenError } from "../../errors/user.js";
+import { ZodError } from "zod/v3";
 
 export class UpdateCarController {
   constructor(private updateCarUseCase: UpdateCarUseCase) {
@@ -42,6 +49,14 @@ export class UpdateCarController {
       return successResponse(updatedCar);
     } catch (error) {
       console.error(error);
+      if (error instanceof ForbiddenError) {
+        return badRequest("You do not have permission to update this car.");
+      }
+
+      if (error instanceof ZodError) {
+        return badRequest(error.message);
+      }
+
       return serverError();
     }
   }

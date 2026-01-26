@@ -1,8 +1,14 @@
 import type { Request } from "express";
-import { badRequest, created, serverError } from "../helpers/http.js";
+import {
+  badRequest,
+  created,
+  serverError,
+  checkIfIdIsValid,
+} from "../helpers/index.js";
 import type { ReserveCarUseCase } from "../../use-cases/car/reserve-car.js";
-import { checkIfIdIsValid } from "../helpers/validation.js";
 import { createReserveSchema } from "../../schemas/car.js";
+import { CarNotFoundError } from "../../errors/car.js";
+import { ZodError } from "zod/v3";
 
 export class ReserveCarController {
   constructor(private reserveCarUseCase: ReserveCarUseCase) {
@@ -35,6 +41,14 @@ export class ReserveCarController {
       return created(createdBooking);
     } catch (error) {
       console.error(error);
+      if (error instanceof CarNotFoundError) {
+        return badRequest("Car not found");
+      }
+
+      if (error instanceof ZodError) {
+        return badRequest(error.message);
+      }
+
       return serverError();
     }
   }

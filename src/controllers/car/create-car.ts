@@ -1,6 +1,6 @@
 import type { Request } from "express";
 import type { CreateCarUseCase } from "../../use-cases/car/create-car.js";
-import { badRequest, created, serverError } from "../helpers/http.js";
+import { badRequest, created, serverError } from "../helpers/index.js";
 import { createCarSchema } from "../../schemas/car.js";
 import { ZodError } from "zod/v3";
 
