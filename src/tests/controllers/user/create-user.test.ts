@@ -171,7 +171,7 @@ describe("Create User Controller", () => {
     jest
       .spyOn(createUserUseCase, "execute")
       .mockRejectedValueOnce(
-        new UserAlreadyExistsError(faker.internet.email())
+        new UserAlreadyExistsError(faker.internet.email()),
       );
 
     const response = await sut.execute(httpRequest);
