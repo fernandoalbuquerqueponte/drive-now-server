@@ -49,6 +49,19 @@ describe("UpdateUserController", () => {
     });
   });
 
+  it("should return 400 if userId is invalid", async () => {
+    const { sut } = makeSut();
+
+    const response = await sut.execute({
+      ...httpRequest,
+      params: {
+        userId: "invalid-uuid",
+      },
+    } as Request<any, any, UpdateUserSchema>);
+
+    expect(response.statusCode).toBe(400);
+  });
+
   it("should return 400 if email is invalid", async () => {
     const { sut } = makeSut();
 
