@@ -38,5 +38,10 @@ export const deleteCarSchema = z.object({
 
 export const updateCarSchema = createCarSchema.partial();
 
+export const updateCarParamsSchema = z.object({
+  carId: z.uuid("Invalid carId"),
+  userId: z.uuid("Invalid userId"),
+});
+
 export type CreateCarSchema = z.infer<typeof createCarSchema>;
 export type UpdateCarSchema = z.infer<typeof updateCarSchema>;

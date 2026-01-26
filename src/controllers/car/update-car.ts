@@ -7,7 +7,7 @@ import {
   checkIfIdIsValid,
   invalidIdResponse,
 } from "../helpers/index.js";
-import { updateCarSchema } from "../../schemas/car.js";
+import { updateCarParamsSchema, updateCarSchema } from "../../schemas/car.js";
 import { ForbiddenError } from "../../errors/user.js";
 import { ZodError } from "zod/v3";
 
@@ -17,29 +17,11 @@ export class UpdateCarController {
   }
   async execute(httpRequest: Request) {
     try {
-      const { carId, userId } = httpRequest.params;
+      const { carId, userId } = updateCarParamsSchema.parse(httpRequest.params);
+
       const data = httpRequest.body;
 
       await updateCarSchema.parseAsync(data);
-
-      if (!carId) {
-        return badRequest("Car ID is required.");
-      }
-
-      if (!userId) {
-        return badRequest("User ID is required.");
-      }
-
-      const carIdIsValid = checkIfIdIsValid(carId);
-      const userIdIsValid = checkIfIdIsValid(userId);
-
-      if (!carIdIsValid) {
-        return invalidIdResponse();
-      }
-
-      if (!userIdIsValid) {
-        return invalidIdResponse();
-      }
 
       const updatedCar = await this.updateCarUseCase.execute(
         carId,
