@@ -3,6 +3,7 @@ import type { UpdateUserUseCase } from "../../../use-cases/index.js";
 import { UpdateUserController } from "../../../controllers/index.js";
 import type { Request } from "express";
 import { faker } from "@faker-js/faker";
+import { UserAlreadyExistsError } from "../../../errors/user.js";
 
 describe("UpdateUserController", () => {
   class UpdateUserUseCaseStub {
@@ -117,5 +118,18 @@ describe("UpdateUserController", () => {
       httpRequest.params.userId,
       httpRequest.body,
     );
+  });
+
+  it("should return 400 if UserAlreadyExistsError throws", async () => {
+    const { sut, updateUserUseCase } = makeSut();
+    jest
+      .spyOn(updateUserUseCase, "execute")
+      .mockRejectedValueOnce(
+        new UserAlreadyExistsError(faker.internet.email()),
+      );
+
+    const response = await sut.execute(httpRequest);
+
+    expect(response.statusCode).toBe(400);
   });
 });
