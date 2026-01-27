@@ -194,4 +194,18 @@ describe("CreateCarController", () => {
 
     expect(result.statusCode).toBe(400);
   });
+
+  it("should return 400 if pricePerHour is missing", async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.execute({
+      ...httpRequest,
+      body: {
+        ...httpRequest.body,
+        pricePerHour: undefined,
+      },
+    } as unknown as Request<any, any, Partial<CreateCarSchema>>);
+
+    expect(result.statusCode).toBe(400);
+  });
 });
