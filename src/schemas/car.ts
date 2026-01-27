@@ -1,4 +1,4 @@
-import { z } from "zod/v4";
+import { z } from "zod/v3";
 
 export const createCarSchema = z.object({
   brand: z.string(),
@@ -33,14 +33,14 @@ export const createReserveSchema = z.object({
 });
 
 export const deleteCarSchema = z.object({
-  carId: z.uuid(),
+  carId: z.string().uuid(),
 });
 
 export const updateCarSchema = createCarSchema.partial();
 
 export const updateCarParamsSchema = z.object({
-  carId: z.uuid("Invalid carId"),
-  userId: z.uuid("Invalid userId"),
+  carId: z.string().uuid("Invalid carId"),
+  userId: z.string().uuid("Invalid userId"),
 });
 
 export type CreateCarSchema = z.infer<typeof createCarSchema>;
