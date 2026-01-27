@@ -234,4 +234,16 @@ describe("CreateCarController", () => {
 
     expect(result.statusCode).toBe(500);
   });
+
+  it("should call CreateCarUseCase with correct params", async () => {
+    const { sut, createCarUseCase } = makeSut();
+    const executeSpy = jest.spyOn(createCarUseCase, "execute");
+
+    await sut.execute(httpRequest);
+
+    expect(executeSpy).toHaveBeenCalledWith(
+      httpRequest.body,
+      httpRequest.params.userId,
+    );
+  });
 });
