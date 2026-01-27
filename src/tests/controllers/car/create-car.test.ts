@@ -55,4 +55,18 @@ describe("CreateCarController", () => {
 
     expect(result.statusCode).toBe(201);
   });
+
+  it("should return 400 if invalid data is provided", async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.execute({
+      ...httpRequest,
+      body: {
+        ...httpRequest.body,
+        brand: null,
+      },
+    } as unknown as Request<any, any, Partial<CreateCarSchema>>);
+
+    expect(result.statusCode).toBe(400);
+  });
 });
