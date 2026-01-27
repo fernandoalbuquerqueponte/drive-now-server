@@ -40,10 +40,6 @@ export class UpdateUserController {
         return badRequest(error.message);
       }
 
-      if (error instanceof UserAlreadyExistsError) {
-        return badRequest(error.message);
-      }
-
       console.error(error);
 
       return serverError();
