@@ -60,4 +60,14 @@ describe("DeleteCarController", () => {
 
     expect(result.statusCode).toBe(400);
   });
+
+  it("should call DeleteCarUseCase with correct params", async () => {
+    const { sut, deleteCarUseCase } = makeSut();
+    const executeSpy = jest.spyOn(deleteCarUseCase, "execute");
+
+    await sut.execute(httpRequest);
+
+    expect(executeSpy).toHaveBeenCalledWith(httpRequest.params.carId);
+    expect(executeSpy).toHaveBeenCalledTimes(1);
+  });
 });
