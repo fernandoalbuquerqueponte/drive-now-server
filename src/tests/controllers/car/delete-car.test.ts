@@ -82,4 +82,13 @@ describe("DeleteCarController", () => {
 
     expect(result.statusCode).toBe(404);
   });
+
+  it("should throw generic error if DeleteCarUseCase throws it", async () => {
+    const { sut, deleteCarUseCase } = makeSut();
+    jest.spyOn(deleteCarUseCase, "execute").mockRejectedValueOnce(new Error());
+
+    const result = await sut.execute(httpRequest);
+
+    expect(result.statusCode).toBe(500);
+  });
 });
