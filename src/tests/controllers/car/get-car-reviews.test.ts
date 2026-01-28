@@ -47,4 +47,17 @@ describe("GetCarReviewsController", () => {
 
     expect(result.statusCode).toBe(400);
   });
+
+  it("should return 400 if carId is invalid", async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.execute({
+      ...httpRequest,
+      params: {
+        carId: "invalid_carId",
+      },
+    } as unknown as Request);
+
+    expect(result.statusCode).toBe(400);
+  });
 });
