@@ -34,4 +34,17 @@ describe("DeleteCarController", () => {
 
     expect(result.statusCode).toBe(200);
   });
+
+  it("should return 400 if carId is missing", async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.execute({
+      ...httpRequest,
+      params: {
+        carId: null,
+      },
+    } as unknown as Request);
+
+    expect(result.statusCode).toBe(400);
+  });
 });
