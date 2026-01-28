@@ -60,4 +60,14 @@ describe("GetCarReviewsController", () => {
 
     expect(result.statusCode).toBe(400);
   });
+
+  it("should call GetCarReviewsUseCase with correct params", async () => {
+    const { sut, getCarReviewsUseCase } = makeSut();
+    const executeSpy = jest.spyOn(getCarReviewsUseCase, "execute");
+
+    await sut.execute(httpRequest);
+
+    expect(executeSpy).toHaveBeenCalledWith(httpRequest.params.carId);
+    expect(executeSpy).toHaveBeenCalledTimes(1);
+  });
 });
