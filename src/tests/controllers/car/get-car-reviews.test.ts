@@ -70,4 +70,15 @@ describe("GetCarReviewsController", () => {
     expect(executeSpy).toHaveBeenCalledWith(httpRequest.params.carId);
     expect(executeSpy).toHaveBeenCalledTimes(1);
   });
+
+  it("should throw gerenric error if GetCarReviewsUseCase throws", async () => {
+    const { sut, getCarReviewsUseCase } = makeSut();
+    jest
+      .spyOn(getCarReviewsUseCase, "execute")
+      .mockRejectedValueOnce(new Error());
+
+    const result = await sut.execute(httpRequest);
+
+    expect(result.statusCode).toBe(500);
+  });
 });
