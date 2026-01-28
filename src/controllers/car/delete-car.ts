@@ -3,10 +3,12 @@ import type { DeleteCarUseCase } from "../../use-cases/car/delete-car.js";
 import { deleteCarSchema } from "../../schemas/car.js";
 import { CarNotFoundError } from "../../errors/car.js";
 import {
+  badRequest,
   carNotFoundResponse,
   serverError,
   successResponse,
 } from "../helpers/index.js";
+import { ZodError } from "zod/v3";
 
 export class DeleteCarController {
   constructor(private deleteCarUseCase: DeleteCarUseCase) {
@@ -25,6 +27,11 @@ export class DeleteCarController {
       if (error instanceof CarNotFoundError) {
         return carNotFoundResponse();
       }
+
+      if (error instanceof ZodError) {
+        return badRequest(error.message);
+      }
+
       console.error(error);
       return serverError();
     }
