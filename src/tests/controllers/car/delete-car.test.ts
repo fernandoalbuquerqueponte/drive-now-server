@@ -2,6 +2,7 @@ import { faker } from "@faker-js/faker";
 import { DeleteCarController } from "../../../controllers/car/delete-car.js";
 import type { DeleteCarUseCase } from "../../../use-cases/car/delete-car.js";
 import type { Request } from "express";
+import { CarNotFoundError } from "../../../errors/car.js";
 
 describe("DeleteCarController", () => {
   const carId = faker.string.uuid();
@@ -69,5 +70,16 @@ describe("DeleteCarController", () => {
 
     expect(executeSpy).toHaveBeenCalledWith(httpRequest.params.carId);
     expect(executeSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it("should throw CarNotFoundError if DeleteCarUseCase throws it", async () => {
+    const { sut, deleteCarUseCase } = makeSut();
+    jest
+      .spyOn(deleteCarUseCase, "execute")
+      .mockRejectedValueOnce(new CarNotFoundError());
+
+    const result = await sut.execute(httpRequest);
+
+    expect(result.statusCode).toBe(404);
   });
 });
