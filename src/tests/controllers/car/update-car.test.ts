@@ -4,6 +4,7 @@ import type { UpdateCarUseCase } from "../../../use-cases/car/update-car.js";
 import type { UpdateCarSchema } from "../../../schemas/car.js";
 import { faker } from "@faker-js/faker";
 import { car } from "../../fixtures/index.js";
+import { ForbiddenError } from "../../../errors/user.js";
 
 describe("UpdateCarController", () => {
   class UpdateCarUseCaseStub {
@@ -158,7 +159,7 @@ describe("UpdateCarController", () => {
     expect(result.statusCode).toBe(500);
   });
 
-  it("should call CreateCarUseCase with correct params", async () => {
+  it("should call UpdateCarUseCase with correct params", async () => {
     const { sut, updateCarUseCase } = makeSut();
     const executeSpy = jest.spyOn(updateCarUseCase, "execute");
 
@@ -169,5 +170,16 @@ describe("UpdateCarController", () => {
       httpRequest.body,
       httpRequest.params.userId,
     );
+  });
+
+  it("should return 400 if ForbiddenError throws", async () => {
+    const { sut, updateCarUseCase } = makeSut();
+    jest
+      .spyOn(updateCarUseCase, "execute")
+      .mockRejectedValueOnce(new ForbiddenError());
+
+    const result = await sut.execute(httpRequest);
+
+    expect(result.statusCode).toBe(400);
   });
 });
