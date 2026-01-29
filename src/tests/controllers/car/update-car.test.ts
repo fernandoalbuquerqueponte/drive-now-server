@@ -157,4 +157,17 @@ describe("UpdateCarController", () => {
 
     expect(result.statusCode).toBe(500);
   });
+
+  it("should call CreateCarUseCase with correct params", async () => {
+    const { sut, updateCarUseCase } = makeSut();
+    const executeSpy = jest.spyOn(updateCarUseCase, "execute");
+
+    await sut.execute(httpRequest);
+
+    expect(executeSpy).toHaveBeenCalledWith(
+      httpRequest.params.carId,
+      httpRequest.body,
+      httpRequest.params.userId,
+    );
+  });
 });
