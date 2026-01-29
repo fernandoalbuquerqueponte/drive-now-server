@@ -37,7 +37,6 @@ export class ReserveCarController {
         params,
       );
 
-      console.log(created(createdBooking));
       return created(createdBooking);
     } catch (error) {
       console.error(error);
