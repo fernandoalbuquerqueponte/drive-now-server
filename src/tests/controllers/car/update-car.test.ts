@@ -145,4 +145,16 @@ describe("UpdateCarController", () => {
 
     expect(result.statusCode).toBe(400);
   });
+
+  it("should return 500 if throws generic error", async () => {
+    const { sut, updateCarUseCase } = makeSut();
+
+    jest.spyOn(updateCarUseCase, "execute").mockImplementationOnce(() => {
+      throw new Error();
+    });
+
+    const result = await sut.execute(httpRequest);
+
+    expect(result.statusCode).toBe(500);
+  });
 });
