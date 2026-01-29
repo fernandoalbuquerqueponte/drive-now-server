@@ -3,6 +3,7 @@ import { ReserveCarController } from "../../../controllers/car/reserve-car.js";
 import type { ReserveCarUseCase } from "../../../use-cases/car/reserve-car.js";
 import type { Request } from "express";
 import type { ReserveCarInputDTO } from "../../../types/car.js";
+import { CarNotFoundError } from "../../../errors/car.js";
 
 describe("ReserveCarController", () => {
   class ReserveCarUseCaseStub {
@@ -166,5 +167,16 @@ describe("ReserveCarController", () => {
     const result = await sut.execute(httpRequest);
 
     expect(result.statusCode).toBe(500);
+  });
+
+  it("should return 400 if CarNotFoundError throws", async () => {
+    const { sut, reserveCarUseCase } = makeSut();
+    jest
+      .spyOn(reserveCarUseCase, "execute")
+      .mockRejectedValueOnce(new CarNotFoundError());
+
+    const result = await sut.execute(httpRequest);
+
+    expect(result.statusCode).toBe(400);
   });
 });
