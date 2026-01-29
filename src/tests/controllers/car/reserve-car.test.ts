@@ -42,12 +42,25 @@ describe("ReserveCarController", () => {
   });
 
   it("should return 400 if startDate is invalid", async () => {
-    const { sut, reserveCarUseCase } = makeSut();
+    const { sut } = makeSut();
 
     const result = await sut.execute({
       ...httpRequest,
       body: {
         startDate: "any_date",
+      },
+    } as unknown as Request<any, any, Partial<ReserveCarInputDTO>>);
+
+    expect(result.statusCode).toBe(400);
+  });
+
+  it("should return 400 if endDate is invalid", async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.execute({
+      ...httpRequest,
+      body: {
+        endDate: "any_date",
       },
     } as unknown as Request<any, any, Partial<ReserveCarInputDTO>>);
 
