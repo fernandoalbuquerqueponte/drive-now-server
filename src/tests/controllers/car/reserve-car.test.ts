@@ -101,6 +101,7 @@ describe("ReserveCarController", () => {
       ...httpRequest,
       params: {
         carId: "invalid_id",
+        userId: faker.string.uuid(),
       },
     } as unknown as Request<any, any, Partial<ReserveCarInputDTO>>);
 
