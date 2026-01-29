@@ -1,12 +1,6 @@
 import type { Request } from "express";
 import type { UpdateCarUseCase } from "../../use-cases/car/update-car.js";
-import {
-  badRequest,
-  serverError,
-  successResponse,
-  checkIfIdIsValid,
-  invalidIdResponse,
-} from "../helpers/index.js";
+import { badRequest, serverError, successResponse } from "../helpers/index.js";
 import { updateCarParamsSchema, updateCarSchema } from "../../schemas/car.js";
 import { ForbiddenError } from "../../errors/user.js";
 import { ZodError } from "zod/v3";
