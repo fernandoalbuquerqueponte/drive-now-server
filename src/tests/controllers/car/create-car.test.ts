@@ -3,6 +3,7 @@ import { CreateCarController } from "../../../controllers/car/create-car.js";
 import { CreateCarUseCase } from "../../../use-cases/car/create-car.js";
 import type { Request } from "express";
 import type { CreateCarSchema } from "../../../schemas/car.js";
+import { car } from "../../fixtures/index.js";
 
 describe("CreateCarController", () => {
   class CreateCarUseCaseStub {
@@ -32,19 +33,8 @@ describe("CreateCarController", () => {
       userId: faker.string.uuid(),
     },
     body: {
-      brand: faker.vehicle.manufacturer(),
-      model: faker.vehicle.model(),
-      category: "SUV",
-      image: faker.image.url(),
-      gallery: [faker.image.url(), faker.image.url()],
-      year: 2022,
-      pricePerHour: 120,
-      description: faker.lorem.paragraph(),
-      specifications: [
-        { label: "Motor", value: "2.0 Flex" },
-        { label: "Câmbio", value: "Automático CVT" },
-      ],
-      features: ["Air Conditioning", "ABS", "GPS"],
+      ...car,
+      id: undefined,
     },
   } as unknown as Request<any, any, Partial<CreateCarSchema>>;
 
