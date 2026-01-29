@@ -117,4 +117,18 @@ describe("UpdateCarController", () => {
 
     expect(result.statusCode).toBe(400);
   });
+
+  it("should return 400 if image is invalid", async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.execute({
+      ...httpRequest,
+      body: {
+        ...httpRequest.body,
+        image: "invalid_url",
+      },
+    } as unknown as Request<any, any, Partial<UpdateCarSchema>>);
+
+    expect(result.statusCode).toBe(400);
+  });
 });
