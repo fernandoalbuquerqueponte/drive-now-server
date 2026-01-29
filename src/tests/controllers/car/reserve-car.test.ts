@@ -158,4 +158,13 @@ describe("ReserveCarController", () => {
       httpRequest.body,
     );
   });
+
+  it("should throw generic error if ReserveCarUseCase throws it", async () => {
+    const { sut, reserveCarUseCase } = makeSut();
+    jest.spyOn(reserveCarUseCase, "execute").mockRejectedValueOnce(new Error());
+
+    const result = await sut.execute(httpRequest);
+
+    expect(result.statusCode).toBe(500);
+  });
 });
