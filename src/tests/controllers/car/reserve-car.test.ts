@@ -144,4 +144,18 @@ describe("ReserveCarController", () => {
 
     expect(result.statusCode).toBe(400);
   });
+
+  it("should call ReserveCarUseCase with correct params", async () => {
+    const { sut, reserveCarUseCase } = makeSut();
+    const executeSpy = jest.spyOn(reserveCarUseCase, "execute");
+
+    await sut.execute(httpRequest);
+
+    expect(executeSpy).toHaveBeenCalledTimes(1);
+    expect(executeSpy).toHaveBeenCalledWith(
+      httpRequest.params.carId,
+      httpRequest.params.userId,
+      httpRequest.body,
+    );
+  });
 });
