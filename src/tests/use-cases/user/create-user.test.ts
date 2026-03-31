@@ -1,8 +1,12 @@
-import { faker } from "@faker-js/faker";
 import { CreateUserUseCase } from "../../../use-cases/index.js";
-import { user } from "../../fixtures/user.js";
+import { user as fixturedUser } from "../../fixtures/user.js";
 
 describe("CreateUserUseCase", () => {
+  const user = {
+    ...fixturedUser,
+    id: undefined,
+  };
+
   class CreateUserRepositoryStub {
     async execute() {
       return user;
@@ -47,5 +51,18 @@ describe("CreateUserUseCase", () => {
 
     expect(createdUser).toBeTruthy();
     expect(createdUser).toEqual(user);
+  });
+
+  it("should call CreateUserRepository with correct params ", async () => {
+    const { sut, createUserRepository } = makeSut();
+
+    const createUserRepositorySpy = jest.spyOn(createUserRepository, "execute");
+
+    await sut.execute(user);
+
+    expect(createUserRepositorySpy).toHaveBeenCalledWith({
+      ...user,
+      password: "any_hashed_password",
+    });
   });
 });
