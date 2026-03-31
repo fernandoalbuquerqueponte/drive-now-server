@@ -19,8 +19,6 @@ export class PostgresCreateUserRepository implements ICreateUsersRepository {
         last_name: true,
         email: true,
         imageUrl: true,
-        created_at: true,
-        updated_at: true,
       },
     });
 
