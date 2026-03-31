@@ -9,7 +9,7 @@ export type UserDTO = CreateUserSchema;
 // export type User = Omit<CreateUserSchema, "password">;
 
 export interface ICreateUsersRepository {
-  execute(params: CreateUserSchema): Promise<User | undefined>;
+  execute(params: CreateUserSchema): Promise<CreateUserSchema | undefined>;
 }
 
 export interface IGetUserByEmailRepository {

@@ -1,4 +1,3 @@
-import bcrypt from "bcrypt";
 import type {
   IGetUserByEmailRepository,
   ICreateUsersRepository,
@@ -12,7 +11,7 @@ export class CreateUserUseCase {
   constructor(
     private createUserRepository: ICreateUsersRepository,
     private getUserByEmailRepository: IGetUserByEmailRepository,
-    private passwordHasherAdapter: PasswordHasherAdapter
+    private passwordHasherAdapter: PasswordHasherAdapter,
   ) {
     this.createUserRepository = createUserRepository;
     this.getUserByEmailRepository = getUserByEmailRepository;
@@ -21,7 +20,7 @@ export class CreateUserUseCase {
 
   async execute(params: CreateUserSchema) {
     const emailIsAlreadyInUse = await this.getUserByEmailRepository.execute(
-      params.email
+      params.email,
     );
 
     if (emailIsAlreadyInUse) {
@@ -29,7 +28,7 @@ export class CreateUserUseCase {
     }
 
     const hashedPassword = await this.passwordHasherAdapter.execute(
-      params.password
+      params.password,
     );
 
     const userParams = {
