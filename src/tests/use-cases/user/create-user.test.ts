@@ -65,4 +65,14 @@ describe("CreateUserUseCase", () => {
       password: "any_hashed_password",
     });
   });
+
+  it("should call GetUserByEmailRepository with correct params", async () => {
+    const { sut, getUserByEmailRepository } = makeSut();
+
+    jest.spyOn(getUserByEmailRepository, "execute");
+
+    await sut.execute(user);
+
+    expect(getUserByEmailRepository.execute).toHaveBeenCalledWith(user.email);
+  });
 });
