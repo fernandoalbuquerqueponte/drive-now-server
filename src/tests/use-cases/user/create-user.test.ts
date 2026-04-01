@@ -1,3 +1,4 @@
+import type { IGetUserByEmailRepository } from "../../../types/user.js";
 import { CreateUserUseCase } from "../../../use-cases/index.js";
 import { user as fixturedUser } from "../../fixtures/user.js";
 
@@ -13,8 +14,9 @@ describe("CreateUserUseCase", () => {
     }
   }
 
-  class GetUserByEmailRepositoryStub {
-    async execute() {
+  class GetUserByEmailRepositoryStub implements IGetUserByEmailRepository {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async execute(): Promise<any> {
       return null;
     }
   }
@@ -74,5 +76,16 @@ describe("CreateUserUseCase", () => {
     await sut.execute(user);
 
     expect(getUserByEmailRepository.execute).toHaveBeenCalledWith(user.email);
+  });
+
+  it("should throw an EmailAlreadyInUseError if GetUserByEmailRepository returns an user", async () => {
+    const { sut, getUserByEmailRepository } = makeSut();
+    jest
+      .spyOn(getUserByEmailRepository, "execute")
+      .mockResolvedValueOnce(user.email);
+
+    const promise = sut.execute(user);
+
+    await expect(promise).rejects.toThrow();
   });
 });
