@@ -150,4 +150,18 @@ describe("UpdateUserUseCase", () => {
     expect(getUserByEmailSpy).toHaveBeenCalledWith(email);
     expect(response).toEqual(user);
   });
+
+  it("should not throw an error if the email already belongs to the user being updated", async () => {
+    const { sut, getUserByEmailRepositoryStub } = makeSut();
+
+    const userId = faker.string.uuid();
+
+    jest
+      .spyOn(getUserByEmailRepositoryStub, "execute")
+      .mockResolvedValueOnce({ ...user, id: userId });
+
+    const promise = sut.execute(userId, { email: user.email });
+
+    await expect(promise).resolves.not.toThrow();
+  });
 });
