@@ -83,4 +83,14 @@ describe("UpdateUserUseCase", () => {
 
     expect(getUserByIdSpy).toHaveBeenCalledWith(userId);
   });
+
+  it("should call updateUserRepository with correct params", async () => {
+    const { sut, updateUserRepositoryStub } = makeSut();
+    const updateUserSpy = jest.spyOn(updateUserRepositoryStub, "execute");
+
+    const userId = faker.string.uuid();
+    await sut.execute(userId, user);
+
+    expect(updateUserSpy).toHaveBeenCalledWith(userId, user);
+  });
 });
