@@ -73,4 +73,14 @@ describe("UpdateUserUseCase", () => {
 
     await expect(promise).rejects.toThrow(new UserNotFoundError());
   });
+
+  it("should call getUserByIdRepository with correct params", async () => {
+    const { sut, getUserByIdRepositoryStub } = makeSut();
+    const getUserByIdSpy = jest.spyOn(getUserByIdRepositoryStub, "execute");
+
+    const userId = faker.string.uuid();
+    await sut.execute(userId, user);
+
+    expect(getUserByIdSpy).toHaveBeenCalledWith(userId);
+  });
 });
