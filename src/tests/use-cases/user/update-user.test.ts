@@ -1,7 +1,12 @@
 import { faker } from "@faker-js/faker";
-import type { IUpdateUserRepository } from "../../../types/user.js";
+import type {
+  IGetUserByIdRepository,
+  IUpdateUserRepository,
+} from "../../../types/user.js";
 import { UpdateUserUseCase } from "../../../use-cases/index.js";
 import { user } from "../../fixtures/user.js";
+import type { User } from "../../../schemas/user.js";
+import { UserNotFoundError } from "../../../errors/user.js";
 
 describe("UpdateUserUseCase", () => {
   class UpdateUserRepositoryStub implements IUpdateUserRepository {
@@ -10,8 +15,8 @@ describe("UpdateUserUseCase", () => {
     }
   }
 
-  class GetUserByIdRepositoryStub {
-    async execute() {
+  class GetUserByIdRepositoryStub implements IGetUserByIdRepository {
+    async execute(): Promise<User | null> {
       return user;
     }
   }
@@ -56,5 +61,16 @@ describe("UpdateUserUseCase", () => {
     const updatedUser = await sut.execute(faker.string.uuid(), user);
 
     expect(updatedUser).toEqual(user);
+  });
+
+  it("should throw an error if the user does not exist", async () => {
+    const { sut, getUserByIdRepositoryStub } = makeSut();
+    jest
+      .spyOn(getUserByIdRepositoryStub, "execute")
+      .mockResolvedValueOnce(null);
+
+    const promise = sut.execute(faker.string.uuid(), user);
+
+    await expect(promise).rejects.toThrow(new UserNotFoundError());
   });
 });
