@@ -114,4 +114,19 @@ describe("UpdateUserUseCase", () => {
       new UserAlreadyExistsError(user.email),
     );
   });
+
+  it("should hash the password on update user", async () => {
+    const { sut, passwordHasherAdapterStub } = makeSut();
+    const passwordHasherAdapterSpy = jest.spyOn(
+      passwordHasherAdapterStub,
+      "execute",
+    );
+
+    await sut.execute(faker.string.uuid(), {
+      ...user,
+      password: "new_password",
+    });
+
+    expect(passwordHasherAdapterSpy).toHaveBeenCalledWith("new_password");
+  });
 });
