@@ -122,11 +122,32 @@ describe("UpdateUserUseCase", () => {
       "execute",
     );
 
-    await sut.execute(faker.string.uuid(), {
-      ...user,
-      password: "new_password",
+    const password = faker.internet.password();
+
+    const response = await sut.execute(faker.string.uuid(), {
+      password: password,
     });
 
-    expect(passwordHasherAdapterSpy).toHaveBeenCalledWith("new_password");
+    expect(passwordHasherAdapterSpy).toHaveBeenCalledWith(password);
+    expect(passwordHasherAdapterSpy).toHaveBeenCalledTimes(1);
+    expect(response).toEqual(user);
+  });
+
+  it("should update user with email successfully", async () => {
+    const { sut, getUserByEmailRepositoryStub } = makeSut();
+
+    const getUserByEmailSpy = jest.spyOn(
+      getUserByEmailRepositoryStub,
+      "execute",
+    );
+    const email = faker.internet.email();
+
+    const response = await sut.execute(faker.string.uuid(), {
+      ...user,
+      email,
+    });
+
+    expect(getUserByEmailSpy).toHaveBeenCalledWith(email);
+    expect(response).toEqual(user);
   });
 });
