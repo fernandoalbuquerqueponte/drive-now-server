@@ -1,12 +1,16 @@
 import { faker } from "@faker-js/faker";
 import type {
+  IGetUserByEmailRepository,
   IGetUserByIdRepository,
   IUpdateUserRepository,
 } from "../../../types/user.js";
 import { UpdateUserUseCase } from "../../../use-cases/index.js";
 import { user } from "../../fixtures/user.js";
 import type { User } from "../../../schemas/user.js";
-import { UserNotFoundError } from "../../../errors/user.js";
+import {
+  UserAlreadyExistsError,
+  UserNotFoundError,
+} from "../../../errors/user.js";
 
 describe("UpdateUserUseCase", () => {
   class UpdateUserRepositoryStub implements IUpdateUserRepository {
@@ -21,8 +25,8 @@ describe("UpdateUserUseCase", () => {
     }
   }
 
-  class GetUserByEmailRepositoryStub {
-    async execute() {
+  class GetUserByEmailRepositoryStub implements IGetUserByEmailRepository {
+    async execute(): Promise<User | null> {
       return null;
     }
   }
@@ -92,5 +96,22 @@ describe("UpdateUserUseCase", () => {
     await sut.execute(userId, user);
 
     expect(updateUserSpy).toHaveBeenCalledWith(userId, user);
+  });
+
+  it("should throw an erro if the email is already in use by another user", async () => {
+    const { sut, getUserByEmailRepositoryStub } = makeSut();
+
+    jest
+      .spyOn(getUserByEmailRepositoryStub, "execute")
+      .mockResolvedValueOnce(user);
+
+    const promise = sut.execute(faker.string.uuid(), {
+      ...user,
+      email: user.email,
+    });
+
+    await expect(promise).rejects.toThrow(
+      new UserAlreadyExistsError(user.email),
+    );
   });
 });
