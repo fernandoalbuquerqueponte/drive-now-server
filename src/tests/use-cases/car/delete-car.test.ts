@@ -44,4 +44,14 @@ describe("DeleteCarUseCase", () => {
 
     expect(result).toEqual(car);
   });
+
+  it("should call GetCarByIdRepository with correct params", async () => {
+    const { sut, getCarByIdRepositoryStub } = makeSut();
+    const getCarByIdSpy = jest.spyOn(getCarByIdRepositoryStub, "execute");
+    const carId = faker.string.uuid();
+
+    await sut.execute(carId);
+
+    expect(getCarByIdSpy).toHaveBeenCalledWith(carId);
+  });
 });
