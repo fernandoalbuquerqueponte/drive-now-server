@@ -6,6 +6,7 @@ import { CreateCarUseCase } from "../../../use-cases/car/create-car.js";
 import type { CreateCarSchema } from "../../../schemas/car.js";
 import { user } from "../../fixtures/user.js";
 import type { IGetUserByIdRepository } from "../../../types/user.js";
+import { UserNotFoundError } from "../../../errors/user.js";
 
 describe("CreateCarUseCase", () => {
   const userId = faker.string.uuid();
@@ -75,5 +76,16 @@ describe("CreateCarUseCase", () => {
     await sut.execute(car, userId);
 
     expect(executeSpy).toHaveBeenCalledWith(userId);
+  });
+
+  it("should throw UserNotFoundError if user is not found", async () => {
+    const { sut, getUserByIdRepositoryStub } = makeSut();
+    jest
+      .spyOn(getUserByIdRepositoryStub, "execute")
+      .mockResolvedValueOnce(null);
+
+    const promise = sut.execute(car, userId);
+
+    await expect(promise).rejects.toThrow(new UserNotFoundError());
   });
 });
