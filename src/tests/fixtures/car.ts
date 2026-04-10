@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import type { CreateCarSchema } from "../../schemas/car.js";
+import type { Review } from "@prisma/client";
 
 export const car: CreateCarSchema = {
   brand: faker.vehicle.manufacturer(),
@@ -15,6 +16,16 @@ export const car: CreateCarSchema = {
     { label: "Câmbio", value: "Automático CVT" },
   ],
   features: ["Air Conditioning", "ABS", "GPS"],
+  createdAt: faker.date.recent(),
+  updatedAt: faker.date.recent(),
+};
+
+export const review: Review = {
+  id: faker.string.uuid(),
+  carId: faker.string.uuid(),
+  userId: faker.string.uuid(),
+  rating: faker.number.int({ min: 1, max: 5 }),
+  comment: faker.lorem.sentence(),
   createdAt: faker.date.recent(),
   updatedAt: faker.date.recent(),
 };
