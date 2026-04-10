@@ -1,0 +1,47 @@
+import { faker } from "@faker-js/faker";
+import type {
+  IPostgresDeleteCarRepository,
+  IPostgresGetCarByIdRepository,
+} from "../../../types/car.js";
+import { DeleteCarUseCase } from "../../../use-cases/car/delete-car.js";
+import { car } from "../../fixtures/car.js";
+
+describe("DeleteCarUseCase", () => {
+  class DeleteCarRepositoryStub {
+    async execute() {
+      return car;
+    }
+  }
+
+  class GetCarByIdRepositoryStub {
+    async execute() {
+      return car;
+    }
+  }
+
+  const makeSut = () => {
+    const deleteCarRepositoryStub =
+      new DeleteCarRepositoryStub() as unknown as IPostgresDeleteCarRepository;
+    const getCarByIdRepositoryStub =
+      new GetCarByIdRepositoryStub() as unknown as IPostgresGetCarByIdRepository;
+
+    const sut = new DeleteCarUseCase(
+      deleteCarRepositoryStub,
+      getCarByIdRepositoryStub,
+    );
+
+    return {
+      sut,
+      deleteCarRepositoryStub,
+      getCarByIdRepositoryStub,
+    };
+  };
+
+  it("should delete a car successfully", async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.execute(faker.string.uuid());
+
+    expect(result).toEqual(car);
+  });
+});
