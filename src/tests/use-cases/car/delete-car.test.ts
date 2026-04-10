@@ -66,4 +66,15 @@ describe("DeleteCarUseCase", () => {
 
     await expect(promise).rejects.toThrow(new CarNotFoundError());
   });
+
+  it("should call DeleteCarRepository with correct params", async () => {
+    const { sut, deleteCarRepositoryStub } = makeSut();
+    const deleteCarSpy = jest.spyOn(deleteCarRepositoryStub, "execute");
+
+    const carId = faker.string.uuid();
+
+    await sut.execute(carId);
+
+    expect(deleteCarSpy).toHaveBeenCalledWith(carId);
+  });
 });
