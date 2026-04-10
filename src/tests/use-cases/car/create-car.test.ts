@@ -41,4 +41,14 @@ describe("CreateCarUseCase", () => {
       user_id: userId,
     });
   });
+
+  it("should call CreateCarRepository with correct params", async () => {
+    const { sut, createCarRepositoryStub } = makeSut();
+
+    const executeSpy = jest.spyOn(createCarRepositoryStub, "execute");
+
+    await sut.execute(car, userId);
+
+    expect(executeSpy).toHaveBeenCalledWith(car, userId);
+  });
 });
