@@ -64,4 +64,13 @@ describe("GetCarReviewsUseCase", () => {
 
     expect(executeSpy).toHaveBeenCalledWith(carId);
   });
+
+  it("should call GetCarByIdRepository with correct params", async () => {
+    const { sut, getCarByIdRepositoryStub } = makeSut();
+    const executeSpy = jest.spyOn(getCarByIdRepositoryStub, "execute");
+
+    await sut.execute(carId);
+
+    expect(executeSpy).toHaveBeenCalledWith(carId);
+  });
 });
