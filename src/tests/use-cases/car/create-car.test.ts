@@ -4,6 +4,8 @@ import { car } from "../../fixtures/car.js";
 import { faker } from "@faker-js/faker";
 import { CreateCarUseCase } from "../../../use-cases/car/create-car.js";
 import type { CreateCarSchema } from "../../../schemas/car.js";
+import { user } from "../../fixtures/user.js";
+import type { IGetUserByIdRepository } from "../../../types/user.js";
 
 describe("CreateCarUseCase", () => {
   const userId = faker.string.uuid();
@@ -19,14 +21,27 @@ describe("CreateCarUseCase", () => {
     }
   }
 
-  const makeSut = () => {
-    const createCarRepositoryStub = new CreateCarRepositoryStub();
+  class GetUserByIdRepositoryStub implements IGetUserByIdRepository {
+    async execute() {
+      return user;
+    }
+  }
 
-    const sut = new CreateCarUseCase(createCarRepositoryStub);
+  const makeSut = () => {
+    const createCarRepositoryStub =
+      new CreateCarRepositoryStub() as unknown as ICreateCarRepository;
+    const getUserByIdRepositoryStub =
+      new GetUserByIdRepositoryStub() as unknown as IGetUserByIdRepository;
+
+    const sut = new CreateCarUseCase(
+      createCarRepositoryStub,
+      getUserByIdRepositoryStub,
+    );
 
     return {
       sut,
       createCarRepositoryStub,
+      getUserByIdRepositoryStub,
     };
   };
 
@@ -50,5 +65,15 @@ describe("CreateCarUseCase", () => {
     await sut.execute(car, userId);
 
     expect(executeSpy).toHaveBeenCalledWith(car, userId);
+  });
+
+  it("should call GetUserByIdRepository with correct params", async () => {
+    const { sut, getUserByIdRepositoryStub } = makeSut();
+
+    const executeSpy = jest.spyOn(getUserByIdRepositoryStub, "execute");
+
+    await sut.execute(car, userId);
+
+    expect(executeSpy).toHaveBeenCalledWith(userId);
   });
 });
