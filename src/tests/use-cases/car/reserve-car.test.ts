@@ -54,4 +54,15 @@ describe("ReserveCarUseCase", () => {
     expect(bookingCar).toHaveProperty("id");
     expect(bookingCar.carId).toBe(carId);
   });
+
+  it("should call GetCarByIdRepository with correct params", () => {
+    const { sut, getCarByIdRepository } = makeSut();
+
+    const getCarByIdSpy = jest.spyOn(getCarByIdRepository, "execute");
+
+    sut.execute(carId, user.id, params);
+
+    expect(getCarByIdSpy).toHaveBeenCalledWith(carId);
+    expect(getCarByIdSpy).toHaveBeenCalledTimes(1);
+  });
 });
