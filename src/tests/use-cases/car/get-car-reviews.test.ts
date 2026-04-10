@@ -5,6 +5,7 @@ import type {
 } from "../../../types/car.js";
 import { GetCarReviewsUseCase } from "../../../use-cases/car/get-car-reviews.js";
 import { review } from "../../fixtures/car.js";
+import { CarNotFoundError } from "../../../errors/car.js";
 
 describe("GetCarReviewsUseCase", () => {
   const carId = faker.string.uuid();
@@ -42,5 +43,16 @@ describe("GetCarReviewsUseCase", () => {
     const result = await sut.execute(carId);
 
     expect(result).toEqual(review);
+  });
+
+  it("should throw CarNotFoundError if car does not exist", async () => {
+    const { sut, getCarByIdRepositoryStub } = makeSut();
+    jest
+      .spyOn(getCarByIdRepositoryStub, "execute")
+      .mockResolvedValueOnce(undefined);
+
+    const promise = sut.execute(carId);
+
+    await expect(promise).rejects.toThrow(new CarNotFoundError());
   });
 });
