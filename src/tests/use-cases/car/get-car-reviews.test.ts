@@ -73,4 +73,15 @@ describe("GetCarReviewsUseCase", () => {
 
     expect(executeSpy).toHaveBeenCalledWith(carId);
   });
+
+  it("should throw if GetCarReviewsRepository throws", async () => {
+    const { sut, getCarReviewsRepositoryStub } = makeSut();
+    jest
+      .spyOn(getCarReviewsRepositoryStub, "execute")
+      .mockRejectedValueOnce(new Error());
+
+    const promise = sut.execute(carId);
+
+    await expect(promise).rejects.toThrow(new Error());
+  });
 });
