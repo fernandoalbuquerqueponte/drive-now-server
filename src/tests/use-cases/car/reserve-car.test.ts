@@ -6,6 +6,7 @@ import type {
   IPostgresReserveCarRepository,
 } from "../../../types/car.js";
 import { user } from "../../fixtures/user.js";
+import { CarNotFoundError } from "../../../errors/car.js";
 
 describe("ReserveCarUseCase", () => {
   const carId = faker.string.uuid();
@@ -25,7 +26,7 @@ describe("ReserveCarUseCase", () => {
   }
 
   class GetCarByIdRepositoryStub {
-    async execute() {
+    async execute(): Promise<string | undefined> {
       return carId;
     }
   }
@@ -55,14 +56,26 @@ describe("ReserveCarUseCase", () => {
     expect(bookingCar.carId).toBe(carId);
   });
 
-  it("should call GetCarByIdRepository with correct params", () => {
+  it("should call GetCarByIdRepository with correct params", async () => {
     const { sut, getCarByIdRepository } = makeSut();
 
     const getCarByIdSpy = jest.spyOn(getCarByIdRepository, "execute");
 
-    sut.execute(carId, user.id, params);
+    await sut.execute(carId, user.id, params);
 
     expect(getCarByIdSpy).toHaveBeenCalledWith(carId);
     expect(getCarByIdSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it("should throw an error if car is not found", async () => {
+    const { sut, getCarByIdRepository } = makeSut();
+
+    jest
+      .spyOn(getCarByIdRepository, "execute")
+      .mockResolvedValueOnce(undefined);
+
+    const promise = sut.execute(carId, user.id, params);
+
+    await expect(promise).rejects.toThrow(new CarNotFoundError());
   });
 });
