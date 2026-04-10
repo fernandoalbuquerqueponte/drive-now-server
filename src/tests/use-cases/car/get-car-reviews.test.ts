@@ -55,4 +55,13 @@ describe("GetCarReviewsUseCase", () => {
 
     await expect(promise).rejects.toThrow(new CarNotFoundError());
   });
+
+  it("should call GetCarReviewsRepository with correct params", async () => {
+    const { sut, getCarReviewsRepositoryStub } = makeSut();
+    const executeSpy = jest.spyOn(getCarReviewsRepositoryStub, "execute");
+
+    await sut.execute(carId);
+
+    expect(executeSpy).toHaveBeenCalledWith(carId);
+  });
 });
