@@ -5,13 +5,14 @@ export const createCarSchema = z.object({
   model: z.string(),
   category: z.string(),
 
-  image: z.string().url(), // imagem principal
+  image: z.string().url(),
 
-  gallery: z.array(z.string().url()).optional(), // galeria de imagens
+  gallery: z.array(z.string().url()).optional(),
 
   year: z.number().int(),
   pricePerHour: z.number().positive(),
   description: z.string(),
+  available: z.boolean().optional(),
 
   specifications: z.array(
     z.object({
@@ -21,6 +22,8 @@ export const createCarSchema = z.object({
   ),
 
   features: z.array(z.string()),
+  createdAt: z.date().optional(),
+  updatedAt: z.date().optional(),
 });
 
 export const createReserveSchema = z.object({
