@@ -88,4 +88,15 @@ describe("CreateCarUseCase", () => {
 
     await expect(promise).rejects.toThrow(new UserNotFoundError());
   });
+
+  it("should throw if CreateCarRepository throws", async () => {
+    const { sut, createCarRepositoryStub } = makeSut();
+    jest
+      .spyOn(createCarRepositoryStub, "execute")
+      .mockRejectedValueOnce(new Error());
+
+    const promise = sut.execute(car, userId);
+
+    await expect(promise).rejects.toThrow(new Error());
+  });
 });
