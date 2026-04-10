@@ -78,4 +78,17 @@ describe("ReserveCarUseCase", () => {
 
     await expect(promise).rejects.toThrow(new CarNotFoundError());
   });
+
+  it("should throw an error if totalHours is less or equal to 0", async () => {
+    const { sut } = makeSut();
+
+    const invalidParams = {
+      startDate: faker.date.future(),
+      endDate: faker.date.soon(),
+    };
+
+    const promise = sut.execute(carId, user.id, invalidParams);
+
+    await expect(promise).rejects.toThrow("Invalid booking duration");
+  });
 });
