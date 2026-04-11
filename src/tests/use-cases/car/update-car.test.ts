@@ -72,4 +72,17 @@ describe("UpdateCarUseCase", () => {
       car,
     );
   });
+
+  it("should call GetCarByIdRepository with correct params", async () => {
+    const { sut, getCarByIdRepositoryStub } = makeSut();
+
+    const getCarByIdRepositorySpy = jest.spyOn(
+      getCarByIdRepositoryStub,
+      "execute",
+    );
+
+    await sut.execute(faker.string.uuid(), car, carWithUserId.user_id);
+
+    expect(getCarByIdRepositorySpy).toHaveBeenCalledWith(expect.any(String));
+  });
 });
