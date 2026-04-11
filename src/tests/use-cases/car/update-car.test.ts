@@ -5,6 +5,7 @@ import type {
 } from "../../../types/car.js";
 import { UpdateCarUseCase } from "../../../use-cases/car/update-car.js";
 import { car } from "../../fixtures/car.js";
+import { ForbiddenError } from "../../../errors/user.js";
 
 describe("UpdateCarUseCase", () => {
   const carId = faker.string.uuid();
@@ -84,5 +85,13 @@ describe("UpdateCarUseCase", () => {
     await sut.execute(faker.string.uuid(), car, carWithUserId.user_id);
 
     expect(getCarByIdRepositorySpy).toHaveBeenCalledWith(expect.any(String));
+  });
+
+  it("should throw ForbiddenError if user is not the owner of the car", async () => {
+    const { sut } = makeSut();
+
+    const promise = sut.execute(faker.string.uuid(), car, faker.string.uuid());
+
+    await expect(promise).rejects.toThrow(new ForbiddenError());
   });
 });
