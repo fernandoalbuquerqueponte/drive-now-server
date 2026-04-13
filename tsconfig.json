@@ -20,6 +20,10 @@
     "skipLibCheck": true
   },
   "include": [
-    "src"
+    "src",
+    "prisma/**/*.ts",
+    "jest.global-setup.ts",
+    "jest.config.ts",
+    "prisma.config.ts"
   ]
 }

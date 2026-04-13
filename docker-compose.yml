@@ -10,3 +10,13 @@ services:
       - "5432:5432"
     volumes:
       - ./.postgres:/var/lib/postgresql
+
+  postgres-test:
+    image: postgres:latest
+    container_name: drive-now-postgres-test
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: root
+      POSTGRES_DB: drive-now-app
+    ports:
+      - "5433:5432"
