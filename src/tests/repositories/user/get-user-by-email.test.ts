@@ -15,4 +15,12 @@ describe("GetUserByEmailRepository", () => {
       updated_at: expect.any(Date),
     });
   });
+
+  it("should return null if user is not found", async () => {
+    const sut = new PostgresEmailIsAlreadyInUseUserRepository();
+
+    const result = await sut.execute("nonexistent@example.com");
+
+    expect(result).toBeNull();
+  });
 });
