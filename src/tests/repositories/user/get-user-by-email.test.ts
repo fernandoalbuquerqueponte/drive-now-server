@@ -34,4 +34,13 @@ describe("GetUserByEmailRepository", () => {
       where: { email: user.email },
     });
   });
+
+  it("should throw an error if prisma throws an error", async () => {
+    const sut = new PostgresEmailIsAlreadyInUseUserRepository();
+    jest.spyOn(prismaClient.user, "findFirst").mockRejectedValue(new Error());
+
+    const promise = sut.execute(user.email);
+
+    await expect(promise).rejects.toThrow();
+  });
 });
