@@ -11,7 +11,7 @@ export class PostgresDeleteUserRepository implements IDeleteUserRepository {
       return deletedUser;
     } catch (error) {
       console.error(error);
-      return null;
+      throw error;
     }
   }
 }
