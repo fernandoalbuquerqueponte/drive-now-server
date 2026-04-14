@@ -23,4 +23,15 @@ describe("GetUserByEmailRepository", () => {
 
     expect(result).toBeNull();
   });
+
+  it("should call prisma with correct params", async () => {
+    const sut = new PostgresEmailIsAlreadyInUseUserRepository();
+    const prismaSpy = jest.spyOn(prismaClient.user, "findFirst");
+
+    await sut.execute(user.email);
+
+    expect(prismaSpy).toHaveBeenCalledWith({
+      where: { email: user.email },
+    });
+  });
 });
