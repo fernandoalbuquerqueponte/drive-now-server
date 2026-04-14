@@ -16,6 +16,20 @@ describe("CreateUserRepository", () => {
     expect(result.imageUrl).toBe(userWithoutId.imageUrl);
   });
 
+  it("should create user without imageUrl", async () => {
+    const sut = new PostgresCreateUserRepository();
+
+    const result = await sut.execute({
+      ...userWithoutId,
+      imageUrl: null,
+    });
+
+    expect(result.first_name).toBe(userWithoutId.first_name);
+    expect(result.last_name).toBe(userWithoutId.last_name);
+    expect(result.email).toBe(userWithoutId.email);
+    expect(result.imageUrl).toBeNull();
+  });
+
   it("should call prisma with correct params", () => {
     const sut = new PostgresCreateUserRepository();
     const executeSpy = jest.spyOn(prismaClient.user, "create");
