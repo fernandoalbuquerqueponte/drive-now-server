@@ -9,6 +9,10 @@ export class PostgresGetUserByIdRepository implements IGetUserByIdRepository {
       },
     });
 
+    if (!response) {
+      return null;
+    }
+
     return response;
   }
 }
