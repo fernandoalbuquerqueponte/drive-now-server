@@ -16,4 +16,12 @@ describe("GetUserByIdRepository", () => {
       updated_at: expect.any(Date),
     });
   });
+
+  it("should return null if user is not found", async () => {
+    const sut = new PostgresGetUserByIdRepository();
+
+    const result = await sut.execute("non-existing-user-id");
+
+    expect(result).toBeNull();
+  });
 });
