@@ -14,6 +14,11 @@ describe("DeleteUserRepository", () => {
       created_at: expect.any(Date),
       updated_at: expect.any(Date),
     });
+
+    const deletedUserInDb = await prismaClient.user.findUnique({
+      where: { id: user.id },
+    });
+    expect(deletedUserInDb).toBeNull();
   });
 
   it("should call prisma with correct params", async () => {
