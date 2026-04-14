@@ -24,4 +24,18 @@ describe("GetUserByIdRepository", () => {
 
     expect(result).toBeNull();
   });
+
+  it("should call prisma with correct params", async () => {
+    const findFirstSpy = jest.spyOn(prismaClient.user, "findFirst");
+
+    const sut = new PostgresGetUserByIdRepository();
+
+    await sut.execute("any-user-id");
+
+    expect(findFirstSpy).toHaveBeenCalledWith({
+      where: {
+        id: "any-user-id",
+      },
+    });
+  });
 });
