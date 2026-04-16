@@ -20,6 +20,14 @@ describe("GetCarByIdRepository", () => {
     expect(result?.id);
   });
 
+  it("should return undefined if no car is found", async () => {
+    const sut = new PostgresGetCarByIdRepository();
+
+    const result = await sut.execute("any_id");
+
+    expect(result).toBeUndefined();
+  });
+
   it("should call prisma with correct params", async () => {
     await prismaClient.user.create({ data: user });
     const createdCar = await prismaClient.car.create({
