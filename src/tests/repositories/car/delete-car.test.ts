@@ -2,6 +2,7 @@ import { PostgresDeleteCarRepository } from "../../../repositories/postgres/car/
 import { car } from "../../fixtures/car.js";
 import prismaClient from "../../../../prisma/prisma.js";
 import { user } from "../../fixtures/user.js";
+import { faker } from "@faker-js/faker";
 
 describe("DeleteCarRepository", () => {
   it("should delete a car sucessfully", async () => {
@@ -25,5 +26,25 @@ describe("DeleteCarRepository", () => {
     });
 
     expect(fetchCarInDb).toBeNull();
+  });
+
+  it("should call prisma with correct params", async () => {
+    await prismaClient.user.create({ data: user });
+    const createdCar = await prismaClient.car.create({
+      data: {
+        ...car,
+        user_id: user.id,
+      },
+    });
+    const sut = new PostgresDeleteCarRepository();
+    const prismaSpy = jest.spyOn(prismaClient.car, "delete");
+
+    await sut.execute(createdCar.id);
+
+    expect(prismaSpy).toHaveBeenCalledWith({
+      where: {
+        id: createdCar.id,
+      },
+    });
   });
 });
