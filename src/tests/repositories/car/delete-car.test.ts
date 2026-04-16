@@ -2,7 +2,6 @@ import { PostgresDeleteCarRepository } from "../../../repositories/postgres/car/
 import { car } from "../../fixtures/car.js";
 import prismaClient from "../../../../prisma/prisma.js";
 import { user } from "../../fixtures/user.js";
-import { faker } from "@faker-js/faker";
 
 describe("DeleteCarRepository", () => {
   it("should delete a car sucessfully", async () => {
@@ -46,5 +45,14 @@ describe("DeleteCarRepository", () => {
         id: createdCar.id,
       },
     });
+  });
+
+  it("should throw a generic error", async () => {
+    const sut = new PostgresDeleteCarRepository();
+    jest.spyOn(prismaClient.car, "delete").mockRejectedValueOnce(new Error());
+
+    const promise = sut.execute("any-id");
+
+    await expect(promise).rejects.toThrow();
   });
 });
