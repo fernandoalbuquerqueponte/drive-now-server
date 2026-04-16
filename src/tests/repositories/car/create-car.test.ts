@@ -13,4 +13,24 @@ describe("CreateCarRepository", () => {
     expect(result.brand).toBe(car.brand);
     expect(result.user_id).toBe(user.id);
   });
+
+  it("should call prisma with correct params", async () => {
+    await prismaClient.user.create({ data: user });
+    const sut = new PostgresCreateCarRepository();
+    const prismaSpy = jest.spyOn(prismaClient.car, "create");
+
+    await sut.execute(car, user.id);
+
+    expect(prismaSpy).toHaveBeenCalledWith({
+      data: {
+        ...car,
+        user_id: user.id,
+        ...(car.gallery && {
+          gallery: {
+            set: car.gallery,
+          },
+        }),
+      },
+    });
+  });
 });
