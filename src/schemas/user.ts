@@ -9,6 +9,20 @@ export const baseUserSchema = z.object({
   password: z.string().min(6),
 });
 
+export const loginSchema = z.object({
+  email: z
+    .email({
+      message: "Please provide a valid e-mail.",
+    })
+    .trim()
+    .min(1, {
+      message: "E-mail is required.",
+    }),
+  password: z.string().trim().min(6, {
+    message: "Password must have at least 6 characters.",
+  }),
+});
+
 export const createUserSchema = baseUserSchema.omit({ id: true });
 export const updateUserSchema = createUserSchema.partial();
 
