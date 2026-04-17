@@ -24,7 +24,7 @@ export class LoginUserController {
       if (error instanceof ZodError) {
         return badRequest(error.message);
       }
-      return serverError;
+      return serverError();
     }
   }
 }
