@@ -1,10 +1,13 @@
 import { PasswordHasherAdapter } from "../../adapters/index.js";
+import { PasswordComparatorAdapter } from "../../adapters/password-comparator.js";
+import { TokensGeneratorAdapter } from "../../adapters/tokens-generator.js";
 import {
   CreateUserController,
   DeleteUserController,
   GetUserByIdController,
   UpdateUserController,
 } from "../../controllers/index.js";
+import { LoginUserController } from "../../controllers/user/login-user.js";
 import {
   PostgresCreateUserRepository,
   PostgresDeleteUserRepository,
@@ -18,6 +21,7 @@ import {
   GetUserByIdUseCase,
   UpdateUserUseCase,
 } from "../../use-cases/index.js";
+import { LoginUserUseCase } from "../../use-cases/user/login-user.js";
 
 export const makeCreateUserController = () => {
   const createUserRepository = new PostgresCreateUserRepository();
@@ -28,7 +32,7 @@ export const makeCreateUserController = () => {
   const createUserUseCase = new CreateUserUseCase(
     createUserRepository,
     getUserByEmailRepository,
-    passwordHasherAdapter
+    passwordHasherAdapter,
   );
   const createUserController = new CreateUserController(createUserUseCase);
 
@@ -63,10 +67,27 @@ export const makeUpdateUserController = () => {
     updateUserRepository,
     getUserByIdRepository,
     getUserByEmailRepository,
-    passwordHasherAdapter
+    passwordHasherAdapter,
   );
 
   const updateUserController = new UpdateUserController(updateUserUseCase);
 
   return updateUserController;
+};
+
+export const makeLoginUserController = () => {
+  const getUserByEmailRepository =
+    new PostgresEmailIsAlreadyInUseUserRepository();
+  const passwordComparatorAdapter = new PasswordComparatorAdapter();
+  const tokensGeneratorAdapter = new TokensGeneratorAdapter();
+  
+  const loginUserUseCase = new LoginUserUseCase(
+    getUserByEmailRepository,
+    passwordComparatorAdapter,
+    tokensGeneratorAdapter,
+  );
+
+  const loginUserController = new LoginUserController(loginUserUseCase);
+
+  return loginUserController;
 };
