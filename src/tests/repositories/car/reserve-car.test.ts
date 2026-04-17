@@ -62,4 +62,35 @@ describe("ReserveCarRepository", () => {
       },
     });
   });
+
+  it("should call prisma(CREATE) with correct params", async () => {
+    await prismaClient.user.create({ data: user });
+    const createdCar = await prismaClient.car.create({
+      data: {
+        ...car,
+        user_id: user.id,
+      },
+    });
+
+    const sut = new PostgresReserveCarRepository();
+    const prismaSpy = jest.spyOn(prismaClient.booking, "create");
+
+    await sut.execute({
+      ...booking,
+      startDate,
+      endDate,
+      carId: createdCar.id,
+      userId: user.id,
+    });
+
+    expect(prismaSpy).toHaveBeenCalledWith({
+      data: {
+        ...booking,
+        startDate,
+        endDate,
+        carId: createdCar.id,
+        userId: user.id,
+      },
+    });
+  });
 });
