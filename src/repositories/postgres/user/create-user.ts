@@ -13,13 +13,6 @@ export class PostgresCreateUserRepository implements ICreateUsersRepository {
         imageUrl: params.imageUrl ?? null,
         password: params.password,
       },
-      select: {
-        id: true,
-        first_name: true,
-        last_name: true,
-        email: true,
-        imageUrl: true,
-      },
     });
 
     return user;
