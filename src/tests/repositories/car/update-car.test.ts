@@ -26,4 +26,33 @@ describe("UpdateCarRepository", () => {
     });
     expect(carInDb?.brand).toBe("Nome Novo");
   });
+
+  it("should call prisma with correct params", async () => {
+    await prismaClient.user.create({ data: user });
+    const createdCar = await prismaClient.car.create({
+      data: {
+        ...car,
+        user_id: user.id,
+      },
+    });
+
+    const sut = new PostgresUpdateCarRepository();
+    const prismaSpy = jest.spyOn(prismaClient.car, "update");
+
+    await sut.execute(createdCar.id, car);
+
+    expect(prismaSpy).toHaveBeenCalledWith({
+      where: {
+        id: createdCar.id,
+      },
+      data: {
+        ...car,
+        ...(car.gallery && {
+          gallery: {
+            set: car.gallery,
+          },
+        }),
+      },
+    });
+  });
 });
