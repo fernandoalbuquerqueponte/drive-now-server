@@ -9,14 +9,9 @@ export const baseUserSchema = z.object({
   password: z.string().min(6),
 });
 
-// usado para criação (sem id)
 export const createUserSchema = baseUserSchema.omit({ id: true });
-
-// usado para update (parcial e sem id)
 export const updateUserSchema = createUserSchema.partial();
 
 export type CreateUserSchema = z.infer<typeof createUserSchema>;
 export type UpdateUserSchema = z.infer<typeof updateUserSchema>;
-
-// esse é o USER retornado pela aplicação:
-export type User = Omit<z.infer<typeof baseUserSchema>, "password">;
+export type User = z.infer<typeof baseUserSchema>;
