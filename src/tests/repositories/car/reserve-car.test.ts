@@ -93,4 +93,31 @@ describe("ReserveCarRepository", () => {
       },
     });
   });
+
+  it("should throw error if has conflit with booking dates", async () => {
+    await prismaClient.user.create({ data: user });
+    const createdCar = await prismaClient.car.create({
+      data: { ...car, user_id: user.id },
+    });
+    await prismaClient.booking.create({
+      data: {
+        ...booking,
+        carId: createdCar.id,
+        userId: user.id,
+        startDate,
+        endDate,
+      },
+    });
+    const sut = new PostgresReserveCarRepository();
+
+    const promise = sut.execute({
+      ...booking,
+      carId: createdCar.id,
+      userId: user.id,
+      startDate,
+      endDate,
+    });
+
+    await expect(promise).rejects.toThrow();
+  });
 });
