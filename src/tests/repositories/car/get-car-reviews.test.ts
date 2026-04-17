@@ -29,4 +29,24 @@ describe("GetCarReviewsRepository", () => {
     expect(Array.isArray(result)).toBe(true);
     expect(result).toHaveLength(1);
   });
+
+  it("should call prisma with correct params", async () => {
+    const createdUser = await prismaClient.user.create({ data: user });
+    const createdCar = await prismaClient.car.create({
+      data: {
+        ...car,
+        user_id: createdUser.id,
+      },
+    });
+    const sut = new GetCarReviewsRepository();
+    const prismaSpy = jest.spyOn(prismaClient.review, "findMany");
+
+    await sut.execute(createdCar.id);
+
+    expect(prismaSpy).toHaveBeenCalledWith({
+      where: {
+        carId: createdCar.id,
+      },
+    });
+  });
 });
