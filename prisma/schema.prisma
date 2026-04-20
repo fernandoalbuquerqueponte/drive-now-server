@@ -47,7 +47,7 @@ model Car {
   specifications Json
   features       String[]
 
-  user     User       @relation(fields: [user_id], references: [id])
+  user     User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
   reviews  Review[]
   bookings Booking[]
   CarImage CarImage[]

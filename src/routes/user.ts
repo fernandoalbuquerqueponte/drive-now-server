@@ -19,37 +19,34 @@ usersRoutes.post("/", async (req: Request, res: Response) => {
   res.status(response.statusCode).send(response.body);
 });
 
-usersRoutes.get("/:userId", auth, async (req: Request, res: Response) => {
+usersRoutes.get("/", auth, async (req: Request, res: Response) => {
   const getUserByIdController = makeGetUserByIdController();
 
-  const response = await getUserByIdController.execute(req);
+  const response = await getUserByIdController.execute({ userId: req.userId });
 
   res.status(response.statusCode).send(response.body);
 });
 
-usersRoutes.delete(
-  "/:userId",
-  auth,
-  async (request: Request, response: Response) => {
-    const deleteUserController = makeDeleteUserController();
+usersRoutes.delete("/", auth, async (request: Request, response: Response) => {
+  const deleteUserController = makeDeleteUserController();
 
-    const { body, statusCode } = await deleteUserController.execute(request);
+  const { body, statusCode } = await deleteUserController.execute({
+    userId: request.userId,
+  });
 
-    response.status(statusCode).send(body);
-  },
-);
+  response.status(statusCode).send(body);
+});
 
-usersRoutes.patch(
-  "/:userId",
-  auth,
-  async (request: Request, response: Response) => {
-    const updateUserController = makeUpdateUserController();
+usersRoutes.patch("/", auth, async (request: Request, response: Response) => {
+  const updateUserController = makeUpdateUserController();
 
-    const { body, statusCode } = await updateUserController.execute(request);
+  const { body, statusCode } = await updateUserController.execute({
+    userId: request.userId,
+    body: request.body,
+  });
 
-    response.status(statusCode).send(body);
-  },
-);
+  response.status(statusCode).send(body);
+});
 
 usersRoutes.post("/login", async (request: Request, response: Response) => {
   const loginUserController = makeLoginUserController();

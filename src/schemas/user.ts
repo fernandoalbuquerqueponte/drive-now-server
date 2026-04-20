@@ -1,7 +1,6 @@
 import { z } from "zod/v4";
 
 export const baseUserSchema = z.object({
-  id: z.string().uuid(),
   first_name: z.string().trim().min(1),
   last_name: z.string().trim().min(1),
   imageUrl: z.string().url().nullable().optional(),

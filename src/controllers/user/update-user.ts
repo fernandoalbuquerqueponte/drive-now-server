@@ -1,8 +1,7 @@
-import type { Request } from "express";
 import type { UpdateUserUseCase } from "../../use-cases/user/update-user.js";
 import { ZodError } from "zod";
 
-import { updateUserSchema } from "../../schemas/user.js";
+import { updateUserSchema, type UpdateUserSchema } from "../../schemas/user.js";
 import {
   badRequest,
   serverError,
@@ -12,23 +11,26 @@ import {
 } from "../helpers/index.js";
 import { UserAlreadyExistsError } from "../../errors/user.js";
 
+interface UpdateUserRequest {
+  userId: string;
+  body: UpdateUserSchema;
+}
+
 export class UpdateUserController {
   constructor(private updateUserUseCase: UpdateUserUseCase) {
     this.updateUserUseCase = updateUserUseCase;
   }
-  async execute(httpRequest: Request) {
+  async execute(httpRequest: UpdateUserRequest) {
     try {
-      const userId = httpRequest.params.userId as string;
+      const { userId, body } = httpRequest;
       const isIdValid = checkIfIdIsValid(userId);
 
       if (!isIdValid) {
         return invalidIdResponse();
       }
+      await updateUserSchema.parseAsync(body);
 
-      const params = httpRequest.body;
-      await updateUserSchema.parseAsync(params);
-
-      const updatedUser = await this.updateUserUseCase.execute(userId, params);
+      const updatedUser = await this.updateUserUseCase.execute(userId, body);
 
       return successResponse(updatedUser);
     } catch (error) {
