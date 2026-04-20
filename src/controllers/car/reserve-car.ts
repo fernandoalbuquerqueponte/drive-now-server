@@ -1,4 +1,3 @@
-import type { Request } from "express";
 import {
   badRequest,
   created,
@@ -9,16 +8,23 @@ import type { ReserveCarUseCase } from "../../use-cases/car/reserve-car.js";
 import { createReserveSchema } from "../../schemas/car.js";
 import { CarNotFoundError } from "../../errors/car.js";
 import { ZodError } from "zod/v3";
+import type { ReserveCarInputDTO } from "../../types/car.js";
+
+interface httpRequest {
+  userId: string;
+  carId: string;
+  body: ReserveCarInputDTO;
+}
 
 export class ReserveCarController {
   constructor(private reserveCarUseCase: ReserveCarUseCase) {
     this.reserveCarUseCase = reserveCarUseCase;
   }
-  async execute(httpRequest: Request) {
+  async execute(httpRequest: httpRequest) {
     try {
       const params = httpRequest.body;
-      const carId = httpRequest.params.carId;
-      const userId = httpRequest.params.userId;
+      const carId = httpRequest.carId;
+      const userId = httpRequest.userId;
 
       await createReserveSchema.parseAsync(params);
 

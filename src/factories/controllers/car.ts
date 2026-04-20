@@ -9,6 +9,7 @@ import { PostgresGetCarByIdRepository } from "../../repositories/postgres/car/ge
 import { GetCarReviewsRepository } from "../../repositories/postgres/car/get-car-reviews.js";
 import { PostgresReserveCarRepository } from "../../repositories/postgres/car/reserve-car.js";
 import { PostgresUpdateCarRepository } from "../../repositories/postgres/car/update-car.js";
+import { PostgresGetUserByIdRepository } from "../../repositories/postgres/index.js";
 import { CreateCarUseCase } from "../../use-cases/car/create-car.js";
 import { DeleteCarUseCase } from "../../use-cases/car/delete-car.js";
 import { GetCarReviewsUseCase } from "../../use-cases/car/get-car-reviews.js";
@@ -17,7 +18,13 @@ import { UpdateCarUseCase } from "../../use-cases/car/update-car.js";
 
 export const makeCreateCarController = () => {
   const createCarRepository = new PostgresCreateCarRepository();
-  const createCarUseCase = new CreateCarUseCase(createCarRepository);
+  const getUserByIdRepository = new PostgresGetUserByIdRepository();
+
+  const createCarUseCase = new CreateCarUseCase(
+    createCarRepository,
+    getUserByIdRepository,
+  );
+
   const createCarController = new CreateCarController(createCarUseCase);
 
   return createCarController;
@@ -25,8 +32,10 @@ export const makeCreateCarController = () => {
 
 export const makeGetCarReviewsController = () => {
   const getCarReviewsRepository = new GetCarReviewsRepository();
+  const getCarByIdRepository = new PostgresGetCarByIdRepository();
   const getCarReviewsUseCase = new GetCarReviewsUseCase(
     getCarReviewsRepository,
+    getCarByIdRepository,
   );
   const getCarReviewsController = new GetCarReviewsController(
     getCarReviewsUseCase,

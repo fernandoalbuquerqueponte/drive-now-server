@@ -1,17 +1,26 @@
-import type { Request } from "express";
 import type { UpdateCarUseCase } from "../../use-cases/car/update-car.js";
 import { badRequest, serverError, successResponse } from "../helpers/index.js";
-import { updateCarParamsSchema, updateCarSchema } from "../../schemas/car.js";
+import {
+  updateCarParamsSchema,
+  updateCarSchema,
+  type UpdateCarSchema,
+} from "../../schemas/car.js";
 import { ForbiddenError } from "../../errors/user.js";
 import { ZodError } from "zod/v3";
+
+interface HttpRequest {
+  body: UpdateCarSchema;
+  userId: string;
+  carId: string;
+}
 
 export class UpdateCarController {
   constructor(private updateCarUseCase: UpdateCarUseCase) {
     this.updateCarUseCase = updateCarUseCase;
   }
-  async execute(httpRequest: Request) {
+  async execute(httpRequest: HttpRequest) {
     try {
-      const { carId, userId } = updateCarParamsSchema.parse(httpRequest.params);
+      const { carId, userId } = updateCarParamsSchema.parse(httpRequest);
 
       const data = httpRequest.body;
 

@@ -10,10 +10,13 @@ import { auth } from "../middlewares /auth.js";
 
 export const carRoutes = Router();
 
-carRoutes.post("/:userId", auth, async (req: Request, res: Response) => {
+carRoutes.post("/", auth, async (req: Request, res: Response) => {
   const createCarController = makeCreateCarController();
 
-  const response = await createCarController.execute(req);
+  const response = await createCarController.execute({
+    userId: req.userId,
+    body: req.body,
+  });
 
   return res.status(response.statusCode).send(response);
 });
@@ -34,26 +37,26 @@ carRoutes.delete("/:carId", auth, async (req: Request, res: Response) => {
   return res.status(statusCode).send(body);
 });
 
-carRoutes.patch(
-  "/:carId/:userId",
-  auth,
-  async (req: Request, res: Response) => {
-    const updateCarController = makeUpdateCarController();
+carRoutes.patch("/:carId", auth, async (req: Request, res: Response) => {
+  const updateCarController = makeUpdateCarController();
 
-    const { body, statusCode } = await updateCarController.execute(req);
+  const { body, statusCode } = await updateCarController.execute({
+    carId: req.params.carId as string,
+    userId: req.userId,
+    body: req.body,
+  });
 
-    return res.status(statusCode).send(body);
-  },
-);
+  return res.status(statusCode).send(body);
+});
 
-carRoutes.post(
-  "/reserve/:carId/:userId",
-  auth,
-  async (req: Request, res: Response) => {
-    const reserveCarController = makeReserveCarController();
+carRoutes.post("/reserve/:carId", auth, async (req: Request, res: Response) => {
+  const reserveCarController = makeReserveCarController();
 
-    const { body, statusCode } = await reserveCarController.execute(req);
+  const { body, statusCode } = await reserveCarController.execute({
+    carId: req.params.carId as string,
+    userId: req.userId,
+    body: req.body,
+  });
 
-    return res.status(statusCode).send(body);
-  },
-);
+  return res.status(statusCode).send(body);
+});

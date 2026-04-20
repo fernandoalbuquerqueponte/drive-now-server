@@ -3,7 +3,7 @@ import type {
   IPostgresUpdateCarRepository,
 } from "../../types/car.js";
 import { ForbiddenError } from "../../errors/user.js";
-import type { CreateCarSchema } from "../../schemas/car.js";
+import type { UpdateCarSchema } from "../../schemas/car.js";
 
 export class UpdateCarUseCase {
   constructor(
@@ -13,7 +13,7 @@ export class UpdateCarUseCase {
     this.updateCarRepository = updateCarRepository;
     this.getCarByIdRepository = getCarByIdRepository;
   }
-  async execute(carId: string, data: CreateCarSchema, userId: string) {
+  async execute(carId: string, data: UpdateCarSchema, userId: string) {
     const car = await this.getCarByIdRepository.execute(carId);
 
     if (car?.user_id !== userId) {

@@ -1,5 +1,5 @@
 import type { Booking, BookingStatus, Car, Review } from "@prisma/client";
-import type { CreateCarSchema } from "../schemas/car.js";
+import type { CreateCarSchema, UpdateCarSchema } from "../schemas/car.js";
 
 export interface CreateBookingDTO {
   carId: string;
@@ -33,7 +33,7 @@ export interface IPostgresGetCarByIdRepository {
 }
 
 export interface IPostgresUpdateCarRepository {
-  execute(carId: string, params: CreateCarSchema): Promise<Car>;
+  execute(carId: string, params: UpdateCarSchema): Promise<Car>;
 }
 
 export interface IPostgresReserveCarRepository {
