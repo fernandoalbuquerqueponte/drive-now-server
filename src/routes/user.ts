@@ -7,7 +7,7 @@ import {
   makeLoginUserController,
   makeUpdateUserController,
 } from "../factories/controllers/user.js";
-import type { DeleteUserParams } from "../controllers/index.js";
+import { auth } from "../middlewares /auth.js";
 
 export const usersRoutes = Router();
 
@@ -19,7 +19,7 @@ usersRoutes.post("/", async (req: Request, res: Response) => {
   res.status(response.statusCode).send(response.body);
 });
 
-usersRoutes.get("/:userId", async (req: Request, res: Response) => {
+usersRoutes.get("/:userId", auth, async (req: Request, res: Response) => {
   const getUserByIdController = makeGetUserByIdController();
 
   const response = await getUserByIdController.execute(req);
@@ -29,7 +29,8 @@ usersRoutes.get("/:userId", async (req: Request, res: Response) => {
 
 usersRoutes.delete(
   "/:userId",
-  async (request: Request<DeleteUserParams>, response: Response) => {
+  auth,
+  async (request: Request, response: Response) => {
     const deleteUserController = makeDeleteUserController();
 
     const { body, statusCode } = await deleteUserController.execute(request);
@@ -38,13 +39,17 @@ usersRoutes.delete(
   },
 );
 
-usersRoutes.patch("/:userId", async (request: Request, response: Response) => {
-  const updateUserController = makeUpdateUserController();
+usersRoutes.patch(
+  "/:userId",
+  auth,
+  async (request: Request, response: Response) => {
+    const updateUserController = makeUpdateUserController();
 
-  const { body, statusCode } = await updateUserController.execute(request);
+    const { body, statusCode } = await updateUserController.execute(request);
 
-  response.status(statusCode).send(body);
-});
+    response.status(statusCode).send(body);
+  },
+);
 
 usersRoutes.post("/login", async (request: Request, response: Response) => {
   const loginUserController = makeLoginUserController();

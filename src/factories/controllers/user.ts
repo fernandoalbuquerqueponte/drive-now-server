@@ -1,3 +1,4 @@
+import { IdGeneratorAdapter } from "../../adapters/id-generator.js";
 import { PasswordHasherAdapter } from "../../adapters/index.js";
 import { PasswordComparatorAdapter } from "../../adapters/password-comparator.js";
 import { TokensGeneratorAdapter } from "../../adapters/tokens-generator.js";
@@ -29,10 +30,16 @@ export const makeCreateUserController = () => {
     new PostgresEmailIsAlreadyInUseUserRepository();
 
   const passwordHasherAdapter = new PasswordHasherAdapter();
+
+  const tokensGeneratorAdapter = new TokensGeneratorAdapter();
+  const idGeneratorAdapter = new IdGeneratorAdapter();
+
   const createUserUseCase = new CreateUserUseCase(
     createUserRepository,
     getUserByEmailRepository,
     passwordHasherAdapter,
+    idGeneratorAdapter,
+    tokensGeneratorAdapter,
   );
   const createUserController = new CreateUserController(createUserUseCase);
 
@@ -80,7 +87,7 @@ export const makeLoginUserController = () => {
     new PostgresEmailIsAlreadyInUseUserRepository();
   const passwordComparatorAdapter = new PasswordComparatorAdapter();
   const tokensGeneratorAdapter = new TokensGeneratorAdapter();
-  
+
   const loginUserUseCase = new LoginUserUseCase(
     getUserByEmailRepository,
     passwordComparatorAdapter,

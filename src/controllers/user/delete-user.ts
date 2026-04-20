@@ -2,7 +2,11 @@ import type { Request } from "express";
 import type { DeleteUserUseCase } from "../../use-cases/user/delete-user.js";
 
 import { checkIfIdIsValid, invalidIdResponse } from "../helpers/validation.js";
-import { userNotFoundResponse, ok, serverError } from "../helpers/index.js";
+import {
+  userNotFoundResponse,
+  serverError,
+  successResponse,
+} from "../helpers/index.js";
 
 export interface DeleteUserParams {
   userId: string;
@@ -12,9 +16,9 @@ export class DeleteUserController {
   constructor(private deleteUserUserCase: DeleteUserUseCase) {
     this.deleteUserUserCase = deleteUserUserCase;
   }
-  async execute(httpRequest: Request<DeleteUserParams>) {
+  async execute(httpRequest: Request) {
     try {
-      const userId = httpRequest.params.userId;
+      const userId = httpRequest.params.userId as string;
 
       const isIdValid = checkIfIdIsValid(userId);
 
@@ -28,7 +32,7 @@ export class DeleteUserController {
         return userNotFoundResponse();
       }
 
-      return ok();
+      return successResponse(deletedUser);
     } catch (error) {
       console.error("Error deleting user:", error);
       return serverError();

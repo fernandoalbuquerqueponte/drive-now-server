@@ -23,7 +23,7 @@ export const loginSchema = z.object({
   }),
 });
 
-export const createUserSchema = baseUserSchema.omit({ id: true });
+export const createUserSchema = baseUserSchema;
 export const updateUserSchema = createUserSchema.partial();
 
 export type CreateUserSchema = z.infer<typeof createUserSchema>;

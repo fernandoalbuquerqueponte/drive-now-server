@@ -6,10 +6,11 @@ import {
   makeReserveCarController,
   makeUpdateCarController,
 } from "../factories/controllers/car.js";
+import { auth } from "../middlewares /auth.js";
 
 export const carRoutes = Router();
 
-carRoutes.post("/:userId", async (req: Request, res: Response) => {
+carRoutes.post("/:userId", auth, async (req: Request, res: Response) => {
   const createCarController = makeCreateCarController();
 
   const response = await createCarController.execute(req);
@@ -17,7 +18,7 @@ carRoutes.post("/:userId", async (req: Request, res: Response) => {
   return res.status(response.statusCode).send(response);
 });
 
-carRoutes.get("/:carId", async (req: Request, res: Response) => {
+carRoutes.get("/:carId", auth, async (req: Request, res: Response) => {
   const getCarReviewsController = makeGetCarReviewsController();
 
   const { body, statusCode } = await getCarReviewsController.execute(req);
@@ -25,7 +26,7 @@ carRoutes.get("/:carId", async (req: Request, res: Response) => {
   return res.status(statusCode).send(body);
 });
 
-carRoutes.delete("/:carId", async (req: Request, res: Response) => {
+carRoutes.delete("/:carId", auth, async (req: Request, res: Response) => {
   const deleteCarController = makeDeleteCarController();
 
   const { body, statusCode } = await deleteCarController.execute(req);
@@ -33,16 +34,21 @@ carRoutes.delete("/:carId", async (req: Request, res: Response) => {
   return res.status(statusCode).send(body);
 });
 
-carRoutes.patch("/:carId/:userId", async (req: Request, res: Response) => {
-  const updateCarController = makeUpdateCarController();
+carRoutes.patch(
+  "/:carId/:userId",
+  auth,
+  async (req: Request, res: Response) => {
+    const updateCarController = makeUpdateCarController();
 
-  const { body, statusCode } = await updateCarController.execute(req);
+    const { body, statusCode } = await updateCarController.execute(req);
 
-  return res.status(statusCode).send(body);
-});
+    return res.status(statusCode).send(body);
+  },
+);
 
 carRoutes.post(
   "/reserve/:carId/:userId",
+  auth,
   async (req: Request, res: Response) => {
     const reserveCarController = makeReserveCarController();
 

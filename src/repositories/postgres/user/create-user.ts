@@ -7,6 +7,7 @@ export class PostgresCreateUserRepository implements ICreateUsersRepository {
   async execute(params: CreateUserSchema) {
     const user = await prismaClient.user.create({
       data: {
+        id: params.id,
         first_name: params.first_name,
         last_name: params.last_name,
         email: params.email,
