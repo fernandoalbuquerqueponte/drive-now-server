@@ -21,10 +21,10 @@ export class CreateCarController {
         return badRequest("User ID is required.");
       }
 
-      await createCarSchema.parseAsync(params);
+      const validatedData = await createCarSchema.parseAsync(params);
 
       const createdCar = await this.createCarUseCase.execute(
-        httpRequest.body,
+        validatedData,
         userId,
       );
       return created(createdCar);
