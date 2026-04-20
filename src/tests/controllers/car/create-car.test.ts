@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { faker } from "@faker-js/faker";
 import { CreateCarController } from "../../../controllers/car/create-car.js";
 import { CreateCarUseCase } from "../../../use-cases/car/create-car.js";
-import type { Request } from "express";
 import type { CreateCarSchema } from "../../../schemas/car.js";
 import { car } from "../../fixtures/index.js";
 
@@ -29,14 +29,12 @@ describe("CreateCarController", () => {
   };
 
   const httpRequest = {
-    params: {
-      userId: faker.string.uuid(),
-    },
+    userId: faker.string.uuid(),
     body: {
       ...car,
       id: undefined,
     },
-  } as unknown as Request<any, any, Partial<CreateCarSchema>>;
+  } as any;
 
   it("should create a car successfully", async () => {
     const { sut } = makeSut();
@@ -55,7 +53,7 @@ describe("CreateCarController", () => {
         ...httpRequest.body,
         brand: null,
       },
-    } as unknown as Request<any, any, Partial<CreateCarSchema>>);
+    });
 
     expect(result.statusCode).toBe(400);
   });
@@ -65,10 +63,8 @@ describe("CreateCarController", () => {
 
     const result = await sut.execute({
       ...httpRequest,
-      params: {
-        userId: null,
-      },
-    } as unknown as Request<any, any, Partial<CreateCarSchema>>);
+      userId: null,
+    });
 
     expect(result.statusCode).toBe(400);
   });
@@ -82,7 +78,7 @@ describe("CreateCarController", () => {
         ...httpRequest.body,
         specifications: [{ label: "Motor" }],
       },
-    } as unknown as Request<any, any, Partial<CreateCarSchema>>);
+    });
 
     expect(result.statusCode).toBe(400);
   });
@@ -96,7 +92,7 @@ describe("CreateCarController", () => {
         ...httpRequest.body,
         features: "invalid_features",
       },
-    } as unknown as Request<any, any, Partial<CreateCarSchema>>);
+    });
 
     expect(result.statusCode).toBe(400);
   });
@@ -110,7 +106,7 @@ describe("CreateCarController", () => {
         ...httpRequest.body,
         image: "invalid_url",
       },
-    } as unknown as Request<any, any, Partial<CreateCarSchema>>);
+    });
 
     expect(result.statusCode).toBe(400);
   });
@@ -124,7 +120,7 @@ describe("CreateCarController", () => {
         ...httpRequest.body,
         gallery: ["invalid_url1", "invalid_url2"],
       },
-    } as unknown as Request<any, any, Partial<CreateCarSchema>>);
+    });
 
     expect(result.statusCode).toBe(400);
   });
@@ -138,7 +134,7 @@ describe("CreateCarController", () => {
         ...httpRequest.body,
         brand: undefined,
       },
-    } as unknown as Request<any, any, Partial<CreateCarSchema>>);
+    });
 
     expect(result.statusCode).toBe(400);
   });
@@ -152,7 +148,7 @@ describe("CreateCarController", () => {
         ...httpRequest.body,
         model: undefined,
       },
-    } as unknown as Request<any, any, Partial<CreateCarSchema>>);
+    });
 
     expect(result.statusCode).toBe(400);
   });
@@ -166,7 +162,7 @@ describe("CreateCarController", () => {
         ...httpRequest.body,
         category: undefined,
       },
-    } as unknown as Request<any, any, Partial<CreateCarSchema>>);
+    });
 
     expect(result.statusCode).toBe(400);
   });
@@ -180,7 +176,7 @@ describe("CreateCarController", () => {
         ...httpRequest.body,
         year: undefined,
       },
-    } as unknown as Request<any, any, Partial<CreateCarSchema>>);
+    });
 
     expect(result.statusCode).toBe(400);
   });
@@ -194,7 +190,7 @@ describe("CreateCarController", () => {
         ...httpRequest.body,
         pricePerHour: undefined,
       },
-    } as unknown as Request<any, any, Partial<CreateCarSchema>>);
+    });
 
     expect(result.statusCode).toBe(400);
   });
@@ -208,7 +204,7 @@ describe("CreateCarController", () => {
         ...httpRequest.body,
         description: undefined,
       },
-    } as unknown as Request<any, any, Partial<CreateCarSchema>>);
+    });
 
     expect(result.statusCode).toBe(400);
   });
@@ -233,7 +229,7 @@ describe("CreateCarController", () => {
 
     expect(executeSpy).toHaveBeenCalledWith(
       httpRequest.body,
-      httpRequest.params.userId,
+      httpRequest.userId,
     );
   });
 });
