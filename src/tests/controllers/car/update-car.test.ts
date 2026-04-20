@@ -1,7 +1,6 @@
-import type { Request } from "express";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { UpdateCarController } from "../../../controllers/car/update-car.js";
 import type { UpdateCarUseCase } from "../../../use-cases/car/update-car.js";
-import type { UpdateCarSchema } from "../../../schemas/car.js";
 import { faker } from "@faker-js/faker";
 import { car } from "../../fixtures/index.js";
 import { ForbiddenError } from "../../../errors/user.js";
@@ -14,14 +13,12 @@ describe("UpdateCarController", () => {
   }
 
   const httpRequest = {
-    params: {
-      carId: faker.string.uuid(),
-      userId: faker.string.uuid(),
-    },
+    carId: faker.string.uuid(),
+    userId: faker.string.uuid(),
     body: {
-      car,
+      ...car,
     },
-  } as unknown as Request<any, any, Partial<UpdateCarSchema>>;
+  };
 
   const makeSut = () => {
     const updateCarUseCase =
@@ -44,10 +41,8 @@ describe("UpdateCarController", () => {
 
     const result = await sut.execute({
       ...httpRequest,
-      params: {
-        carId: "invalid_id",
-      },
-    } as unknown as Request<any, any, Partial<UpdateCarSchema>>);
+      carId: "invalid_id",
+    });
 
     expect(result.statusCode).toBe(400);
   });
@@ -57,10 +52,8 @@ describe("UpdateCarController", () => {
 
     const result = await sut.execute({
       ...httpRequest,
-      params: {
-        carId: null,
-      },
-    } as unknown as Request<any, any, Partial<UpdateCarSchema>>);
+      carId: null as any,
+    });
 
     expect(result.statusCode).toBe(400);
   });
@@ -70,10 +63,8 @@ describe("UpdateCarController", () => {
 
     const result = await sut.execute({
       ...httpRequest,
-      params: {
-        userId: "invalid_id",
-      },
-    } as unknown as Request<any, any, Partial<UpdateCarSchema>>);
+      userId: "invalid_id",
+    });
 
     expect(result.statusCode).toBe(400);
   });
@@ -83,10 +74,8 @@ describe("UpdateCarController", () => {
 
     const result = await sut.execute({
       ...httpRequest,
-      params: {
-        userId: null,
-      },
-    } as unknown as Request<any, any, Partial<UpdateCarSchema>>);
+      userId: null as any,
+    });
 
     expect(result.statusCode).toBe(400);
   });
@@ -98,9 +87,9 @@ describe("UpdateCarController", () => {
       ...httpRequest,
       body: {
         ...httpRequest.body,
-        specifications: [{ label: "Motor" }],
+        specifications: [{ label: "Motor" }] as any,
       },
-    } as unknown as Request<any, any, Partial<UpdateCarSchema>>);
+    });
 
     expect(result.statusCode).toBe(400);
   });
@@ -112,9 +101,9 @@ describe("UpdateCarController", () => {
       ...httpRequest,
       body: {
         ...httpRequest.body,
-        features: "invalid_features",
+        features: "invalid_features" as any,
       },
-    } as unknown as Request<any, any, Partial<UpdateCarSchema>>);
+    });
 
     expect(result.statusCode).toBe(400);
   });
@@ -128,7 +117,7 @@ describe("UpdateCarController", () => {
         ...httpRequest.body,
         image: "invalid_url",
       },
-    } as unknown as Request<any, any, Partial<UpdateCarSchema>>);
+    });
 
     expect(result.statusCode).toBe(400);
   });
@@ -142,7 +131,7 @@ describe("UpdateCarController", () => {
         ...httpRequest.body,
         gallery: ["invalid_url1", "invalid_url2"],
       },
-    } as unknown as Request<any, any, Partial<UpdateCarSchema>>);
+    });
 
     expect(result.statusCode).toBe(400);
   });
@@ -166,9 +155,9 @@ describe("UpdateCarController", () => {
     await sut.execute(httpRequest);
 
     expect(executeSpy).toHaveBeenCalledWith(
-      httpRequest.params.carId,
+      httpRequest.carId,
       httpRequest.body,
-      httpRequest.params.userId,
+      httpRequest.userId,
     );
   });
 
