@@ -37,6 +37,11 @@ export class ReserveCarController {
         return badRequest("Invalid carId format");
       }
 
+      const isUserIdValid = checkIfIdIsValid(userId);
+      if (!isUserIdValid) {
+        return badRequest("Invalid userId format");
+      }
+
       const createdBooking = await this.reserveCarUseCase.execute(
         carId,
         userId,
