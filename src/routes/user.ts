@@ -5,6 +5,7 @@ import {
   makeDeleteUserController,
   makeGetUserByIdController,
   makeLoginUserController,
+  makeRefreshTokenController,
   makeUpdateUserController,
 } from "../factories/controllers/user.js";
 import { auth } from "../middlewares /auth.js";
@@ -54,4 +55,12 @@ usersRoutes.post("/login", async (request: Request, response: Response) => {
   const { body, statusCode } = await loginUserController.execute(request);
 
   return response.status(statusCode).json(body);
+});
+
+usersRoutes.post("/refresh-token", async (request, response) => {
+  const refreshTokenController = makeRefreshTokenController();
+
+  const { statusCode, body } = await refreshTokenController.execute(request);
+
+  response.status(statusCode).send(body);
 });

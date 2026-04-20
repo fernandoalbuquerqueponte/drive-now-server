@@ -22,6 +22,12 @@ export const loginSchema = z.object({
   }),
 });
 
+export const refreshTokenSchema = z.object({
+  refreshToken: z.string().trim().min(1, {
+    message: "Refresh token is required.",
+  }),
+});
+
 export const createUserSchema = baseUserSchema;
 export const updateUserSchema = createUserSchema.partial();
 
