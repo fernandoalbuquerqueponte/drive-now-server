@@ -52,7 +52,7 @@ export class CreateUserUseCase {
 
     return {
       ...createdUser,
-      tokens: this.tokensGeneratorAdapter.execute(userId),
+      tokens: await this.tokensGeneratorAdapter.execute(userId),
     };
   }
 }
