@@ -1,14 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { faker } from "@faker-js/faker";
 import { GetUserByIdController } from "../../../controllers/index.js";
-import type { User } from "../../../types/user.js";
 import { GetUserByIdUseCase } from "../../../use-cases/index.js";
 import type { Request } from "express";
-import type { CreateUserSchema } from "../../../schemas/user.js";
 
 describe("GetUserByIdController", () => {
   class GetUserByIdUseCaseStub {
-    async execute(): Promise<User> {
+    async execute() {
       return {
+        id: faker.string.uuid(),
         first_name: faker.person.firstName(),
         last_name: faker.person.lastName(),
         email: faker.internet.email(),
@@ -25,15 +25,13 @@ describe("GetUserByIdController", () => {
   };
 
   const httpRequest = {
-    params: {
-      userId: faker.string.uuid(),
-    },
-  } as Request<any, any, CreateUserSchema>;
+    userId: faker.string.uuid(),
+  };
 
   it("should return user successfully", async () => {
     const { sut } = makeSut();
 
-    const response = await sut.execute(httpRequest);
+    const response = await sut.execute(httpRequest as any);
 
     expect(response.statusCode).toBe(200);
   });
@@ -41,17 +39,9 @@ describe("GetUserByIdController", () => {
   it("should return 400 if userId is invalid", async () => {
     const { sut } = makeSut();
 
-    const fake = {
-      params: {
-        userId: "faker.string.uuid()",
-      },
-    } as Request<any, any, CreateUserSchema>;
-
     const response = await sut.execute({
-      params: {
-        userId: "invalid_id",
-      },
-    } as Partial<Request> as Request);
+      userId: "invalid_id",
+    });
 
     expect(response.statusCode).toBe(400);
   });
@@ -60,7 +50,7 @@ describe("GetUserByIdController", () => {
     const { sut } = makeSut();
 
     const response = await sut.execute({
-      params: {},
+      userId: undefined,
     } as Partial<Request> as Request);
 
     expect(response.statusCode).toBe(400);
@@ -72,7 +62,9 @@ describe("GetUserByIdController", () => {
       .spyOn(getUserByIdUseCase, "execute")
       .mockRejectedValueOnce(new Error());
 
-    const result = await sut.execute(httpRequest);
+    const result = await sut.execute(
+      httpRequest as Partial<Request> as Request,
+    );
 
     expect(result.statusCode).toBe(500);
   });
@@ -81,8 +73,8 @@ describe("GetUserByIdController", () => {
     const { sut, getUserByIdUseCase } = makeSut();
     const executeSpy = jest.spyOn(getUserByIdUseCase, "execute");
 
-    await sut.execute(httpRequest);
+    await sut.execute(httpRequest as Partial<Request> as Request);
 
-    expect(executeSpy).toHaveBeenCalledWith(httpRequest.params.userId);
+    expect(executeSpy).toHaveBeenCalledWith(httpRequest.userId);
   });
 });
