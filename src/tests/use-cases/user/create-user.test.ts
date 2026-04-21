@@ -1,3 +1,4 @@
+import { faker } from "@faker-js/faker";
 import type { IGetUserByEmailRepository } from "../../../types/user.js";
 import { CreateUserUseCase } from "../../../use-cases/index.js";
 import { user as fixturedUser } from "../../fixtures/user.js";
@@ -27,15 +28,34 @@ describe("CreateUserUseCase", () => {
     }
   }
 
+  class IdGeneratorAdapterStub {
+    execute() {
+      return faker.string.uuid();
+    }
+  }
+
+  class TokensGeneratorAdapterStub {
+    async execute() {
+      return {
+        accessToken: faker.string.uuid(),
+        refreshToken: faker.string.uuid(),
+      };
+    }
+  }
+
   const makeSut = () => {
     const createUserRepository = new CreateUserRepositoryStub();
     const getUserByEmailRepository = new GetUserByEmailRepositoryStub();
     const passwordHasherAdapter = new PasswordHasherAdapterStub();
+    const idGeneratorAdapter = new IdGeneratorAdapterStub();
+    const tokensGeneratorAdapter = new TokensGeneratorAdapterStub();
 
     const sut = new CreateUserUseCase(
       createUserRepository,
       getUserByEmailRepository,
       passwordHasherAdapter,
+      idGeneratorAdapter,
+      tokensGeneratorAdapter,
     );
 
     return {
@@ -52,7 +72,15 @@ describe("CreateUserUseCase", () => {
     const createdUser = await sut.execute(user);
 
     expect(createdUser).toBeTruthy();
-    expect(createdUser).toEqual(user);
+    expect(createdUser).toEqual({
+      ...user,
+      tokens: {
+        accessToken: expect.any(String),
+        refreshToken: expect.any(String),
+      },
+    });
+    expect(createdUser.tokens.accessToken).toBeDefined();
+    expect(createdUser.tokens.refreshToken).toBeDefined();
   });
 
   it("should call CreateUserRepository with correct params ", async () => {
@@ -64,6 +92,7 @@ describe("CreateUserUseCase", () => {
 
     expect(createUserRepositorySpy).toHaveBeenCalledWith({
       ...user,
+      id: expect.any(String),
       password: "any_hashed_password",
     });
   });
