@@ -1,7 +1,6 @@
 import type { UpdateUserSchema } from "../../../schemas/user.js";
 import type { UpdateUserUseCase } from "../../../use-cases/index.js";
 import { UpdateUserController } from "../../../controllers/index.js";
-import type { Request } from "express";
 import { faker } from "@faker-js/faker";
 import { UserAlreadyExistsError } from "../../../errors/user.js";
 
@@ -16,15 +15,13 @@ describe("UpdateUserController", () => {
   }
 
   const httpRequest = {
-    params: {
-      userId: faker.string.uuid(),
-    },
+    userId: faker.string.uuid(),
     body: {
       first_name: faker.person.firstName(),
       last_name: faker.person.lastName(),
       email: faker.internet.email(),
     },
-  } as Request<any, any, UpdateUserSchema>;
+  };
 
   const makeSut = () => {
     const updateUserUseCase =
@@ -45,7 +42,7 @@ describe("UpdateUserController", () => {
 
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual({
-      id: httpRequest.params.userId,
+      id: httpRequest.userId,
       ...httpRequest.body,
     });
   });
@@ -55,10 +52,8 @@ describe("UpdateUserController", () => {
 
     const response = await sut.execute({
       ...httpRequest,
-      params: {
-        userId: "invalid-uuid",
-      },
-    } as Request<any, any, UpdateUserSchema>);
+      userId: "invalid-uuid",
+    });
 
     expect(response.statusCode).toBe(400);
   });
@@ -72,7 +67,7 @@ describe("UpdateUserController", () => {
         ...httpRequest.body,
         email: "invalid-email",
       },
-    } as Request<any, any, UpdateUserSchema>);
+    });
 
     expect(response.statusCode).toBe(400);
   });
@@ -88,7 +83,7 @@ describe("UpdateUserController", () => {
           length: 5,
         }),
       },
-    } as Request<any, any, UpdateUserSchema>);
+    });
 
     expect(response.statusCode).toBe(400);
   });
@@ -102,7 +97,7 @@ describe("UpdateUserController", () => {
         ...httpRequest.body,
         imageUrl: "invalid-url",
       },
-    } as Request<any, any, UpdateUserSchema>);
+    });
 
     expect(response.statusCode).toBe(400);
   });
@@ -115,7 +110,7 @@ describe("UpdateUserController", () => {
     await sut.execute(httpRequest);
 
     expect(executeSpy).toHaveBeenCalledWith(
-      httpRequest.params.userId,
+      httpRequest.userId,
       httpRequest.body,
     );
   });
