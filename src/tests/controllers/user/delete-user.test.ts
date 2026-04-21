@@ -1,7 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { DeleteUserController } from "../../../controllers/index.js";
 import type { DeleteUserUseCase } from "../../../use-cases/index.js";
-import type { Request } from "express";
 
 describe("DeleteUserController", () => {
   const userId = faker.string.uuid();
@@ -18,10 +17,8 @@ describe("DeleteUserController", () => {
   };
 
   const httpRequest = {
-    params: {
-      userId: faker.string.uuid(),
-    },
-  } as Request<any, any, any>;
+    userId: faker.string.uuid(),
+  };
 
   it("should delete an user successfully", async () => {
     const { sut } = makeSut();
@@ -34,10 +31,8 @@ describe("DeleteUserController", () => {
   it("should return 400 id userId is invalid", () => {
     const { sut } = makeSut();
     const invalidHttpRequest = {
-      params: {
-        userId: "invalid-uuid",
-      },
-    } as Request<any, any, any>;
+      userId: "invalid-uuid",
+    };
 
     return sut.execute(invalidHttpRequest).then((response) => {
       expect(response.statusCode).toBe(400);
