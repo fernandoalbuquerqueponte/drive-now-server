@@ -18,7 +18,7 @@ carRoutes.post("/", auth, async (req: Request, res: Response) => {
     body: req.body,
   });
 
-  return res.status(response.statusCode).send(response);
+  return res.status(response.statusCode).send(response.body);
 });
 
 carRoutes.get("/:carId", auth, async (req: Request, res: Response) => {
