@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "test": "dotenv -e .env.test -- jest --passWithNoTests --runInBand",
-    "test:watch": "dotenv -e .env.test -- jest --watch --passWithNoTests --runInBand",
-    "test:coverage": "dotenv -e .env.test -- jest --passWithNoTests --coverage --runInBand",
+    "test": "dotenv -e .env.test -- jest --passWithNoTests --runInBand --silent",
+    "test:watch": "dotenv -e .env.test -- jest --watch --passWithNoTests --runInBand --silent",
+    "test:coverage": "dotenv -e .env.test -- jest --passWithNoTests --coverage --runInBand --silent",
     "seed": "tsx prisma/seed.ts"
   },
   "prisma": {
