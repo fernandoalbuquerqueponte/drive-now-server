@@ -87,4 +87,13 @@ describe("Users Route E2E Tests", () => {
     expect(response.body.accessToken).toBeDefined();
     expect(response.body.refreshToken).toBeDefined();
   });
+
+  it("POST /api/users/login should return 401 when credentials are invalid", async () => {
+    const response = await request(app).post("/api/users/login").send({
+      email: "invalid34@mail.com",
+      password: "wrongpassword",
+    });
+
+    expect(response.status).toBe(401);
+  });
 });
