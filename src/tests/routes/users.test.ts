@@ -70,6 +70,16 @@ describe("Users Route E2E Tests", () => {
     expect(response.body.last_name).toBe("Updated Last Name");
   });
 
+  it("PATCH /api/users should return 401 when token is missing", async () => {
+    const response = await request(app).patch("/api/users").send({
+      first_name: "Updated Name",
+      password: "newpassword123",
+      last_name: "Updated Last Name",
+    });
+
+    expect(response.status).toBe(401);
+  });
+
   it("POST /api/users/login should return 200 when user logs in successfully", async () => {
     const { body: createdUser } = await request(app)
       .post("/api/users")
