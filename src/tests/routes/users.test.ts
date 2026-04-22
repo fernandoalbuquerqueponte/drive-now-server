@@ -12,17 +12,13 @@ describe("Users Route E2E Tests", () => {
     expect(response.status).toBe(201);
   });
 
-  it("GET /api/users should return 200 when user by id is found", async () => {
-    const { body: createdUser } = await request(app)
-      .post("/api/users")
-      .send(userData);
+  it("POST /api/users should return 400 when email is already in use", async () => {
+    await request(app).post("/api/users").send(userData);
 
-    const response = await request(app)
-      .get("/api/users")
-      .set("Authorization", `Bearer ${createdUser.tokens.accessToken}`);
+    const response = await request(app).post("/api/users").send(userData);
 
-    expect(response.status).toBe(200);
-    expect(response.body.id).toBe(createdUser.id);
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBeDefined();
   });
 
   it("GET /api/users should return 401 when token is missing", async () => {
