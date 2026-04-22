@@ -3,6 +3,7 @@ import request from "supertest";
 import { app } from "../../app.js";
 import { user } from "../fixtures/user.js";
 import { car } from "../fixtures/index.js";
+import { faker } from "@faker-js/faker";
 
 describe("Cars Route E2E Tests", () => {
   it("POST /api/cars should return 201 when car is created successfully", async () => {
@@ -80,5 +81,29 @@ describe("Cars Route E2E Tests", () => {
       .send({ brand: "Updated Brand", year: 2020 });
 
     expect(response.status).toBe(200);
+  });
+
+  it("POST /api/cars/reserve/:carId should booking a car successfully", async () => {
+    const { body: createdUser } = await request(app)
+      .post("/api/users")
+      .send({
+        ...user,
+        id: undefined,
+      });
+
+    const { body: createdCar } = await request(app)
+      .post("/api/cars")
+      .set("Authorization", `Bearer ${createdUser.tokens.accessToken}`)
+      .send(car);
+
+    const response = await request(app)
+      .post(`/api/cars/reserve/${createdCar.id}`)
+      .set("Authorization", `Bearer ${createdUser.tokens.accessToken}`)
+      .send({
+        startDate: faker.date.soon(),
+        endDate: faker.date.future(),
+      });
+
+    expect(response.status).toBe(201);
   });
 });
