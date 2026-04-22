@@ -57,4 +57,19 @@ describe("Users Route E2E Tests", () => {
     expect(response.body.first_name).toBe("Updated Name");
     expect(response.body.last_name).toBe("Updated Last Name");
   });
+
+  it("POST /api/users/login should return 200 when user logs in successfully", async () => {
+    const { body: createdUser } = await request(app)
+      .post("/api/users")
+      .send(userData);
+
+    const response = await request(app).post("/api/users/login").send({
+      email: createdUser.email,
+      password: userData.password,
+    });
+
+    expect(response.status).toBe(200);
+    expect(response.body.tokens.accessToken).toBeDefined();
+    expect(response.body.tokens.refreshToken).toBeDefined();
+  });
 });
