@@ -24,4 +24,16 @@ describe("Users Route E2E Tests", () => {
     expect(response.status).toBe(200);
     expect(response.body.id).toBe(createdUser.id);
   });
+
+  it("DELETE /api/users should return 200 when user is deleted successfully", async () => {
+    const { body: createdUser } = await request(app)
+      .post("/api/users")
+      .send(userData);
+
+    const response = await request(app)
+      .delete("/api/users")
+      .set("Authorization", `Bearer ${createdUser.tokens.accessToken}`);
+
+    expect(response.status).toBe(200);
+  });
 });
