@@ -15,14 +15,14 @@ export const created = <T>(body: T): SuccessResponse<T> => ({
   body,
 });
 
-export const serverError = <T>(): ErrorResponse => ({
+export const serverError = (): ErrorResponse => ({
   statusCode: 500,
   body: {
     message: "Internal server error",
   },
 });
 
-export const badRequest = <T>(message: string): ErrorResponse => ({
+export const badRequest = (message: string): ErrorResponse => ({
   statusCode: 400,
   body: { message },
 });
@@ -35,4 +35,9 @@ export const successResponse = <T>(body: T): SuccessResponse<T> => ({
 export const ok = (): SuccessResponse<{ message: string }> => ({
   statusCode: 200,
   body: { message: "Operation successful" },
+});
+
+export const unauthorized = (message: string = "Unauthorized") => ({
+  statusCode: 401,
+  body: { message },
 });

@@ -1,6 +1,9 @@
 import type { PasswordComparatorAdapter } from "../../adapters/password-comparator.js";
 import type { TokensGeneratorAdapter } from "../../adapters/tokens-generator.js";
-import { UserNotFoundError } from "../../errors/user.js";
+import {
+  InvalidCredentialsError,
+  UserNotFoundError,
+} from "../../errors/user.js";
 import type { IGetUserByEmailRepository } from "../../types/user.js";
 
 export class LoginUserUseCase {
@@ -27,7 +30,7 @@ export class LoginUserUseCase {
     );
 
     if (!isPasswordValid) {
-      throw new Error("Password not valid.");
+      throw new InvalidCredentialsError();
     }
 
     return {

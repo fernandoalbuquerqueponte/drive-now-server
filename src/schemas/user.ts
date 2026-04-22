@@ -28,9 +28,13 @@ export const refreshTokenSchema = z.object({
   }),
 });
 
+export const userSchema = baseUserSchema.extend({
+  id: z.string().uuid(),
+});
+
 export const createUserSchema = baseUserSchema;
 export const updateUserSchema = createUserSchema.partial();
 
 export type CreateUserSchema = z.infer<typeof createUserSchema>;
 export type UpdateUserSchema = z.infer<typeof updateUserSchema>;
-export type User = z.infer<typeof baseUserSchema>;
+export type User = z.infer<typeof userSchema>;

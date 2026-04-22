@@ -18,3 +18,10 @@ export class ForbiddenError extends Error {
     this.name = "ForbiddenError";
   }
 }
+
+export class InvalidCredentialsError extends Error {
+  constructor() {
+    super("Invalid email or password");
+    this.name = "InvalidCredentialsError";
+  }
+}
