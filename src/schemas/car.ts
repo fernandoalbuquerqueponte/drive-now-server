@@ -22,8 +22,6 @@ export const createCarSchema = z.object({
   ),
 
   features: z.array(z.string()),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
 });
 
 export const createReserveSchema = z.object({

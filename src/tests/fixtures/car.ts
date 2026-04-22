@@ -16,8 +16,6 @@ export const car: CreateCarSchema = {
     { label: "Câmbio", value: "Automático CVT" },
   ],
   features: ["Air Conditioning", "ABS", "GPS"],
-  createdAt: faker.date.recent(),
-  updatedAt: faker.date.recent(),
 };
 
 export const review: Review = {
