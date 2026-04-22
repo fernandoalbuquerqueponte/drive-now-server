@@ -43,6 +43,12 @@ describe("Users Route E2E Tests", () => {
     expect(response.status).toBe(200);
   });
 
+  it("DELETE /api/usersshould return 401 when token is missing", async () => {
+    const response = await request(app).delete("/api/users");
+
+    expect(response.status).toBe(401);
+  });
+
   it("PATCH /api/users should return 200 when user is updated successfully", async () => {
     const { body: createdUser } = await request(app)
       .post("/api/users")
