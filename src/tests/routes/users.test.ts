@@ -36,4 +36,25 @@ describe("Users Route E2E Tests", () => {
 
     expect(response.status).toBe(200);
   });
+
+  it("PATCH /api/users should return 200 when user is updated successfully", async () => {
+    const { body: createdUser } = await request(app)
+      .post("/api/users")
+      .send(userData);
+
+    const updatedUserData = {
+      first_name: "Updated Name",
+      password: "newpassword123",
+      last_name: "Updated Last Name",
+    };
+
+    const response = await request(app)
+      .patch("/api/users")
+      .set("Authorization", `Bearer ${createdUser.tokens.accessToken}`)
+      .send(updatedUserData);
+
+    expect(response.status).toBe(200);
+    expect(response.body.first_name).toBe("Updated Name");
+    expect(response.body.last_name).toBe("Updated Last Name");
+  });
 });
