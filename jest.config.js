@@ -5,9 +5,10 @@ export default {
     "^.+\\.(t|j)sx?$": "babel-jest",
   },
   watchPathIgnorePatterns: ["<rootDir>/.postgres"],
-  transformIgnorePatterns: ["/node_modules/(?!@faker-js)"],
+  transformIgnorePatterns: ["node_modules/(?!(@faker-js|uuid)/)"],
   moduleNameMapper: {
     "^(\\.{1,2}/.*)\\.js$": "$1",
+    "^uuid$": "uuid",
   },
   globalSetup: "<rootDir>/jest.global-setup.ts",
   setupFilesAfterEnv: ["<rootDir>/jest.setup-files-after-env.ts"],

@@ -1,3 +1,6 @@
+// import dotenv from "dotenv";
+// dotenv.config();
+
 import prismaClient from "./prisma/prisma.js";
 
 beforeEach(async () => {
