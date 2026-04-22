@@ -20,4 +20,24 @@ describe("Cars Route E2E Tests", () => {
 
     expect(response.status).toBe(201);
   });
+
+  it("GET /api/cars/:carId should fetch car reviews", async () => {
+    const { body: createdUser } = await request(app)
+      .post("/api/users")
+      .send({
+        ...user,
+        id: undefined,
+      });
+
+    const { body: createdCar } = await request(app)
+      .post("/api/cars")
+      .set("Authorization", `Bearer ${createdUser.tokens.accessToken}`)
+      .send(car);
+
+    const response = await request(app)
+      .get(`/api/cars/${createdCar.id}`)
+      .set("Authorization", `Bearer ${createdUser.tokens.accessToken}`);
+
+    expect(response.status).toBe(200);
+  });
 });
