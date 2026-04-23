@@ -2,6 +2,7 @@
 import { faker } from "@faker-js/faker";
 import { LoginUserController } from "../../../controllers/user/login-user.js";
 import type { LoginUserUseCase } from "../../../use-cases/user/login-user.js";
+import { InvalidCredentialsError } from "../../../errors/user.js";
 
 describe("LoginUserController", () => {
   class LoginUserUseCaseStub {
@@ -54,5 +55,16 @@ describe("LoginUserController", () => {
     expect(body).toHaveProperty("password");
     expect(body.tokens.accessToken).toBe("any_access_token");
     expect(body.tokens.refreshToken).toBe("any_refresh_token");
+  });
+
+  it("should return 401 if credentials are invalid", async () => {
+    const { sut, loginUserUseCase } = makeSut();
+    jest
+      .spyOn(loginUserUseCase, "execute")
+      .mockRejectedValueOnce(new InvalidCredentialsError());
+
+    const response = await sut.execute(httpRequest as any);
+
+    expect(response.statusCode).toBe(401);
   });
 });
