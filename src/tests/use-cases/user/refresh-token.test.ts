@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ForbiddenError } from "../../../errors/user.js";
 import { RefreshTokenUseCase } from "../../../use-cases/user/refresh-token.js";
 
@@ -53,5 +54,29 @@ describe("RefreshTokenUseCase", () => {
     expect(() => sut.execute("any_refresh_token")).rejects.toThrow(
       new ForbiddenError(),
     );
+  });
+
+  it("should throw ForbiddenError if TokenVerifierAdapter returns null", async () => {
+    const { sut, tokenVerifierAdapter } = makeSut();
+
+    jest
+      .spyOn(tokenVerifierAdapter, "execute")
+      .mockReturnValueOnce(null as any);
+
+    const promise = sut.execute("any_token");
+
+    await expect(promise).rejects.toThrow(new ForbiddenError());
+  });
+
+  it("should throw ForbiddenError if TokenVerifierAdapter throws", async () => {
+    const { sut, tokenVerifierAdapter } = makeSut();
+
+    jest.spyOn(tokenVerifierAdapter, "execute").mockImplementationOnce(() => {
+      throw new Error();
+    });
+
+    const promise = sut.execute("any_refresh_token");
+
+    await expect(promise).rejects.toThrow(new ForbiddenError());
   });
 });
