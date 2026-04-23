@@ -6,7 +6,9 @@ import {
   successResponse,
   checkIfIdIsValid,
   invalidIdResponse,
+  carNotFoundResponse,
 } from "../helpers/index.js";
+import { CarNotFoundError } from "../../errors/car.js";
 
 export class GetCarReviewsController {
   constructor(private getCarReviewsUseCase: GetCarReviewsUseCase) {
@@ -14,7 +16,7 @@ export class GetCarReviewsController {
   }
   async execute(httpRequest: Request) {
     try {
-      const carId = httpRequest.params.carId;
+      const carId = httpRequest.params.carId as string;
 
       if (!carId) {
         return badRequest("Car ID is required.");
@@ -31,6 +33,10 @@ export class GetCarReviewsController {
       return successResponse(reviews);
     } catch (error) {
       console.error(error);
+      if (error instanceof CarNotFoundError) {
+        return carNotFoundResponse();
+      }
+
       return serverError();
     }
   }
