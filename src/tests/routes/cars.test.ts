@@ -214,4 +214,27 @@ describe("Cars Route E2E Tests", () => {
 
     expect(response.status).toBe(201);
   });
+
+  it("POST /api/cars/reserve/:carId should return 401 when tokens is missing", async () => {
+    const { body: createdUser } = await request(app)
+      .post("/api/users")
+      .send({
+        ...user,
+        id: undefined,
+      });
+
+    const { body: createdCar } = await request(app)
+      .post("/api/cars")
+      .set("Authorization", `Bearer ${createdUser.tokens.accessToken}`)
+      .send(car);
+
+    const response = await request(app)
+      .post(`/api/cars/reserve/${createdCar.id}`)
+      .send({
+        startDate: faker.date.soon(),
+        endDate: faker.date.future(),
+      });
+
+    expect(response.status).toBe(401);
+  });
 });
