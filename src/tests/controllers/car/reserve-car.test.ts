@@ -160,7 +160,7 @@ describe("ReserveCarController", () => {
     expect(result.statusCode).toBe(500);
   });
 
-  it("should return 400 if CarNotFoundError throws", async () => {
+  it("should return 404 if CarNotFoundError throws", async () => {
     const { sut, reserveCarUseCase } = makeSut();
     jest
       .spyOn(reserveCarUseCase, "execute")
@@ -168,6 +168,6 @@ describe("ReserveCarController", () => {
 
     const result = await sut.execute(httpRequest as any);
 
-    expect(result.statusCode).toBe(400);
+    expect(result.statusCode).toBe(404);
   });
 });
