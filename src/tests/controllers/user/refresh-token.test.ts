@@ -48,4 +48,16 @@ describe("RefreshTokenController", () => {
 
     expect(response.statusCode).toBe(400);
   });
+
+  it("should return 500 if an error occurs while refreshing the token", async () => {
+    const { sut, refreshTokenUseCaseStub } = makeSut();
+
+    jest
+      .spyOn(refreshTokenUseCaseStub, "execute")
+      .mockRejectedValueOnce(new Error());
+
+    const response = await sut.execute(httpRequest as any);
+
+    expect(response.statusCode).toBe(500);
+  });
 });
