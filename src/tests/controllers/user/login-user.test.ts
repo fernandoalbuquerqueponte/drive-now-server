@@ -89,4 +89,17 @@ describe("LoginUserController", () => {
 
     expect(response.statusCode).toBe(400);
   });
+
+  it("should return 400 if password is missing", async () => {
+    const { sut } = makeSut();
+    const httpRequest = {
+      body: {
+        email: faker.internet.email(),
+      },
+    };
+
+    const response = await sut.execute(httpRequest as any);
+
+    expect(response.statusCode).toBe(400);
+  });
 });
