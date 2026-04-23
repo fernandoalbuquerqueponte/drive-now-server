@@ -3,6 +3,7 @@ import {
   created,
   serverError,
   checkIfIdIsValid,
+  carNotFoundResponse,
 } from "../helpers/index.js";
 import type { ReserveCarUseCase } from "../../use-cases/car/reserve-car.js";
 import { createReserveSchema } from "../../schemas/car.js";
@@ -52,7 +53,7 @@ export class ReserveCarController {
     } catch (error) {
       console.error(error);
       if (error instanceof CarNotFoundError) {
-        return badRequest("Car not found");
+        return carNotFoundResponse();
       }
 
       if (error instanceof ZodError) {
