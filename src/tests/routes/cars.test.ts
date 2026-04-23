@@ -175,6 +175,22 @@ describe("Cars Route E2E Tests", () => {
     expect(response.status).toBe(401);
   });
 
+  it("PATCH /api/cars/:carId should return 404 when car is not found", async () => {
+    const { body: createdUser } = await request(app)
+      .post("/api/users")
+      .send({
+        ...user,
+        id: undefined,
+      });
+
+    const response = await request(app)
+      .patch(`/api/cars/${faker.string.uuid()}`)
+      .set("Authorization", `Bearer ${createdUser.tokens.accessToken}`)
+      .send({ brand: "Updated Brand", year: 2020 });
+
+    expect(response.status).toBe(404);
+  });
+
   it("POST /api/cars/reserve/:carId should booking a car successfully", async () => {
     const { body: createdUser } = await request(app)
       .post("/api/users")
