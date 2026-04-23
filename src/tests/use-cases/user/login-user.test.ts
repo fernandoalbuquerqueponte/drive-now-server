@@ -54,4 +54,16 @@ describe("LoginUserUseCase", () => {
       },
     });
   });
+
+  it("should throw UserNotFoundError error if user is not found", () => {
+    const { sut, getUserByEmailRepositoryStub } = makeSut();
+
+    jest
+      .spyOn(getUserByEmailRepositoryStub, "execute")
+      .mockResolvedValueOnce(null);
+
+    const result = sut.execute("any_email", "any_password");
+
+    expect(result).rejects.toThrow();
+  });
 });
