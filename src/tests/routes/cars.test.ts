@@ -22,6 +22,12 @@ describe("Cars Route E2E Tests", () => {
     expect(response.status).toBe(201);
   });
 
+  it("POST /api/cars should return 401 when token is missing", async () => {
+    const response = await request(app).post("/api/cars").send(car);
+
+    expect(response.status).toBe(401);
+  });
+
   it("GET /api/cars/:carId should fetch car reviews", async () => {
     const { body: createdUser } = await request(app)
       .post("/api/users")
