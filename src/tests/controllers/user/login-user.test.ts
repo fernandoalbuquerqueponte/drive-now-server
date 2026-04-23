@@ -116,4 +116,18 @@ describe("LoginUserController", () => {
 
     expect(response.statusCode).toBe(400);
   });
+
+  it("should return 400 if password is invalid", async () => {
+    const { sut } = makeSut();
+    const httpRequest = {
+      body: {
+        email: faker.internet.email(),
+        password: "short",
+      },
+    };
+
+    const response = await sut.execute(httpRequest as any);
+
+    expect(response.statusCode).toBe(400);
+  });
 });
