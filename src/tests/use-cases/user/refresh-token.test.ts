@@ -1,3 +1,4 @@
+import { ForbiddenError } from "../../../errors/user.js";
 import { RefreshTokenUseCase } from "../../../use-cases/user/refresh-token.js";
 
 describe("RefreshTokenUseCase", () => {
@@ -12,7 +13,7 @@ describe("RefreshTokenUseCase", () => {
 
   class TokenVerifierAdapterStub {
     async execute() {
-      return { userId: "userId" };
+      return true;
     }
   }
 
@@ -41,5 +42,16 @@ describe("RefreshTokenUseCase", () => {
       accessToken: "newAccessToken",
       refreshToken: "newRefreshToken",
     });
+  });
+
+  it("should throw if TokenVerifierAdapter throws", async () => {
+    const { sut, tokenVerifierAdapter } = makeSut();
+    jest.spyOn(tokenVerifierAdapter, "execute").mockImplementationOnce(() => {
+      throw new Error();
+    });
+
+    expect(() => sut.execute("any_refresh_token")).rejects.toThrow(
+      new ForbiddenError(),
+    );
   });
 });
