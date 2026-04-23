@@ -1,5 +1,10 @@
 import type { UpdateCarUseCase } from "../../use-cases/car/update-car.js";
-import { badRequest, serverError, successResponse } from "../helpers/index.js";
+import {
+  badRequest,
+  carNotFoundResponse,
+  serverError,
+  successResponse,
+} from "../helpers/index.js";
 import {
   updateCarParamsSchema,
   updateCarSchema,
@@ -7,6 +12,7 @@ import {
 } from "../../schemas/car.js";
 import { ForbiddenError } from "../../errors/user.js";
 import { ZodError } from "zod/v3";
+import { CarNotFoundError } from "../../errors/car.js";
 
 interface HttpRequest {
   body: UpdateCarSchema;
@@ -40,6 +46,10 @@ export class UpdateCarController {
 
       if (error instanceof ZodError) {
         return badRequest(error.message);
+      }
+
+      if (error instanceof CarNotFoundError) {
+        return carNotFoundResponse();
       }
 
       return serverError();

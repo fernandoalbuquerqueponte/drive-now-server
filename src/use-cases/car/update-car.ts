@@ -4,6 +4,7 @@ import type {
 } from "../../types/car.js";
 import { ForbiddenError } from "../../errors/user.js";
 import type { UpdateCarSchema } from "../../schemas/car.js";
+import { CarNotFoundError } from "../../errors/car.js";
 
 export class UpdateCarUseCase {
   constructor(
@@ -15,6 +16,10 @@ export class UpdateCarUseCase {
   }
   async execute(carId: string, data: UpdateCarSchema, userId: string) {
     const car = await this.getCarByIdRepository.execute(carId);
+
+    if (!car) {
+      throw new CarNotFoundError();
+    }
 
     if (car?.user_id !== userId) {
       throw new ForbiddenError();
