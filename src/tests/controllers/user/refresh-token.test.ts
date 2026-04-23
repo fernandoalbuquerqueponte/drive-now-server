@@ -36,4 +36,16 @@ describe("RefreshTokenController", () => {
     expect(response.body).toHaveProperty("accessToken");
     expect(response.body).toHaveProperty("refreshToken");
   });
+
+  it("should return 400 if refresh token is missing", async () => {
+    const { sut } = makeSut();
+
+    const invalidHttpRequest = {
+      body: {},
+    };
+
+    const response = await sut.execute(invalidHttpRequest as any);
+
+    expect(response.statusCode).toBe(400);
+  });
 });
