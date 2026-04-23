@@ -66,4 +66,21 @@ describe("LoginUserUseCase", () => {
 
     expect(result).rejects.toThrow();
   });
+
+  it("should throw InvalidPasswordError error if password is invalid", () => {
+    const { sut, getUserByEmailRepositoryStub, passwordComparatorAdapterStub } =
+      makeSut();
+
+    jest
+      .spyOn(getUserByEmailRepositoryStub, "execute")
+      .mockResolvedValueOnce(user);
+
+    jest
+      .spyOn(passwordComparatorAdapterStub, "execute")
+      .mockResolvedValueOnce(false);
+
+    const result = sut.execute("any_email", "any_password");
+
+    expect(result).rejects.toThrow();
+  });
 });
