@@ -48,6 +48,21 @@ describe("Cars Route E2E Tests", () => {
     expect(response.status).toBe(200);
   });
 
+  it("GET /api/cars/:carId should return 404 when car is not found", async () => {
+    const { body: createdUser } = await request(app)
+      .post("/api/users")
+      .send({
+        ...user,
+        id: undefined,
+      });
+
+    const response = await request(app)
+      .get(`/api/cars/${faker.string.uuid()}`)
+      .set("Authorization", `Bearer ${createdUser.tokens.accessToken}`);
+
+    expect(response.status).toBe(404);
+  });
+
   it("GET /api/cars/:carId should return 401 when token is missing", async () => {
     const { body: createdUser } = await request(app)
       .post("/api/users")
