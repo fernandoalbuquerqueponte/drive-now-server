@@ -237,4 +237,23 @@ describe("Cars Route E2E Tests", () => {
 
     expect(response.status).toBe(401);
   });
+
+  it("POST /api/cars/reserve/:carId should return 404 when car is not found", async () => {
+    const { body: createdUser } = await request(app)
+      .post("/api/users")
+      .send({
+        ...user,
+        id: undefined,
+      });
+
+    const response = await request(app)
+      .post(`/api/cars/reserve/${faker.string.uuid()}`)
+      .set("Authorization", `Bearer ${createdUser.tokens.accessToken}`)
+      .send({
+        startDate: faker.date.soon(),
+        endDate: faker.date.future(),
+      });
+
+    expect(response.status).toBe(404);
+  });
 });
