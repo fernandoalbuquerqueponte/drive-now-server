@@ -17,11 +17,11 @@ jobs:
         with:
           node-version: "22.x"
 
+      - name: Create .env.test file
+        run: echo "DATABASE_URL="postgresql://root:password@localhost:5433/drive-now-app" >> .env.test
+
       - name: Install dependecies
         run: npm install
-
-      - name: Generate Prisma Client
-        run: npx prisma generate
 
       - name: Eslint
         run: npm run eslint:check
@@ -31,5 +31,3 @@ jobs:
 
       - name: Test
         run: npm run test
-        env:
-          DATABASE_URL: "postgresql://root:password@localhost:5433/drive-now-app"
