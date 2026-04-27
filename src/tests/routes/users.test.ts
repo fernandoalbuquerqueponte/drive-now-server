@@ -1,9 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+jest.mock("@scalar/express-api-reference", () => ({
+  apiReference: jest.fn(() => (req: any, res: any, next: any) => next()),
+}));
 import request from "supertest";
 import { app } from "../../app.js";
 import { user } from "../fixtures/user.js";
 
 describe("Users Route E2E Tests", () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const { id, ...userData } = user;
 
   it("POST /api/users should return 201 when user is created successfully", async () => {

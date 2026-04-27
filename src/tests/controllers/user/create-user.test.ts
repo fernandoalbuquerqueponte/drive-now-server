@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Request } from "express";
 import { faker } from "@faker-js/faker";
 
@@ -15,13 +16,15 @@ describe("Create User Controller", () => {
         first_name: user.first_name,
         last_name: user.last_name,
         email: user.email,
+        password: user.password,
         imageUrl: user.imageUrl ?? null,
       };
     }
   }
 
   const makeSut = () => {
-    const createUserUseCase = new CreateUserUseCaseStub() as CreateUserUseCase;
+    const createUserUseCase =
+      new CreateUserUseCaseStub() as unknown as CreateUserUseCase;
     const sut = new CreateUserController(createUserUseCase);
 
     return { sut, createUserUseCase };
@@ -50,6 +53,7 @@ describe("Create User Controller", () => {
       first_name: httpRequest.body.first_name,
       last_name: httpRequest.body.last_name,
       email: httpRequest.body.email,
+      password: httpRequest.body.password,
       imageUrl: httpRequest.body.imageUrl,
     });
   });
