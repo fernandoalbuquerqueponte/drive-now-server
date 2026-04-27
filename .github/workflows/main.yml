@@ -18,13 +18,13 @@ jobs:
           node-version: "22.x"
 
       - name: Create .env.test file
-        run: echo "DATABASE_URL=postgresql://root:password@localhost:5433/drive-now-app" >> .env.test
+        run:
+          echo 'DATABASE_URL="postgresql://root:password@localhost:5433/drive-now-app"' >> .env.test
+          echo 'JWT_ACCESS_TOKEN_SECRET="secret"' >> .env.test
+          echo 'JWT_REFRESH_TOKEN_SECRET="secret2"' >> .env.test
 
       - name: Install dependecies
         run: npm install
-
-      - name: Generate Prisma Client
-        run: npx prisma generate
 
       - name: Eslint
         run: npm run eslint:check
@@ -33,4 +33,6 @@ jobs:
         run: npm run prettier:check
 
       - name: Test
-        run: npm run test
+        run: |
+          export $(cat .env.test | xargs)
+          npm run test
