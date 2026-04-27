@@ -18,7 +18,7 @@ jobs:
           node-version: "22.x"
 
       - name: Create .env.test file
-        run: echo "DATABASE_URL="postgresql://root:password@localhost:5433/drive-now-app" >> .env.test
+        run: echo "DATABASE_URL=postgresql://root:password@localhost:5433/drive-now-app" >> .env.test
 
       - name: Install dependecies
         run: npm install
