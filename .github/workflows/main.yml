@@ -17,11 +17,11 @@ jobs:
         with:
           node-version: "22.x"
 
-      - name: Generate Prisma Client
-        run: npx prisma generate
-
       - name: Install dependecies
         run: npm install
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
 
       - name: Eslint
         run: npm run eslint:check
