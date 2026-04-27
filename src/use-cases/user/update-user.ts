@@ -15,7 +15,7 @@ export class UpdateUserUseCase {
     private updateUserRepository: IUpdateUserRepository,
     private getUserByIdRepository: IGetUserByIdRepository,
     private getUserByEmailRepository: IGetUserByEmailRepository,
-    private passwordHasherAdapter: PasswordHasherAdapter
+    private passwordHasherAdapter: PasswordHasherAdapter,
   ) {
     this.getUserByIdRepository = getUserByIdRepository;
     this.getUserByEmailRepository = getUserByEmailRepository;
@@ -33,7 +33,7 @@ export class UpdateUserUseCase {
     //verificar se o email ja esta em uso
     if (params.email) {
       const hasUserWithEmail = await this.getUserByEmailRepository.execute(
-        params.email
+        params.email,
       );
 
       if (hasUserWithEmail && hasUserWithEmail.id !== userId) {
@@ -44,7 +44,7 @@ export class UpdateUserUseCase {
     //senha for passada, hashear a nova senha
     if (params.password) {
       params.password = await this.passwordHasherAdapter.execute(
-        params.password
+        params.password,
       );
     }
 

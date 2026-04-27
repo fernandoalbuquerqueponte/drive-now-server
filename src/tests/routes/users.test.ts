@@ -9,7 +9,6 @@ import { app } from "../../app.js";
 import { user } from "../fixtures/user.js";
 
 describe("Users Route E2E Tests", () => {
-
   const { id, ...userData } = user;
 
   it("POST /api/users should return 201 when user is created successfully", async () => {

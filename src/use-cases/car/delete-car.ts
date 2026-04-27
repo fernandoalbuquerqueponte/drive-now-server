@@ -7,7 +7,7 @@ import type {
 export class DeleteCarUseCase {
   constructor(
     private deleteCarRepository: IPostgresDeleteCarRepository,
-    private postgresGetCarByIdRepository: IPostgresGetCarByIdRepository
+    private postgresGetCarByIdRepository: IPostgresGetCarByIdRepository,
   ) {
     this.deleteCarRepository = deleteCarRepository;
     this.postgresGetCarByIdRepository = postgresGetCarByIdRepository;
