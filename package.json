@@ -8,7 +8,9 @@
     "test": "dotenv -e .env.test -- jest --passWithNoTests --runInBand --silent",
     "test:watch": "dotenv -e .env.test -- jest --watch --passWithNoTests --runInBand --silent",
     "test:coverage": "dotenv -e .env.test -- jest --passWithNoTests --coverage --runInBand --silent",
-    "seed": "tsx prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts",
+    "eslint:check": "eslint src --ext .ts",
+    "prettier:check": "prettier --check src"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
