@@ -3,9 +3,19 @@ import express from "express";
 import { usersRoutes } from "./routes/user.js";
 import { carRoutes } from "./routes/car.js";
 import { apiReference } from "@scalar/express-api-reference";
+import cors from "cors";
 import swaggerDocument from "./docs/swagger.json" with { type: "json" };
 
 export const app = express();
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
 
 app.use(express.json());
 
