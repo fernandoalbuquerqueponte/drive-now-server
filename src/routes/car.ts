@@ -3,6 +3,7 @@ import {
   makeCreateCarController,
   makeDeleteCarController,
   makeGetCarReviewsController,
+  makeGetCarsController,
   makeReserveCarController,
   makeUpdateCarController,
 } from "../factories/controllers/car.js";
@@ -57,6 +58,14 @@ carRoutes.post("/reserve/:carId", auth, async (req: Request, res: Response) => {
     userId: req.userId,
     body: req.body,
   });
+
+  return res.status(statusCode).send(body);
+});
+
+carRoutes.get("/", auth, async (_req: Request, res: Response) => {
+  const getCarsController = makeGetCarsController();
+
+  const { body, statusCode } = await getCarsController.execute();
 
   return res.status(statusCode).send(body);
 });

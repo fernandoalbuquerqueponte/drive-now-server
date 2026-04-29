@@ -10,11 +10,14 @@ import { GetCarReviewsRepository } from "../../repositories/postgres/car/get-car
 import { PostgresReserveCarRepository } from "../../repositories/postgres/car/reserve-car.js";
 import { PostgresUpdateCarRepository } from "../../repositories/postgres/car/update-car.js";
 import { PostgresGetUserByIdRepository } from "../../repositories/postgres/index.js";
+import { GetCarRepository } from "../../repositories/postgres/car/get-cars.js";
 import { CreateCarUseCase } from "../../use-cases/car/create-car.js";
 import { DeleteCarUseCase } from "../../use-cases/car/delete-car.js";
 import { GetCarReviewsUseCase } from "../../use-cases/car/get-car-reviews.js";
+import { GetCarsUseCase } from "../../use-cases/car/get-cars.js";
 import { ReserveCarUseCase } from "../../use-cases/car/reserve-car.js";
 import { UpdateCarUseCase } from "../../use-cases/car/update-car.js";
+import { GetCarsController } from "../../controllers/car/get-cars.js";
 
 export const makeCreateCarController = () => {
   const createCarRepository = new PostgresCreateCarRepository();
@@ -81,4 +84,13 @@ export const makeReserveCarController = () => {
   const reserveCarController = new ReserveCarController(reserveCarUseCase);
 
   return reserveCarController;
+};
+
+export const makeGetCarsController = () => {
+  const getCarsRepository = new GetCarRepository();
+  const getCarsUseCase = new GetCarsUseCase(getCarsRepository);
+
+  const getCarsController = new GetCarsController(getCarsUseCase);
+
+  return getCarsController;
 };
