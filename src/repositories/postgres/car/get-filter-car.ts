@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 import prismaClient from "../../../../prisma/prisma.js";
 
 export class PostgresGetFilterCars {
   async execute(filters: any) {
-    const where: any = { AND: [] };
+    const conditions = [];
 
     if (filters.search) {
-      where.AND.push({
+      conditions.push({
         OR: [
           { brand: { contains: filters.search, mode: "insensitive" } },
           { model: { contains: filters.search, mode: "insensitive" } },
@@ -15,7 +14,11 @@ export class PostgresGetFilterCars {
       });
     }
 
-    if (filters.category) where.AND.push({ category: filters.category });
+    if (filters.category) {
+      conditions.push({
+        category: { equals: filters.category, mode: "insensitive" },
+      });
+    }
 
     if (filters.priceRange) {
       const ranges: Record<string, any> = {
@@ -25,30 +28,27 @@ export class PostgresGetFilterCars {
         "Acima de R$ 200/h": { pricePerHour: { gte: 200 } },
       };
       if (ranges[filters.priceRange])
-        where.AND.push(ranges[filters.priceRange]);
+        conditions.push(ranges[filters.priceRange]);
     }
 
     if (filters.transmission) {
-      where.AND.push({
+      conditions.push({
         specifications: {
-          path: "$[*]", // Procura em qualquer elemento do array JSON
-          array_contains: { label: "Transmissão", value: filters.transmission },
+          some: {
+            label: { equals: "Transmissão", mode: "insensitive" },
+            value: { equals: filters.transmission, mode: "insensitive" },
+          },
         },
       });
     }
 
-    // FILTRO DE COMBUSTÍVEL EM CAMPO JSON
-    if (filters.fuel) {
-      where.AND.push({
-        specifications: {
-          path: "$[*]",
-          array_contains: { label: "Combustível", value: filters.fuel },
-        },
-      });
-    }
+    const where = conditions.length > 0 ? { AND: conditions } : {};
 
     return await prismaClient.car.findMany({
       where,
+      include: {
+        specifications: true,
+      },
     });
   }
 }
