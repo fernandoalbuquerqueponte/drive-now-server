@@ -18,6 +18,9 @@ import { GetCarsUseCase } from "../../use-cases/car/get-cars.js";
 import { ReserveCarUseCase } from "../../use-cases/car/reserve-car.js";
 import { UpdateCarUseCase } from "../../use-cases/car/update-car.js";
 import { GetCarsController } from "../../controllers/car/get-cars.js";
+import { GetFilterCarController } from "../../controllers/car/get-filter-car.js";
+import { GetFilterCarUseCase } from "../../use-cases/car/get-filter-car.js";
+import { PostgresGetFilterCars } from "../../repositories/postgres/car/get-filter-car.js";
 
 export const makeCreateCarController = () => {
   const createCarRepository = new PostgresCreateCarRepository();
@@ -93,4 +96,16 @@ export const makeGetCarsController = () => {
   const getCarsController = new GetCarsController(getCarsUseCase);
 
   return getCarsController;
+};
+
+export const makeGetFiltersCarController = () => {
+  const getFilterCarRepository = new PostgresGetFilterCars();
+
+  const getFilterCarUseCase = new GetFilterCarUseCase(getFilterCarRepository);
+
+  const getFilterCarController = new GetFilterCarController(
+    getFilterCarUseCase,
+  );
+
+  return getFilterCarController;
 };
