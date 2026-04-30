@@ -5,6 +5,6 @@ export class GetFilterCarUseCase {
   constructor(private getFilterCar: PostgresGetFilterCars) {}
   async execute(filters: any) {
     const cars = await this.getFilterCar.execute(filters);
-    return { cars };
+    return cars;
   }
 }
