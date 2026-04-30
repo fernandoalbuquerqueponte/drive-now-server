@@ -45,7 +45,7 @@ model Car {
   updatedAt    DateTime @updatedAt
   user_id      String
 
-  specifications Json
+  specifications Specification[]
   features       String[]
 
   user     User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
@@ -72,6 +72,14 @@ model Review {
   updatedAt DateTime @updatedAt
   car       Car      @relation(fields: [carId], references: [id], onDelete: Cascade)
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Specification {
+  id    String @id @default(uuid())
+  label String // "Motor", "Transmissão", "Combustível"
+  value String // "2.0L", "Automático", "Flex"
+  carId String
+  car   Car    @relation(fields: [carId], references: [id], onDelete: Cascade)
 }
 
 model Booking {
