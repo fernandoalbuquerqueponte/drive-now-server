@@ -8,24 +8,14 @@ interface HttpRequest {
     transmission: string;
     fuel: string;
   };
-  userId: string;
 }
 
 export class GetFilterCarController {
   constructor(private getFilterCarUseCase: GetFilterCarUseCase) {}
 
-  async handle(httpRequest: HttpRequest) {
+  async execute(httpRequest: HttpRequest) {
     try {
-      const { search, category, priceRange, transmission, fuel } =
-        httpRequest.query;
-
-      const cars = await this.getFilterCarUseCase.execute({
-        search: search as string,
-        category: category as string,
-        priceRange: priceRange as string,
-        transmission: transmission as string,
-        fuel: fuel as string,
-      });
+      const cars = await this.getFilterCarUseCase.execute(httpRequest.query);
 
       return successResponse(cars);
     } catch (error) {
