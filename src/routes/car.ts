@@ -2,6 +2,7 @@ import { Router, type Request, type Response } from "express";
 import {
   makeCreateCarController,
   makeDeleteCarController,
+  makeGetCarByIdController,
   makeGetCarReviewsController,
   makeGetCarsController,
   makeGetFiltersCarController,
@@ -36,6 +37,16 @@ carRoutes.get("/get-filters", auth, async (req: Request, res: Response) => {
       transmission: transmission as string,
       fuel: fuel as string,
     },
+  });
+
+  return res.status(statusCode).send(body);
+});
+
+carRoutes.get("/:carId/details", auth, async (req: Request, res: Response) => {
+  const getCarByIdController = makeGetCarByIdController();
+
+  const { body, statusCode } = await getCarByIdController.execute({
+    carId: req.params.carId as string,
   });
 
   return res.status(statusCode).send(body);
