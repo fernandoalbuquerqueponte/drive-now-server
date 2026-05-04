@@ -15,7 +15,19 @@ const makeGetCarByIdRepository = () => {
 const makeAddCarReviewRepository = () => {
   class AddCarReviewRepositoryStub {
     async execute() {
-      return review;
+      return {
+        ...review,
+        user: {
+          id: "user-id",
+          first_name: "John",
+          last_name: "Doe",
+          email: "john@example.com",
+          password: "hashed",
+          imageUrl: "http://example.com/image.jpg",
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+      };
     }
   }
 

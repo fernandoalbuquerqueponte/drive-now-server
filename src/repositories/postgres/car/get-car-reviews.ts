@@ -7,6 +7,9 @@ export class GetCarReviewsRepository implements IGetCarReviewsRepository {
       where: {
         carId: carId,
       },
+      include: {
+        user: true,
+      },
     });
 
     return carsReviews;

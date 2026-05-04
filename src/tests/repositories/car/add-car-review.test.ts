@@ -53,6 +53,9 @@ describe("PostgresAddCarReviewRepository", () => {
         rating: 4,
         comment: "Muito bom",
       },
+      include: {
+        user: true,
+      },
     });
   });
 });

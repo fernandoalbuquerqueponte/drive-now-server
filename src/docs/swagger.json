@@ -446,6 +446,9 @@
           "updatedAt": {
             "type": "string",
             "format": "date-time"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
           }
         }
       },

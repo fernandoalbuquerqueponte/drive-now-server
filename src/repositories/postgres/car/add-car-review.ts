@@ -11,6 +11,9 @@ export class PostgresAddCarReviewRepository implements IAddCarReviewRepository {
   }): Promise<Review> {
     const review = await prismaClient.review.create({
       data,
+      include: {
+        user: true,
+      },
     });
 
     return review;

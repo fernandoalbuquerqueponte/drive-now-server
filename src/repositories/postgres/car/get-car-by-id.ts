@@ -10,7 +10,11 @@ export class PostgresGetCarByIdRepository implements IPostgresGetCarByIdReposito
       include: {
         specifications: true,
         CarImage: true,
-        reviews: true,
+        reviews: {
+          include: {
+            user: true,
+          },
+        },
       },
     });
 
