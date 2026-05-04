@@ -57,7 +57,12 @@
       },
       "CreateUser": {
         "type": "object",
-        "required": ["first_name", "last_name", "email", "password"],
+        "required": [
+          "first_name",
+          "last_name",
+          "email",
+          "password"
+        ],
         "properties": {
           "first_name": {
             "type": "string",
@@ -111,7 +116,10 @@
       },
       "Login": {
         "type": "object",
-        "required": ["email", "password"],
+        "required": [
+          "email",
+          "password"
+        ],
         "properties": {
           "email": {
             "type": "string",
@@ -125,7 +133,9 @@
       },
       "RefreshToken": {
         "type": "object",
-        "required": ["refreshToken"],
+        "required": [
+          "refreshToken"
+        ],
         "properties": {
           "refreshToken": {
             "type": "string"
@@ -271,7 +281,10 @@
             "type": "array",
             "items": {
               "type": "object",
-              "required": ["label", "value"],
+              "required": [
+                "label",
+                "value"
+              ],
               "properties": {
                 "label": {
                   "type": "string"
@@ -350,7 +363,10 @@
       },
       "ReserveCar": {
         "type": "object",
-        "required": ["startDate", "endDate"],
+        "required": [
+          "startDate",
+          "endDate"
+        ],
         "properties": {
           "startDate": {
             "type": "string",
@@ -393,7 +409,11 @@
           },
           "status": {
             "type": "string",
-            "enum": ["PENDING", "CONFIRMED", "CANCELLED"]
+            "enum": [
+              "PENDING",
+              "CONFIRMED",
+              "CANCELLED"
+            ]
           }
         }
       },
@@ -462,7 +482,9 @@
   "paths": {
     "/api/users": {
       "post": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Create a new user",
         "requestBody": {
           "required": true,
@@ -508,7 +530,9 @@
         }
       },
       "get": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Get current user",
         "security": [
           {
@@ -549,7 +573,9 @@
         }
       },
       "patch": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Update current user",
         "security": [
           {
@@ -610,7 +636,9 @@
         }
       },
       "delete": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Delete current user",
         "security": [
           {
@@ -653,7 +681,9 @@
     },
     "/api/users/login": {
       "post": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Login user",
         "requestBody": {
           "required": true,
@@ -711,7 +741,9 @@
     },
     "/api/users/refresh-token": {
       "post": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Refresh access token",
         "requestBody": {
           "required": true,
@@ -758,8 +790,56 @@
       }
     },
     "/api/cars": {
+      "get": {
+        "tags": [
+          "Cars"
+        ],
+        "summary": "Get all cars",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of cars",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Car"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
-        "tags": ["Cars"],
+        "tags": [
+          "Cars"
+        ],
         "summary": "Create a new car",
         "security": [
           {
@@ -820,9 +900,101 @@
         }
       }
     },
+    "/api/cars/get-filters": {
+      "get": {
+        "tags": [
+          "Cars"
+        ],
+        "summary": "Search cars with filters",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "priceRange",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "transmission",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fuel",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of cars matching filters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Car"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/cars/{carId}": {
       "get": {
-        "tags": ["Cars"],
+        "tags": [
+          "Cars"
+        ],
         "summary": "Get car reviews",
         "security": [
           {
@@ -877,7 +1049,9 @@
         }
       },
       "patch": {
-        "tags": ["Cars"],
+        "tags": [
+          "Cars"
+        ],
         "summary": "Update car",
         "security": [
           {
@@ -949,7 +1123,9 @@
         }
       },
       "delete": {
-        "tags": ["Cars"],
+        "tags": [
+          "Cars"
+        ],
         "summary": "Delete car",
         "security": [
           {
@@ -1003,7 +1179,9 @@
     },
     "/api/cars/reserve/{carId}": {
       "post": {
-        "tags": ["Cars"],
+        "tags": [
+          "Cars"
+        ],
         "summary": "Reserve a car",
         "security": [
           {
