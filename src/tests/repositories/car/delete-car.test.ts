@@ -1,5 +1,5 @@
 import { PostgresDeleteCarRepository } from "../../../repositories/postgres/car/delete-car.js";
-import { car } from "../../fixtures/car.js";
+import { buildPrismaCarData, car } from "../../fixtures/car.js";
 import prismaClient from "../../../../prisma/prisma.js";
 import { user } from "../../fixtures/user.js";
 import { Prisma } from "@prisma/client";
@@ -10,7 +10,7 @@ describe("DeleteCarRepository", () => {
     await prismaClient.user.create({ data: user });
     const createdCar = await prismaClient.car.create({
       data: {
-        ...car,
+        ...buildPrismaCarData(car),
         user_id: user.id,
       },
     });
@@ -33,7 +33,7 @@ describe("DeleteCarRepository", () => {
     await prismaClient.user.create({ data: user });
     const createdCar = await prismaClient.car.create({
       data: {
-        ...car,
+        ...buildPrismaCarData(car),
         user_id: user.id,
       },
     });

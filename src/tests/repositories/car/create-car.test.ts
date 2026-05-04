@@ -25,6 +25,9 @@ describe("CreateCarRepository", () => {
       data: {
         ...car,
         user_id: user.id,
+        specifications: {
+          create: car.specifications,
+        },
         ...(car.gallery && {
           gallery: {
             set: car.gallery,
