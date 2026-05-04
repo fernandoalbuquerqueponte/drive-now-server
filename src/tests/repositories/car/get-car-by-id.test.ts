@@ -48,7 +48,11 @@ describe("GetCarByIdRepository", () => {
       include: {
         specifications: true,
         CarImage: true,
-        reviews: true,
+        reviews: {
+          include: {
+            user: true,
+          },
+        },
       },
     });
   });

@@ -47,6 +47,9 @@ describe("GetCarReviewsRepository", () => {
       where: {
         carId: createdCar.id,
       },
+      include: {
+        user: true,
+      },
     });
   });
 });

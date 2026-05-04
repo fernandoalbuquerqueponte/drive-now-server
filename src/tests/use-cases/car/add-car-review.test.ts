@@ -48,7 +48,10 @@ describe("AddCarReviewUseCase", () => {
       comment: "Ótimo",
     });
 
-    expect(result).toEqual(review);
+    expect(result).toMatchObject({
+      ...review,
+      user: expect.any(Object),
+    });
   });
 
   it("should call AddCarReviewRepository with correct values", async () => {
