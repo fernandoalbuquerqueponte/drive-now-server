@@ -1,7 +1,7 @@
 import type { Review } from "@prisma/client";
 import { CarNotFoundError } from "../../errors/car.js";
+import type { CreateReviewDTO } from "../../schemas/car.js";
 import type {
-  CreateReviewDTO,
   IAddCarReviewRepository,
   IPostgresGetCarByIdRepository,
 } from "../../types/car.js";

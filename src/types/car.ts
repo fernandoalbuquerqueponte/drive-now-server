@@ -16,15 +16,13 @@ export interface ReserveCarInputDTO {
   endDate: Date;
 }
 
-export interface CreateReviewDTO {
-  carId: string;
-  userId: string;
-  rating: number;
-  comment?: string | null;
-}
-
 export interface IAddCarReviewRepository {
-  execute(data: CreateReviewDTO): Promise<Review>;
+  execute(data: {
+    carId: string;
+    userId: string;
+    rating: number;
+    comment?: string | null;
+  }): Promise<Review>;
 }
 
 export interface ICreateCarRepository {

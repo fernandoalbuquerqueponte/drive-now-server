@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AddCarReviewUseCase } from "../../../use-cases/car/add-car-review.js";
 import { review } from "../../fixtures/car.js";
 

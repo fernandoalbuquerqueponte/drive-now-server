@@ -1,4 +1,3 @@
-import type { Request } from "express";
 import type { AddCarReviewUseCase } from "../../use-cases/car/add-car-review.js";
 import {
   badRequest,
@@ -10,7 +9,7 @@ import {
 import { createReviewSchema } from "../../schemas/car.js";
 import { CarNotFoundError } from "../../errors/car.js";
 import { ZodError } from "zod/v3";
-import type { CreateReviewDTO } from "../../types/car.js";
+import type { CreateReviewDTO } from "../../schemas/car.js";
 
 interface HttpRequest {
   userId: string;
