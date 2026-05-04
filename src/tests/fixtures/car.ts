@@ -18,6 +18,13 @@ export const car: CreateCarSchema = {
   features: ["Air Conditioning", "ABS", "GPS"],
 };
 
+export const buildPrismaCarData = (data: typeof car) => ({
+  ...data,
+  specifications: {
+    create: data.specifications,
+  },
+});
+
 export const review: Review = {
   id: faker.string.uuid(),
   carId: faker.string.uuid(),

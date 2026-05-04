@@ -4,12 +4,15 @@ import type { ICreateCarRepository } from "../../../types/car.js";
 
 export class PostgresCreateCarRepository implements ICreateCarRepository {
   async execute(params: CreateCarSchema, userId: string) {
-    const { gallery, ...rest } = params;
+    const { gallery, specifications, ...rest } = params;
     const createdCar = await prismaClient.car.create({
       data: {
         ...rest,
         user_id: userId,
-        ...(gallery && {
+        specifications: {
+          create: specifications,
+        },
+        ...(gallery !== undefined && {
           gallery: {
             set: gallery,
           },
