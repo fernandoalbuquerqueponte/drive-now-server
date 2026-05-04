@@ -45,6 +45,11 @@ describe("GetCarByIdRepository", () => {
       where: {
         id: createdCar.id,
       },
+      include: {
+        specifications: true,
+        CarImage: true,
+        reviews: true,
+      },
     });
   });
 });
