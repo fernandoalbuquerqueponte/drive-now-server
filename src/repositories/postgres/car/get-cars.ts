@@ -5,6 +5,7 @@ export class GetCarRepository {
     const cars = await prismaClient.car.findMany({
       include: {
         specifications: true,
+        reviews: true,
       },
     });
 

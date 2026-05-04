@@ -33,6 +33,11 @@ export const createReserveSchema = z.object({
   }),
 });
 
+export const createReviewSchema = z.object({
+  rating: z.number().int().min(1).max(5),
+  comment: z.string().optional(),
+});
+
 export const deleteCarSchema = z.object({
   carId: z.string().uuid(),
 });
@@ -46,3 +51,4 @@ export const updateCarParamsSchema = z.object({
 
 export type CreateCarSchema = z.infer<typeof createCarSchema>;
 export type UpdateCarSchema = z.infer<typeof updateCarSchema>;
+export type CreateReviewDTO = z.infer<typeof createReviewSchema>;

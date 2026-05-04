@@ -4,6 +4,7 @@ import {
   makeDeleteCarController,
   makeGetCarByIdController,
   makeGetCarReviewsController,
+  makeAddCarReviewController,
   makeGetCarsController,
   makeGetFiltersCarController,
   makeReserveCarController,
@@ -47,6 +48,18 @@ carRoutes.get("/:carId/details", auth, async (req: Request, res: Response) => {
 
   const { body, statusCode } = await getCarByIdController.execute({
     carId: req.params.carId as string,
+  });
+
+  return res.status(statusCode).send(body);
+});
+
+carRoutes.post("/:carId/reviews", auth, async (req: Request, res: Response) => {
+  const addCarReviewController = makeAddCarReviewController();
+
+  const { body, statusCode } = await addCarReviewController.execute({
+    userId: req.userId,
+    carId: req.params.carId as string,
+    body: req.body,
   });
 
   return res.status(statusCode).send(body);

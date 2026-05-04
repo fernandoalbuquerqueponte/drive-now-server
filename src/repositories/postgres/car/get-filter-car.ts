@@ -48,6 +48,7 @@ export class PostgresGetFilterCars {
       where,
       include: {
         specifications: true,
+        reviews: true,
       },
     });
   }

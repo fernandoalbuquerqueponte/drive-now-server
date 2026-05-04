@@ -1,5 +1,6 @@
 import { CreateCarController } from "../../controllers/car/create-car.js";
 import { DeleteCarController } from "../../controllers/car/delete-car.js";
+import { AddCarReviewController } from "../../controllers/car/add-car-review.js";
 import { GetCarReviewsController } from "../../controllers/car/get-car-reviews.js";
 import { GetCarByIdController } from "../../controllers/car/get-car-by-id.js";
 import { ReserveCarController } from "../../controllers/car/reserve-car.js";
@@ -8,6 +9,7 @@ import { PostgresCreateCarRepository } from "../../repositories/postgres/car/cre
 import { PostgresDeleteCarRepository } from "../../repositories/postgres/car/delete-car.js";
 import { PostgresGetCarByIdRepository } from "../../repositories/postgres/car/get-car-by-id.js";
 import { GetCarReviewsRepository } from "../../repositories/postgres/car/get-car-reviews.js";
+import { PostgresAddCarReviewRepository } from "../../repositories/postgres/car/add-car-review.js";
 import { PostgresReserveCarRepository } from "../../repositories/postgres/car/reserve-car.js";
 import { PostgresUpdateCarRepository } from "../../repositories/postgres/car/update-car.js";
 import { PostgresGetUserByIdRepository } from "../../repositories/postgres/index.js";
@@ -15,6 +17,7 @@ import { GetCarRepository } from "../../repositories/postgres/car/get-cars.js";
 import { CreateCarUseCase } from "../../use-cases/car/create-car.js";
 import { DeleteCarUseCase } from "../../use-cases/car/delete-car.js";
 import { GetCarReviewsUseCase } from "../../use-cases/car/get-car-reviews.js";
+import { AddCarReviewUseCase } from "../../use-cases/car/add-car-review.js";
 import { GetCarByIdUseCase } from "../../use-cases/car/get-car-by-id.js";
 import { GetCarsUseCase } from "../../use-cases/car/get-cars.js";
 import { ReserveCarUseCase } from "../../use-cases/car/reserve-car.js";
@@ -50,6 +53,22 @@ export const makeGetCarReviewsController = () => {
   );
 
   return getCarReviewsController;
+};
+
+export const makeAddCarReviewController = () => {
+  const addCarReviewRepository = new PostgresAddCarReviewRepository();
+  const getCarByIdRepository = new PostgresGetCarByIdRepository();
+
+  const addCarReviewUseCase = new AddCarReviewUseCase(
+    addCarReviewRepository,
+    getCarByIdRepository,
+  );
+
+  const addCarReviewController = new AddCarReviewController(
+    addCarReviewUseCase,
+  );
+
+  return addCarReviewController;
 };
 
 export const makeGetCarByIdController = () => {
