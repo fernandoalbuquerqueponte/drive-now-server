@@ -51,6 +51,35 @@ describe("Cars Route E2E Tests", () => {
     expect(response.status).toBe(200);
   });
 
+  it("POST /api/cars/:carId/reviews should create a review successfully", async () => {
+    const { body: createdUser } = await request(app)
+      .post("/api/users")
+      .send({
+        ...user,
+        id: undefined,
+      });
+
+    const { body: createdCar } = await request(app)
+      .post("/api/cars")
+      .set("Authorization", `Bearer ${createdUser.tokens.accessToken}`)
+      .send(car);
+
+    const response = await request(app)
+      .post(`/api/cars/${createdCar.id}/reviews`)
+      .set("Authorization", `Bearer ${createdUser.tokens.accessToken}`)
+      .send({
+        rating: 5,
+        comment: "Ótimo carro!",
+      });
+
+    expect(response.status).toBe(201);
+    expect(response.body).toMatchObject({
+      carId: createdCar.id,
+      rating: 5,
+      comment: "Ótimo carro!",
+    });
+  });
+
   it("GET /api/cars/:carId should return 404 when car is not found", async () => {
     const { body: createdUser } = await request(app)
       .post("/api/users")
