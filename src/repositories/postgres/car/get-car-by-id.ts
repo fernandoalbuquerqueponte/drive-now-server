@@ -7,6 +7,11 @@ export class PostgresGetCarByIdRepository implements IPostgresGetCarByIdReposito
       where: {
         id: carId,
       },
+      include: {
+        specifications: true,
+        CarImage: true,
+        reviews: true,
+      },
     });
 
     return car ?? undefined;
