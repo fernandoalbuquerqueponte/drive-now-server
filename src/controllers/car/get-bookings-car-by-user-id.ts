@@ -6,7 +6,9 @@ interface HttpRequest {
 }
 
 export class GetBookingsCarByUserIdController {
-  constructor(private getBookingsCarByUserIdUseCase: GetBookingsCarByUserIdUseCase) {
+  constructor(
+    private getBookingsCarByUserIdUseCase: GetBookingsCarByUserIdUseCase,
+  ) {
     this.getBookingsCarByUserIdUseCase = getBookingsCarByUserIdUseCase;
   }
 
