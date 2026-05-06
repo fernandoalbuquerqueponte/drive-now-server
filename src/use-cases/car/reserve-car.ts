@@ -26,10 +26,10 @@ export class ReserveCarUseCase {
       throw new CarNotFoundError();
     }
 
-    const parsedStartDate = new Date(params.startDate);
-    const parsedEndDate = new Date(params.endDate);
+    const startDate = new Date(params.startDate);
+    const endDate = new Date(params.endDate);
 
-    const hours = parsedEndDate.getTime() - parsedStartDate.getTime();
+    const hours = endDate.getTime() - startDate.getTime();
     const totalHours = hours / (1000 * 60 * 60);
 
     if (totalHours <= 0) {
@@ -39,9 +39,10 @@ export class ReserveCarUseCase {
     const totalPrice = car.pricePerHour * totalHours;
 
     const bookingData: CreateBookingDTO = {
-      ...params,
       carId: carId,
       userId: userId,
+      startDate,
+      endDate,
       totalPrice,
       totalHours,
       status: "PENDING",
