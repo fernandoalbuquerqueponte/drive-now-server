@@ -5,6 +5,7 @@ import {
   makeGetCarByIdController,
   makeGetCarReviewsController,
   makeAddCarReviewController,
+  makeGetBookingsByCarIdController,
   makeGetCarsController,
   makeGetFiltersCarController,
   makeReserveCarController,
@@ -48,6 +49,18 @@ carRoutes.get("/:carId/details", auth, async (req: Request, res: Response) => {
 
   const { body, statusCode } = await getCarByIdController.execute({
     carId: req.params.carId as string,
+  });
+
+  return res.status(statusCode).send(body);
+});
+
+carRoutes.get("/:carId/bookings", auth, async (req: Request, res: Response) => {
+  const getBookingsByCarIdController = makeGetBookingsByCarIdController();
+
+  const { body, statusCode } = await getBookingsByCarIdController.execute({
+    params: {
+      carId: req.params.carId as string,
+    },
   });
 
   return res.status(statusCode).send(body);
