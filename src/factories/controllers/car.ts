@@ -3,6 +3,7 @@ import { DeleteCarController } from "../../controllers/car/delete-car.js";
 import { AddCarReviewController } from "../../controllers/car/add-car-review.js";
 import { GetCarReviewsController } from "../../controllers/car/get-car-reviews.js";
 import { GetBookingsByCarIdController } from "../../controllers/car/get-bookings-by-car-id.js";
+import { GetBookingsCarByUserIdController } from "../../controllers/car/get-bookings-car-by-user-id.js";
 import { GetCarByIdController } from "../../controllers/car/get-car-by-id.js";
 import { ReserveCarController } from "../../controllers/car/reserve-car.js";
 import { UpdateCarController } from "../../controllers/car/update-car.js";
@@ -11,6 +12,7 @@ import { PostgresDeleteCarRepository } from "../../repositories/postgres/car/del
 import { PostgresGetCarByIdRepository } from "../../repositories/postgres/car/get-car-by-id.js";
 import { GetCarReviewsRepository } from "../../repositories/postgres/car/get-car-reviews.js";
 import { PostgresGetBookingsByCarIdRepository } from "../../repositories/postgres/car/get-bookings-by-car-id.js";
+import { PostgresGetBookingsCarByUserId } from "../../repositories/postgres/car/get-bookings-car-by-user-id.js";
 import { PostgresAddCarReviewRepository } from "../../repositories/postgres/car/add-car-review.js";
 import { PostgresReserveCarRepository } from "../../repositories/postgres/car/reserve-car.js";
 import { PostgresUpdateCarRepository } from "../../repositories/postgres/car/update-car.js";
@@ -21,6 +23,7 @@ import { DeleteCarUseCase } from "../../use-cases/car/delete-car.js";
 import { GetCarReviewsUseCase } from "../../use-cases/car/get-car-reviews.js";
 import { AddCarReviewUseCase } from "../../use-cases/car/add-car-review.js";
 import { GetBookingsByCarIdUseCase } from "../../use-cases/car/get-bookings-by-car-id.js";
+import { GetBookingsCarByUserIdUseCase } from "../../use-cases/car/get-bookings-car-by-user-id.js";
 import { GetCarByIdUseCase } from "../../use-cases/car/get-car-by-id.js";
 import { GetCarsUseCase } from "../../use-cases/car/get-cars.js";
 import { ReserveCarUseCase } from "../../use-cases/car/reserve-car.js";
@@ -85,6 +88,18 @@ export const makeGetBookingsByCarIdController = () => {
   );
 
   return getBookingsByCarIdController;
+};
+
+export const makeGetBookingsCarByUserIdController = () => {
+  const getBookingsCarByUserIdRepository = new PostgresGetBookingsCarByUserId();
+  const getBookingsCarByUserIdUseCase = new GetBookingsCarByUserIdUseCase(
+    getBookingsCarByUserIdRepository,
+  );
+  const getBookingsCarByUserIdController = new GetBookingsCarByUserIdController(
+    getBookingsCarByUserIdUseCase,
+  );
+
+  return getBookingsCarByUserIdController;
 };
 
 export const makeGetCarByIdController = () => {
