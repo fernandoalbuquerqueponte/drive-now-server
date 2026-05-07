@@ -1,13 +1,14 @@
 import Stripe from "stripe";
 import type { PostgresBookingRepository } from "../../repositories/postgres/booking/booking.js";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+import { createStripeClient } from "../../adapters/stripe.js";
 
 export class HandleStripeWebhookUseCase {
+  private readonly stripe = createStripeClient();
+
   constructor(private bookingRepository: PostgresBookingRepository) {}
 
   async execute(rawBody: Buffer, stripeSignature: string) {
-    const event = stripe.webhooks.constructEvent(
+    const event = this.stripe.webhooks.constructEvent(
       rawBody,
       stripeSignature,
       process.env.STRIPE_WEBHOOK_SECRET!,
