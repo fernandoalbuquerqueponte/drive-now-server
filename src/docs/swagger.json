@@ -10,7 +10,7 @@
     },
     {
       "url": "https://drive-now-tezp.onrender.com",
-      "description": "Servidor de Produção (Render)"
+      "description": "Servidor de Produção"
     }
   ],
   "tags": [
@@ -61,7 +61,12 @@
       },
       "CreateUser": {
         "type": "object",
-        "required": ["first_name", "last_name", "email", "password"],
+        "required": [
+          "first_name",
+          "last_name",
+          "email",
+          "password"
+        ],
         "properties": {
           "first_name": {
             "type": "string",
@@ -115,7 +120,10 @@
       },
       "Login": {
         "type": "object",
-        "required": ["email", "password"],
+        "required": [
+          "email",
+          "password"
+        ],
         "properties": {
           "email": {
             "type": "string",
@@ -129,7 +137,9 @@
       },
       "RefreshToken": {
         "type": "object",
-        "required": ["refreshToken"],
+        "required": [
+          "refreshToken"
+        ],
         "properties": {
           "refreshToken": {
             "type": "string"
@@ -160,7 +170,9 @@
       },
       "CreateCheckoutSession": {
         "type": "object",
-        "required": ["bookingId"],
+        "required": [
+          "bookingId"
+        ],
         "properties": {
           "bookingId": {
             "type": "string",
@@ -300,7 +312,10 @@
             "type": "array",
             "items": {
               "type": "object",
-              "required": ["label", "value"],
+              "required": [
+                "label",
+                "value"
+              ],
               "properties": {
                 "label": {
                   "type": "string"
@@ -379,7 +394,10 @@
       },
       "ReserveCar": {
         "type": "object",
-        "required": ["startDate", "endDate"],
+        "required": [
+          "startDate",
+          "endDate"
+        ],
         "properties": {
           "startDate": {
             "type": "string",
@@ -393,7 +411,9 @@
       },
       "CreateReview": {
         "type": "object",
-        "required": ["rating"],
+        "required": [
+          "rating"
+        ],
         "properties": {
           "rating": {
             "type": "integer",
@@ -436,7 +456,11 @@
           },
           "status": {
             "type": "string",
-            "enum": ["PENDING", "CONFIRMED", "CANCELLED"]
+            "enum": [
+              "PENDING",
+              "CONFIRMED",
+              "CANCELLED"
+            ]
           }
         }
       },
@@ -471,7 +495,11 @@
           },
           "status": {
             "type": "string",
-            "enum": ["PENDING", "CONFIRMED", "CANCELLED"]
+            "enum": [
+              "PENDING",
+              "CONFIRMED",
+              "CANCELLED"
+            ]
           },
           "car": {
             "$ref": "#/components/schemas/Car"
@@ -546,7 +574,9 @@
   "paths": {
     "/api/users": {
       "post": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Create a new user",
         "requestBody": {
           "required": true,
@@ -592,7 +622,9 @@
         }
       },
       "get": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Get current user",
         "security": [
           {
@@ -633,7 +665,9 @@
         }
       },
       "patch": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Update current user",
         "security": [
           {
@@ -694,7 +728,9 @@
         }
       },
       "delete": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Delete current user",
         "security": [
           {
@@ -737,7 +773,9 @@
     },
     "/api/users/login": {
       "post": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Login user",
         "requestBody": {
           "required": true,
@@ -795,7 +833,9 @@
     },
     "/api/users/refresh-token": {
       "post": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Refresh access token",
         "requestBody": {
           "required": true,
@@ -843,7 +883,9 @@
     },
     "/api/cars": {
       "get": {
-        "tags": ["Cars"],
+        "tags": [
+          "Cars"
+        ],
         "summary": "Get all cars",
         "security": [
           {
@@ -887,7 +929,9 @@
         }
       },
       "post": {
-        "tags": ["Cars"],
+        "tags": [
+          "Cars"
+        ],
         "summary": "Create a new car",
         "security": [
           {
@@ -950,7 +994,9 @@
     },
     "/api/cars/get-filters": {
       "get": {
-        "tags": ["Cars"],
+        "tags": [
+          "Cars"
+        ],
         "summary": "Search cars with filters",
         "security": [
           {
@@ -1038,7 +1084,9 @@
     },
     "/api/cars/bookings/user": {
       "get": {
-        "tags": ["Cars"],
+        "tags": [
+          "Cars"
+        ],
         "summary": "Get bookings for the authenticated user",
         "security": [
           {
@@ -1084,7 +1132,9 @@
     },
     "/api/cars/{carId}": {
       "get": {
-        "tags": ["Cars"],
+        "tags": [
+          "Cars"
+        ],
         "summary": "Get car reviews",
         "security": [
           {
@@ -1139,7 +1189,9 @@
         }
       },
       "patch": {
-        "tags": ["Cars"],
+        "tags": [
+          "Cars"
+        ],
         "summary": "Update car",
         "security": [
           {
@@ -1211,7 +1263,9 @@
         }
       },
       "delete": {
-        "tags": ["Cars"],
+        "tags": [
+          "Cars"
+        ],
         "summary": "Delete car",
         "security": [
           {
@@ -1265,7 +1319,9 @@
     },
     "/api/cars/{carId}/reviews": {
       "post": {
-        "tags": ["Cars"],
+        "tags": [
+          "Cars"
+        ],
         "summary": "Add a review to a car",
         "security": [
           {
@@ -1349,7 +1405,9 @@
     },
     "/api/cars/{carId}/details": {
       "get": {
-        "tags": ["Cars"],
+        "tags": [
+          "Cars"
+        ],
         "summary": "Get car details by ID",
         "security": [
           {
@@ -1413,7 +1471,9 @@
     },
     "/api/cars/reserve/{carId}": {
       "post": {
-        "tags": ["Cars"],
+        "tags": [
+          "Cars"
+        ],
         "summary": "Reserve a car",
         "security": [
           {
@@ -1487,7 +1547,9 @@
     },
     "/api/payments/checkout": {
       "post": {
-        "tags": ["Payments"],
+        "tags": [
+          "Payments"
+        ],
         "summary": "Create a Stripe checkout session for a booking",
         "security": [
           {
@@ -1550,7 +1612,9 @@
     },
     "/api/payments/webhook": {
       "post": {
-        "tags": ["Payments"],
+        "tags": [
+          "Payments"
+        ],
         "summary": "Handle Stripe webhook events",
         "requestBody": {
           "required": true,
