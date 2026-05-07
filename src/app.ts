@@ -5,6 +5,7 @@ import { carRoutes } from "./routes/car.js";
 import { apiReference } from "@scalar/express-api-reference";
 import cors from "cors";
 import swaggerDocument from "./docs/swagger.json" with { type: "json" };
+import { paymentRoutes } from "./routes/payment.js";
 
 export const app = express();
 
@@ -21,6 +22,7 @@ app.use(express.json());
 
 app.use("/api/users", usersRoutes);
 app.use("/api/cars", carRoutes);
+app.use("/api/payments", paymentRoutes);
 
 app.use(
   "/docs",
