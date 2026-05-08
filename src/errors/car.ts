@@ -4,3 +4,10 @@ export class CarNotFoundError extends Error {
     this.name = "CarNotFoundError";
   }
 }
+
+export class BookingNotFound extends Error {
+  constructor() {
+    super("Booking not found");
+    this.name = "BookingNotFoundError";
+  }
+}
