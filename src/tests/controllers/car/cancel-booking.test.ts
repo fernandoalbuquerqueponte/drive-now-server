@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { faker } from "@faker-js/faker";
 import { CancelBookingController } from "../../../controllers/car/cancel-booking.js";
 import type { CancelBookingUseCase } from "../../../use-cases/car/cancel-booking.js";
@@ -67,6 +68,17 @@ describe("CancelBookingController", () => {
       params: {
         bookingId: "invalid_booking_id",
       },
+    });
+
+    expect(result.statusCode).toBe(400);
+  });
+
+  it("should return 400 if userId is not provided", async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.execute({
+      ...httpRequest,
+      userId: undefined as any,
     });
 
     expect(result.statusCode).toBe(400);
