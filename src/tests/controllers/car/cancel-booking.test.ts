@@ -2,6 +2,7 @@
 import { faker } from "@faker-js/faker";
 import { CancelBookingController } from "../../../controllers/car/cancel-booking.js";
 import type { CancelBookingUseCase } from "../../../use-cases/car/cancel-booking.js";
+import { BookingNotFound } from "../../../errors/car.js";
 const userId = faker.string.uuid();
 const bookingId = faker.string.uuid();
 
@@ -106,5 +107,16 @@ describe("CancelBookingController", () => {
     const result = await sut.execute(httpRequest);
 
     expect(result.statusCode).toBe(500);
+  });
+
+  it("should return 404 if throws BookingNotFound", async () => {
+    const { sut, cancelBookingUseCase } = makeSut();
+    jest.spyOn(cancelBookingUseCase, "execute").mockImplementationOnce(() => {
+      throw new BookingNotFound();
+    });
+
+    const result = await sut.execute(httpRequest);
+
+    expect(result.statusCode).toBe(404);
   });
 });
