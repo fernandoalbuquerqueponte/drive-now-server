@@ -47,4 +47,15 @@ describe("CancelBookingController", () => {
 
     expect(executeSpy).toHaveBeenCalledWith(bookingId, userId);
   });
+
+  it("should return 400 if userId is invalid", async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.execute({
+      ...httpRequest,
+      userId: "invalid_user_id",
+    });
+
+    expect(result.statusCode).toBe(400);
+  });
 });
