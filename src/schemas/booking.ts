@@ -14,5 +14,5 @@ export const getBookingsByCarIdSchema = z.object({
 });
 
 export const getBookingsByUserIdSchema = z.object({
-  carId: z.uuid(),
+  userId: z.uuid(),
 });
