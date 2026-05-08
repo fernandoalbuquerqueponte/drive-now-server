@@ -74,4 +74,17 @@ describe("GetBookingsByCarIdController", () => {
 
     expect(bookings.statusCode).toBe(400);
   });
+
+  it("should return 500 if throws generic error", async () => {
+    const { sut, getBookingsByCarIdUseCase } = makeSut();
+    jest
+      .spyOn(getBookingsByCarIdUseCase, "execute")
+      .mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+    const result = await sut.execute(httpRequest);
+
+    expect(result.statusCode).toBe(500);
+  });
 });
