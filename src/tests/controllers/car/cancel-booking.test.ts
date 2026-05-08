@@ -58,4 +58,17 @@ describe("CancelBookingController", () => {
 
     expect(result.statusCode).toBe(400);
   });
+
+  it("should return 400 if bookingId is invalid", async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.execute({
+      ...httpRequest,
+      params: {
+        bookingId: "invalid_booking_id",
+      },
+    });
+
+    expect(result.statusCode).toBe(400);
+  });
 });
