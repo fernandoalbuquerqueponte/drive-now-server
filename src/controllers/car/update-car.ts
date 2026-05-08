@@ -11,7 +11,7 @@ import {
   type UpdateCarSchema,
 } from "../../schemas/car.js";
 import { ForbiddenError } from "../../errors/user.js";
-import { ZodError } from "zod/v3";
+import { ZodError } from "zod";
 import { CarNotFoundError } from "../../errors/car.js";
 
 interface HttpRequest {

@@ -8,7 +8,7 @@ import {
   serverError,
   successResponse,
 } from "../helpers/index.js";
-import { ZodError } from "zod/v3";
+import { ZodError } from "zod";
 
 export class DeleteCarController {
   constructor(private deleteCarUseCase: DeleteCarUseCase) {

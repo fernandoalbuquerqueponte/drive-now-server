@@ -1,7 +1,7 @@
 import type { CreateCarUseCase } from "../../use-cases/car/create-car.js";
 import { badRequest, created, serverError } from "../helpers/index.js";
 import { createCarSchema, type CreateCarSchema } from "../../schemas/car.js";
-import { ZodError } from "zod/v3";
+import { ZodError } from "zod";
 
 interface HttpRequest {
   body: CreateCarSchema;

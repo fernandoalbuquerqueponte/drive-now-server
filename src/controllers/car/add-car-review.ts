@@ -8,7 +8,7 @@ import {
 } from "../helpers/index.js";
 import { createReviewSchema } from "../../schemas/car.js";
 import { CarNotFoundError } from "../../errors/car.js";
-import { ZodError } from "zod/v3";
+import { ZodError } from "zod";
 import type { CreateReviewDTO } from "../../schemas/car.js";
 
 interface HttpRequest {
