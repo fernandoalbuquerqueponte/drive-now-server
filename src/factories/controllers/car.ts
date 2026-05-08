@@ -32,6 +32,10 @@ import { GetCarsController } from "../../controllers/car/get-cars.js";
 import { GetFilterCarController } from "../../controllers/car/get-filter-car.js";
 import { GetFilterCarUseCase } from "../../use-cases/car/get-filter-car.js";
 import { PostgresGetFilterCars } from "../../repositories/postgres/car/get-filter-car.js";
+import { CancelBookingController } from "../../controllers/car/cancel-booking.js";
+import { CancelBookingUseCase } from "../../use-cases/car/cancel-booking.js";
+import { PostgresCancelBookingRepository } from "../../repositories/postgres/car/cancel-booking.js";
+import { PostgresFindBooking } from "../../repositories/postgres/car/find-booking.js";
 
 export const makeCreateCarController = () => {
   const createCarRepository = new PostgresCreateCarRepository();
@@ -168,4 +172,19 @@ export const makeGetFiltersCarController = () => {
   );
 
   return getFilterCarController;
+};
+
+export const makeCancelBookingController = () => {
+  const findBookingRepository = new PostgresFindBooking();
+  const cancelBookingRepository = new PostgresCancelBookingRepository();
+  const cancelBookingUseCase = new CancelBookingUseCase(
+    cancelBookingRepository,
+    findBookingRepository,
+  );
+
+  const cancelBookingController = new CancelBookingController(
+    cancelBookingUseCase,
+  );
+
+  return cancelBookingController;
 };

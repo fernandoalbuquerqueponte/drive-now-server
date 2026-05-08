@@ -11,6 +11,7 @@ import {
   makeGetFiltersCarController,
   makeReserveCarController,
   makeUpdateCarController,
+  makeCancelBookingController,
 } from "../factories/controllers/car.js";
 import { auth } from "../middlewares /auth.js";
 
@@ -137,3 +138,20 @@ carRoutes.get("/", auth, async (_req: Request, res: Response) => {
 
   return res.status(statusCode).send(body);
 });
+
+carRoutes.patch(
+  "/booking/:bookingId/cancel",
+  auth,
+  async (req: Request, res: Response) => {
+    const cancelBookingController = makeCancelBookingController();
+
+    const { body, statusCode } = await cancelBookingController.execute({
+      userId: req.userId,
+      params: {
+        bookingId: req.params.bookingId as string,
+      },
+    });
+
+    return res.status(statusCode).send(body);
+  },
+);
