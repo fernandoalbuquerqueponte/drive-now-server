@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { faker } from "@faker-js/faker";
 import { GetBookingsByCarIdController } from "../../../controllers/car/get-bookings-by-car-id.js";
 import type { GetBookingsByCarIdUseCase } from "../../../use-cases/car/get-bookings-by-car-id.js";
@@ -55,6 +56,19 @@ describe("GetBookingsByCarIdController", () => {
       ...httpRequest,
       params: {
         carId: "invalid_car_id",
+      },
+    });
+
+    expect(bookings.statusCode).toBe(400);
+  });
+
+  it("should return 400 if carId is not provided", async () => {
+    const { sut } = makeSut();
+
+    const bookings = await sut.execute({
+      ...httpRequest,
+      params: {
+        carId: undefined as any,
       },
     });
 
