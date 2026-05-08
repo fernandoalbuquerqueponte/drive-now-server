@@ -90,10 +90,21 @@ describe("CancelBookingController", () => {
     const result = await sut.execute({
       ...httpRequest,
       params: {
-        bookingId: undefined as any
-      }
+        bookingId: undefined as any,
+      },
     });
 
     expect(result.statusCode).toBe(400);
+  });
+
+  it("should return 500 if throws generic error", async () => {
+    const { sut, cancelBookingUseCase } = makeSut();
+    jest.spyOn(cancelBookingUseCase, "execute").mockImplementationOnce(() => {
+      throw new Error();
+    });
+
+    const result = await sut.execute(httpRequest);
+
+    expect(result.statusCode).toBe(500);
   });
 });
