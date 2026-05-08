@@ -29,9 +29,6 @@ import { GetCarsUseCase } from "../../use-cases/car/get-cars.js";
 import { ReserveCarUseCase } from "../../use-cases/car/reserve-car.js";
 import { UpdateCarUseCase } from "../../use-cases/car/update-car.js";
 import { GetCarsController } from "../../controllers/car/get-cars.js";
-import { GetFilterCarController } from "../../controllers/car/get-filter-car.js";
-import { GetFilterCarUseCase } from "../../use-cases/car/get-filter-car.js";
-import { PostgresGetFilterCars } from "../../repositories/postgres/car/get-filter-car.js";
 import { CancelBookingController } from "../../controllers/car/cancel-booking.js";
 import { CancelBookingUseCase } from "../../use-cases/car/cancel-booking.js";
 import { PostgresCancelBookingRepository } from "../../repositories/postgres/car/cancel-booking.js";
@@ -160,18 +157,6 @@ export const makeGetCarsController = () => {
   const getCarsController = new GetCarsController(getCarsUseCase);
 
   return getCarsController;
-};
-
-export const makeGetFiltersCarController = () => {
-  const getFilterCarRepository = new PostgresGetFilterCars();
-
-  const getFilterCarUseCase = new GetFilterCarUseCase(getFilterCarRepository);
-
-  const getFilterCarController = new GetFilterCarController(
-    getFilterCarUseCase,
-  );
-
-  return getFilterCarController;
 };
 
 export const makeCancelBookingController = () => {

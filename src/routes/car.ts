@@ -8,7 +8,6 @@ import {
   makeGetBookingsByCarIdController,
   makeGetBookingsCarByUserIdController,
   makeGetCarsController,
-  makeGetFiltersCarController,
   makeReserveCarController,
   makeUpdateCarController,
   makeCancelBookingController,
@@ -26,24 +25,6 @@ carRoutes.post("/", auth, async (req: Request, res: Response) => {
   });
 
   return res.status(response.statusCode).send(response.body);
-});
-
-carRoutes.get("/get-filters", auth, async (req: Request, res: Response) => {
-  const getCarsController = makeGetFiltersCarController();
-
-  const { search, category, priceRange, transmission, fuel } = req.query;
-
-  const { body, statusCode } = await getCarsController.execute({
-    query: {
-      search: search as string,
-      category: category as string,
-      priceRange: priceRange as string,
-      transmission: transmission as string,
-      fuel: fuel as string,
-    },
-  });
-
-  return res.status(statusCode).send(body);
 });
 
 carRoutes.get("/:carId/details", auth, async (req: Request, res: Response) => {
