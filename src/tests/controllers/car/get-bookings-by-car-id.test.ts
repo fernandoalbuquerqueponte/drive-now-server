@@ -47,4 +47,17 @@ describe("GetBookingsByCarIdController", () => {
 
     expect(executeSpy).toHaveBeenCalledWith(carId);
   });
+
+  it("should return 400 if carId is invalid", async () => {
+    const { sut } = makeSut();
+
+    const bookings = await sut.execute({
+      ...httpRequest,
+      params: {
+        carId: "invalid_car_id",
+      },
+    });
+
+    expect(bookings.statusCode).toBe(400);
+  });
 });
