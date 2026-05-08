@@ -1,12 +1,14 @@
 import { faker } from "@faker-js/faker";
 import { CancelBookingController } from "../../../controllers/car/cancel-booking.js";
 import type { CancelBookingUseCase } from "../../../use-cases/car/cancel-booking.js";
+const userId = faker.string.uuid();
+const bookingId = faker.string.uuid();
 
 describe("CancelBookingController", () => {
   class CancelBookingUseCaseStub {
     async execute() {
       return {
-        bookingId: faker.string.uuid(),
+        bookingId: bookingId,
       };
     }
   }
@@ -23,9 +25,9 @@ describe("CancelBookingController", () => {
   };
 
   const httpRequest = {
-    userId: faker.string.uuid(),
+    userId: userId,
     params: {
-      bookingId: faker.string.uuid(),
+      bookingId: bookingId,
     },
   };
 
@@ -35,5 +37,14 @@ describe("CancelBookingController", () => {
     const result = await sut.execute(httpRequest);
 
     expect(result.statusCode).toBe(200);
+  });
+
+  it("should call CancelBookingUseCase with correct params", async () => {
+    const { sut, cancelBookingUseCase } = makeSut();
+    const executeSpy = jest.spyOn(cancelBookingUseCase, "execute");
+
+    await sut.execute(httpRequest);
+
+    expect(executeSpy).toHaveBeenCalledWith(bookingId, userId);
   });
 });
