@@ -2,7 +2,7 @@ import type { CancelBookingUseCase } from "../../use-cases/car/cancel-booking.js
 import { BookingNotFound } from "../../errors/car.js";
 import { bookingNotFoundResponse } from "../helpers/booking.js";
 import { cancelBookingSchema } from "../../schemas/booking.js";
-import { ZodError } from "zod/v3";
+import { ZodError } from "zod";
 import { badRequest, serverError, successResponse } from "../helpers/http.js";
 
 interface httpRequest {
