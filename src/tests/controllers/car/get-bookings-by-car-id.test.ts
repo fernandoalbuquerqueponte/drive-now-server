@@ -38,4 +38,13 @@ describe("GetBookingsByCarIdController", () => {
 
     expect(bookings.statusCode).toBe(200);
   });
+
+  it("should call GetBookingsByCarIdUseCase with correct params", async () => {
+    const { sut, getBookingsByCarIdUseCase } = makeSut();
+    const executeSpy = jest.spyOn(getBookingsByCarIdUseCase, "execute");
+
+    await sut.execute(httpRequest);
+
+    expect(executeSpy).toHaveBeenCalledWith(carId);
+  });
 });
