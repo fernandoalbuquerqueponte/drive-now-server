@@ -131,10 +131,12 @@ carRoutes.post("/reserve/:carId", auth, async (req: Request, res: Response) => {
   return res.status(statusCode).send(body);
 });
 
-carRoutes.get("/", auth, async (_req: Request, res: Response) => {
+carRoutes.get("/", auth, async (req: Request, res: Response) => {
   const getCarsController = makeGetCarsController();
 
-  const { body, statusCode } = await getCarsController.execute();
+  const { body, statusCode } = await getCarsController.execute({
+    query: req.query,
+  });
 
   return res.status(statusCode).send(body);
 });

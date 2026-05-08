@@ -24,6 +24,18 @@ export const createCarSchema = z.object({
   features: z.array(z.string()),
 });
 
+export const getCarsSchema = z.object({
+  query: z
+    .object({
+      search: z.string().optional(),
+      category: z.string().optional(),
+      priceRange: z.string().optional(),
+      transmission: z.string().optional(),
+      fuel: z.string().optional(),
+    })
+    .optional(),
+});
+
 export const createReserveSchema = z.object({
   startDate: z.string().refine((date) => !isNaN(Date.parse(date)), {
     message: "Invalid date format",
