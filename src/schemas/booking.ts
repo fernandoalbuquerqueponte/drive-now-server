@@ -6,3 +6,9 @@ export const cancelBookingSchema = z.object({
     bookingId: z.uuid(),
   }),
 });
+
+export const getBookingsByCarIdSchema = z.object({
+  params: z.object({
+    carId: z.uuid(),
+  }),
+});

@@ -1,5 +1,7 @@
+import { getBookingsByCarIdSchema } from "../../schemas/booking.js";
 import type { GetBookingsByCarIdUseCase } from "../../use-cases/car/get-bookings-by-car-id.js";
-import { serverError, successResponse } from "../helpers/http.js";
+import { badRequest, serverError, successResponse } from "../helpers/http.js";
+import { ZodError } from "zod";
 
 interface httpRequest {
   params: {
@@ -13,6 +15,7 @@ export class GetBookingsByCarIdController {
   }
   async execute(httpRequest: httpRequest) {
     try {
+      await getBookingsByCarIdSchema.parseAsync(httpRequest);
       const carId = httpRequest.params.carId;
 
       const bookings = await this.getBookingsByCarIdUseCase.execute(carId);
@@ -20,6 +23,9 @@ export class GetBookingsByCarIdController {
       return successResponse(bookings);
     } catch (error) {
       console.error(error);
+      if (error instanceof ZodError) {
+        return badRequest(error.message);
+      }
       return serverError();
     }
   }
