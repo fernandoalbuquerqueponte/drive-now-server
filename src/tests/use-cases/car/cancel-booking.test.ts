@@ -52,4 +52,14 @@ describe("CancelBookingUseCase", () => {
       userId: userId,
     });
   });
+
+  it("should call FindBookingRepository with correct params", async () => {
+    const { sut, findBookingRepository } = makeSut();
+
+    const executeSpy = jest.spyOn(findBookingRepository, "execute");
+
+    await sut.execute(bookingId, userId);
+
+    expect(executeSpy).toHaveBeenCalledWith(bookingId);
+  });
 });
