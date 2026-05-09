@@ -138,4 +138,15 @@ describe("AddCarReviewController", () => {
 
     expect(response.statusCode).toBe(404);
   });
+
+  it("should return 500 if throw generic error", async () => {
+    const { sut, addCarReviewUseCase } = makeSut();
+    jest
+      .spyOn(addCarReviewUseCase, "execute")
+      .mockRejectedValueOnce(new Error());
+
+    const response = await sut.execute(httpRequest);
+
+    expect(response.statusCode).toBe(500);
+  });
 });
