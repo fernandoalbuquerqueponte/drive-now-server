@@ -2,6 +2,7 @@
 import { faker } from "@faker-js/faker";
 import { AddCarReviewController } from "../../../controllers/car/add-car-review.js";
 import type { AddCarReviewUseCase } from "../../../use-cases/car/add-car-review.js";
+import { CarNotFoundError } from "../../../errors/car.js";
 
 describe("AddCarReviewController", () => {
   const userId = faker.string.uuid();
@@ -103,5 +104,16 @@ describe("AddCarReviewController", () => {
     const response = await sut.execute(invalidHttpRequest as any);
 
     expect(response.statusCode).toBe(400);
+  });
+
+  it("should return 404 if throw CarNotFoundError", async () => {
+    const { sut, addCarReviewUseCase } = makeSut();
+    jest
+      .spyOn(addCarReviewUseCase, "execute")
+      .mockRejectedValueOnce(new CarNotFoundError());
+
+    const response = await sut.execute(httpRequest);
+
+    expect(response.statusCode).toBe(404);
   });
 });
