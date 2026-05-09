@@ -57,6 +57,17 @@ describe("AddCarReviewController", () => {
     expect(response.statusCode).toBe(201);
   });
 
+  it("should return 400 if carId is missing", async () => {
+    const { sut } = makeSut();
+
+    const response = await sut.execute({
+      ...httpRequest,
+      carId: undefined,
+    } as any);
+
+    expect(response.statusCode).toBe(400);
+  });
+
   it("should call AddCarReviewUseCase with correct params", async () => {
     const { sut, addCarReviewUseCase } = makeSut();
     const executeSpy = jest.spyOn(addCarReviewUseCase, "execute");
