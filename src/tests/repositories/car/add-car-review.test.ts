@@ -54,7 +54,16 @@ describe("PostgresAddCarReviewRepository", () => {
         comment: "Muito bom",
       },
       include: {
-        user: true,
+        user: {
+          select: {
+            id: true,
+            first_name: true,
+            last_name: true,
+            imageUrl: true,
+            reviews: true,
+            cars: true,
+          },
+        },
       },
     });
   });
