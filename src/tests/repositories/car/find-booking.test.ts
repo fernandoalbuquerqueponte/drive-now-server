@@ -27,4 +27,33 @@ describe("PostgresFindBookingRepository", () => {
     expect(result).toBeTruthy();
     expect(result?.carId).toBe(createdBooking.carId);
   });
+
+  it("should call prisma with correct params", async () => {
+    const createdUser = await prismaClient.user.create({ data: user });
+    const createdCar = await prismaClient.car.create({
+      data: {
+        ...buildPrismaCarData(car),
+        user_id: createdUser.id,
+      },
+    });
+    const createdBooking = await prismaClient.booking.create({
+      data: {
+        ...booking,
+        carId: createdCar.id,
+        userId: createdUser.id,
+      },
+    });
+
+    const sut = new PostgresFindBooking();
+
+    const prismaSpy = jest.spyOn(prismaClient.booking, "findUnique");
+
+    await sut.execute(createdBooking.id);
+
+    expect(prismaSpy).toHaveBeenCalledWith({
+      where: {
+        id: createdBooking.id,
+      },
+    });
+  });
 });
