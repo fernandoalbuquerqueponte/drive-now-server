@@ -12,7 +12,16 @@ export class PostgresAddCarReviewRepository implements IAddCarReviewRepository {
     const review = await prismaClient.review.create({
       data,
       include: {
-        user: true,
+        user: {
+          select: {
+            id: true,
+            first_name: true,
+            last_name: true,
+            imageUrl: true,
+            reviews: true,
+            cars: true,
+          },
+        },
       },
     });
 
