@@ -1,6 +1,8 @@
 import { faker } from "@faker-js/faker";
 import { CancelBookingUseCase } from "../../../use-cases/car/cancel-booking.js";
 import { booking } from "../../fixtures/car.js";
+import { BookingNotFound } from "../../../errors/car.js";
+import type { Booking } from "@prisma/client";
 
 describe("CancelBookingUseCase", () => {
   const userId = faker.string.uuid();
@@ -17,7 +19,7 @@ describe("CancelBookingUseCase", () => {
   }
 
   class FindBookingRepositoryStub {
-    async execute() {
+    async execute(): Promise<Booking | null> {
       return {
         ...booking,
         id: bookingId,
@@ -61,5 +63,14 @@ describe("CancelBookingUseCase", () => {
     await sut.execute(bookingId, userId);
 
     expect(executeSpy).toHaveBeenCalledWith(bookingId);
+  });
+
+  it("should throw BookingNotFound if booking is not found", async () => {
+    const { sut, findBookingRepository } = makeSut();
+    jest.spyOn(findBookingRepository, "execute").mockResolvedValueOnce(null);
+
+    const promise = sut.execute(bookingId, userId);
+
+    await expect(promise).rejects.toThrow(new BookingNotFound());
   });
 });
