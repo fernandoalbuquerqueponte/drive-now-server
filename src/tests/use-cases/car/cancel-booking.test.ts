@@ -3,6 +3,7 @@ import { CancelBookingUseCase } from "../../../use-cases/car/cancel-booking.js";
 import { booking } from "../../fixtures/car.js";
 import { BookingNotFound } from "../../../errors/car.js";
 import type { Booking } from "@prisma/client";
+import { ForbiddenError } from "../../../errors/user.js";
 
 describe("CancelBookingUseCase", () => {
   const userId = faker.string.uuid();
@@ -82,5 +83,21 @@ describe("CancelBookingUseCase", () => {
     const promise = sut.execute(bookingId, userId);
 
     await expect(promise).rejects.toThrow(new BookingNotFound());
+  });
+
+  it("should throw ForbiddenError if booking is not from the user", async () => {
+    const { sut, findBookingRepository } = makeSut();
+
+    const anotherUserId = faker.string.uuid();
+
+    jest.spyOn(findBookingRepository, "execute").mockResolvedValueOnce({
+      ...booking,
+      id: bookingId,
+      userId: anotherUserId,
+    } as Booking);
+
+    const promise = sut.execute(bookingId, userId);
+
+    await expect(promise).rejects.toThrow(new ForbiddenError());
   });
 });
