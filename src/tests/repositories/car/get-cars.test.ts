@@ -101,4 +101,44 @@ describe("GetCarRepository", () => {
       },
     });
   });
+
+  it("should return cars filtered by fuel (specification)", async () => {
+    const createdUser = await prismaClient.user.create({ data: user });
+
+    await prismaClient.car.create({
+      data: {
+        ...buildPrismaCarData(car),
+        user_id: createdUser.id,
+        specifications: {
+          create: [{ label: "Combustível", value: "Flex" }],
+        },
+      },
+    });
+
+    const sut = new GetCarRepository();
+
+    const result = await sut.execute({ fuel: "Flex" });
+
+    expect(result.length).toBe(1);
+
+    const fuelSpec = result[0]!.specifications.find(
+      (s) => s.label === "Combustível",
+    );
+    expect(fuelSpec?.value).toBe("Flex");
+  });
+
+  it("should not apply price filter if an invalid priceRange is provided", async () => {
+    const sut = new GetCarRepository();
+    const prismaSpy = jest.spyOn(prismaClient.car, "findMany");
+
+    await sut.execute({ priceRange: "Preço de Banana" });
+
+    expect(prismaSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: {},
+      }),
+    );
+
+    prismaSpy.mockRestore();
+  });
 });
