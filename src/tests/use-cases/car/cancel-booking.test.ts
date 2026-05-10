@@ -100,4 +100,15 @@ describe("CancelBookingUseCase", () => {
 
     await expect(promise).rejects.toThrow(new ForbiddenError());
   });
+
+  it("should throw if CancelBookingRepository throws", async () => {
+    const { sut, cancelBookingRepository } = makeSut();
+    jest
+      .spyOn(cancelBookingRepository, "execute")
+      .mockRejectedValueOnce(new Error());
+
+    const promise = sut.execute(bookingId, userId);
+
+    await expect(promise).rejects.toThrow(new Error());
+  });
 });
