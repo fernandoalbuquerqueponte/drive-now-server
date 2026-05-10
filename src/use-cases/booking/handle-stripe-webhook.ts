@@ -1,11 +1,13 @@
 import Stripe from "stripe";
-import type { PostgresBookingRepository } from "../../repositories/postgres/booking/booking.js";
 import { createStripeClient } from "../../adapters/stripe.js";
+import type { PostgresBookingUpdateStatusRepository } from "../../repositories/postgres/booking/booking-update-status.js";
 
 export class HandleStripeWebhookUseCase {
   private readonly stripe = createStripeClient();
 
-  constructor(private bookingRepository: PostgresBookingRepository) {}
+  constructor(
+    private bookingUpdateStatus: PostgresBookingUpdateStatusRepository,
+  ) {}
 
   async execute(rawBody: Buffer, stripeSignature: string) {
     const event = this.stripe.webhooks.constructEvent(
@@ -19,7 +21,7 @@ export class HandleStripeWebhookUseCase {
       const bookingId = session.metadata?.bookingId;
 
       if (bookingId) {
-        await this.bookingRepository.updateStatus(bookingId, "CONFIRMED");
+        await this.bookingUpdateStatus.execute(bookingId, "CONFIRMED");
       }
     }
 
