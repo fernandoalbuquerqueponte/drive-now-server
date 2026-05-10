@@ -65,6 +65,16 @@ describe("CancelBookingUseCase", () => {
     expect(executeSpy).toHaveBeenCalledWith(bookingId);
   });
 
+  it("should call CancelBookingRepository with correct params", async () => {
+    const { sut, cancelBookingRepository } = makeSut();
+
+    const executeSpy = jest.spyOn(cancelBookingRepository, "execute");
+
+    await sut.execute(bookingId, userId);
+
+    expect(executeSpy).toHaveBeenCalledWith(bookingId);
+  });
+
   it("should throw BookingNotFound if booking is not found", async () => {
     const { sut, findBookingRepository } = makeSut();
     jest.spyOn(findBookingRepository, "execute").mockResolvedValueOnce(null);
