@@ -44,4 +44,13 @@ describe("GetCarsUseCase", () => {
       },
     ]);
   });
+
+  it("should call GetCarsRepository with correct params", async () => {
+    const { sut, getCarsRepository } = makeSut();
+    const executeSpy = jest.spyOn(getCarsRepository, "execute");
+
+    await sut.execute(filters);
+
+    expect(executeSpy).toHaveBeenCalledWith(filters);
+  });
 });
