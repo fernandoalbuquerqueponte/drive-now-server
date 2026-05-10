@@ -27,4 +27,36 @@ describe("PostgresCancelBookingRepository", () => {
 
     expect(result).toBeTruthy();
   });
+
+  it("should call prisma with correct params", async () => {
+    const createdUser = await prismaClient.user.create({ data: user });
+    const createdCar = await prismaClient.car.create({
+      data: {
+        ...buildPrismaCarData(car),
+        user_id: createdUser.id,
+      },
+    });
+
+    const createdBooking = await prismaClient.booking.create({
+      data: {
+        ...booking,
+        userId: createdUser.id,
+        carId: createdCar.id,
+      },
+    });
+
+    const sut = new PostgresCancelBookingRepository();
+    const prismaSpy = jest.spyOn(prismaClient.booking, "update");
+
+    await sut.execute(createdBooking.id);
+
+    expect(prismaSpy).toHaveBeenCalledWith({
+      where: {
+        id: createdBooking.id,
+      },
+      data: {
+        status: "CANCELLED",
+      },
+    });
+  });
 });
