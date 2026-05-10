@@ -34,4 +34,36 @@ describe("PostgresBookingUpdateStatusRepository", () => {
     expect(result.userId).toBe(createdUser.id);
     expect(result.carId).toBe(createdCar.id);
   });
+
+  it("should call prisma with correct params", async () => {
+    const createdUser = await prismaClient.user.create({ data: user });
+    const createdCar = await prismaClient.car.create({
+      data: {
+        ...buildPrismaCarData(car),
+        user_id: createdUser.id,
+      },
+    });
+
+    const createdBooking = await prismaClient.booking.create({
+      data: {
+        ...booking,
+        userId: createdUser.id,
+        carId: createdCar.id,
+      },
+    });
+
+    const sut = new PostgresBookingUpdateStatusRepository();
+    const executeSpy = jest.spyOn(prismaClient.booking, "update");
+
+    await sut.execute(createdBooking.id, BookingStatus.CONFIRMED);
+
+    expect(executeSpy).toHaveBeenCalledWith({
+      where: {
+        id: createdBooking.id,
+      },
+      data: {
+        status: BookingStatus.CONFIRMED,
+      },
+    });
+  });
 });
