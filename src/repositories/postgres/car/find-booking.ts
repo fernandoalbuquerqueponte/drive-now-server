@@ -6,6 +6,9 @@ export class PostgresFindBooking {
       where: {
         id: bookingId,
       },
+      include: {
+        car: true,
+      },
     });
   }
 }

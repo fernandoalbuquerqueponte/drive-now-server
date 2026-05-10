@@ -1,13 +1,13 @@
-import type { PostgresBookingRepository } from "../../repositories/postgres/booking/booking.js";
 import { createStripeClient } from "../../adapters/stripe.js";
+import type { PostgresFindBooking } from "../../repositories/postgres/car/find-booking.js";
 
 export class CreateCheckoutSessionUseCase {
   private readonly stripe = createStripeClient();
 
-  constructor(private bookingRepository: PostgresBookingRepository) {}
+  constructor(private findBookingRepository: PostgresFindBooking) {}
 
   async execute(bookingId: string) {
-    const booking = await this.bookingRepository.execute(bookingId);
+    const booking = await this.findBookingRepository.execute(bookingId);
 
     if (!booking) {
       throw new Error("Reserva não encontrada");
