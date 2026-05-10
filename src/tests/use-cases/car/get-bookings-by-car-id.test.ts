@@ -42,4 +42,13 @@ describe("GetBookingsByCarIdUseCase", () => {
       },
     ]);
   });
+
+  it("should call GetBookingsRepository with correct params", async () => {
+    const { sut, getBookingsRepository } = makeSut();
+    const executeSpy = jest.spyOn(getBookingsRepository, "execute");
+
+    await sut.execute(carId);
+
+    expect(executeSpy).toHaveBeenCalledWith(carId);
+  });
 });
