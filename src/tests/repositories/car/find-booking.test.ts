@@ -54,6 +54,9 @@ describe("PostgresFindBookingRepository", () => {
       where: {
         id: createdBooking.id,
       },
+      include: {
+        car: true,
+      },
     });
   });
 });
