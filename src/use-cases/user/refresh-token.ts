@@ -17,10 +17,10 @@ export class RefreshTokenUseCase {
 
   async execute(refreshToken: string) {
     try {
-      const decodedToken = this.tokenVerifierAdapter.execute(
+      const decodedToken = (await this.tokenVerifierAdapter.execute(
         refreshToken,
         process.env.JWT_REFRESH_TOKEN_SECRET as string,
-      ) as UserPayload;
+      )) as UserPayload;
 
       if (!decodedToken) {
         throw new ForbiddenError();
