@@ -3,6 +3,10 @@ import { PostgresGetUserByIdRepository } from "../../../repositories/postgres/in
 import { user } from "../../fixtures/user.js";
 
 describe("GetUserByIdRepository", () => {
+  const userWithoutPassword = {
+    ...user,
+    password: undefined,
+  };
   it("should return a user successfully", async () => {
     await prismaClient.user.create({ data: user });
 
@@ -11,7 +15,10 @@ describe("GetUserByIdRepository", () => {
     const result = await sut.execute(user.id);
 
     expect(result).toEqual({
-      ...user,
+      ...userWithoutPassword,
+      bookings: [],
+      cars: [],
+      reviews: [],
       created_at: expect.any(Date),
       updated_at: expect.any(Date),
     });
@@ -35,6 +42,18 @@ describe("GetUserByIdRepository", () => {
     expect(findFirstSpy).toHaveBeenCalledWith({
       where: {
         id: "any-user-id",
+      },
+      select: {
+        bookings: true,
+        reviews: true,
+        cars: true,
+        id: true,
+        first_name: true,
+        last_name: true,
+        email: true,
+        imageUrl: true,
+        created_at: true,
+        updated_at: true,
       },
     });
   });

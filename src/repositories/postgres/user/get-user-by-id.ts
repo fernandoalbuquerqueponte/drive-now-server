@@ -7,6 +7,18 @@ export class PostgresGetUserByIdRepository implements IGetUserByIdRepository {
       where: {
         id: userId,
       },
+      select: {
+        bookings: true,
+        reviews: true,
+        cars: true,
+        id: true,
+        first_name: true,
+        last_name: true,
+        email: true,
+        imageUrl: true,
+        created_at: true,
+        updated_at: true,
+      },
     });
 
     if (!response) {
