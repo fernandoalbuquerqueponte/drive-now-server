@@ -25,5 +25,5 @@ export interface IDeleteUserRepository {
 }
 
 export interface IUpdateUserRepository {
-  execute(userId: string, params: UpdateUserSchema): Promise<UserSchema | null>;
+  execute(userId: string, params: UpdateUserSchema): Promise<User | null>;
 }
