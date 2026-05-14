@@ -46,7 +46,19 @@ describe("GetUserByIdRepository", () => {
       select: {
         bookings: true,
         reviews: true,
-        cars: true,
+        cars: {
+          select: {
+            id: true,
+            brand: true,
+            model: true,
+            category: true,
+            year: true,
+            pricePerHour: true,
+            available: true,
+            image: true,
+            bookings: true,
+          },
+        },
         id: true,
         first_name: true,
         last_name: true,
