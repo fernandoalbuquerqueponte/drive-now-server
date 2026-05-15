@@ -44,7 +44,11 @@ describe("GetUserByIdRepository", () => {
         id: "any-user-id",
       },
       select: {
-        bookings: true,
+        bookings: {
+          include: {
+            car: true,
+          },
+        },
         reviews: true,
         cars: {
           select: {

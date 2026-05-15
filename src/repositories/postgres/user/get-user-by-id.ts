@@ -8,7 +8,11 @@ export class PostgresGetUserByIdRepository implements IGetUserByIdRepository {
         id: userId,
       },
       select: {
-        bookings: true,
+        bookings: {
+          include: {
+            car: true,
+          },
+        },
         reviews: true,
         cars: {
           select: {
