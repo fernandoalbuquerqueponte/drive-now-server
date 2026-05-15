@@ -9,7 +9,7 @@ export class PostgresGetUserByIdRepository implements IGetUserByIdRepository {
       include: {
         bookings: { include: { car: true } },
         reviews: { include: { car: true } },
-        cars: { include: { bookings: true } },
+        cars: { include: { bookings: true, specifications: true } },
       },
     });
 
