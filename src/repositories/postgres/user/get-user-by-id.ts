@@ -1,46 +1,22 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import prismaClient from "../../../../prisma/prisma.js";
 import type { IGetUserByIdRepository } from "../../../types/user.js";
 
 export class PostgresGetUserByIdRepository implements IGetUserByIdRepository {
   async execute(userId: string) {
-    const response = await prismaClient.user.findFirst({
-      where: {
-        id: userId,
-      },
-      select: {
-        bookings: {
-          include: {
-            car: true,
-          },
-        },
-        reviews: true,
-        cars: {
-          select: {
-            id: true,
-            brand: true,
-            model: true,
-            category: true,
-            year: true,
-            pricePerHour: true,
-            available: true,
-            image: true,
-            bookings: true,
-          },
-        },
-        id: true,
-        first_name: true,
-        last_name: true,
-        email: true,
-        imageUrl: true,
-        created_at: true,
-        updated_at: true,
+    const user = await prismaClient.user.findUnique({
+      where: { id: userId },
+      include: {
+        bookings: { include: { car: true } },
+        reviews: { include: { car: true } },
+        cars: { include: { bookings: true } },
       },
     });
 
-    if (!response) {
-      return null;
-    }
+    if (!user) return null;
 
-    return response;
+    const { password, ...userWithoutPassword } = user;
+
+    return userWithoutPassword;
   }
 }

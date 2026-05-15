@@ -33,50 +33,25 @@ describe("GetUserByIdRepository", () => {
   });
 
   it("should call prisma with correct params", async () => {
-    const findFirstSpy = jest.spyOn(prismaClient.user, "findFirst");
+    const findFirstSpy = jest.spyOn(prismaClient.user, "findUnique");
 
     const sut = new PostgresGetUserByIdRepository();
 
     await sut.execute("any-user-id");
 
     expect(findFirstSpy).toHaveBeenCalledWith({
-      where: {
-        id: "any-user-id",
-      },
-      select: {
-        bookings: {
-          include: {
-            car: true,
-          },
-        },
-        reviews: true,
-        cars: {
-          select: {
-            id: true,
-            brand: true,
-            model: true,
-            category: true,
-            year: true,
-            pricePerHour: true,
-            available: true,
-            image: true,
-            bookings: true,
-          },
-        },
-        id: true,
-        first_name: true,
-        last_name: true,
-        email: true,
-        imageUrl: true,
-        created_at: true,
-        updated_at: true,
+      where: { id: "any-user-id" },
+      include: {
+        bookings: { include: { car: true } },
+        reviews: { include: { car: true } },
+        cars: { include: { bookings: true } },
       },
     });
   });
 
   it("should throw an error if prisma throws an error", async () => {
     const sut = new PostgresGetUserByIdRepository();
-    jest.spyOn(prismaClient.user, "findFirst").mockRejectedValue(new Error());
+    jest.spyOn(prismaClient.user, "findUnique").mockRejectedValue(new Error());
 
     const promise = sut.execute("any-user-id");
 
