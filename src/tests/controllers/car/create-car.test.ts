@@ -3,7 +3,6 @@ import { faker } from "@faker-js/faker";
 import { CreateCarController } from "../../../controllers/car/create-car.js";
 import { CreateCarUseCase } from "../../../use-cases/car/create-car.js";
 import type { CreateCarSchema } from "../../../schemas/car.js";
-import { car } from "../../fixtures/index.js";
 
 describe("CreateCarController", () => {
   class CreateCarUseCaseStub {
@@ -31,8 +30,19 @@ describe("CreateCarController", () => {
   const httpRequest = {
     userId: faker.string.uuid(),
     body: {
-      ...car,
-      id: undefined,
+      brand: "Porsche",
+      model: "911 Carrera",
+      category: "esportivo",
+      description: "Carro esportivo de altíssimo desempenho para locação.",
+      year: "2026",
+      pricePerHour: "150.00",
+      available: "true",
+      specifications: JSON.stringify([{ label: "Motor", value: "4.0 V8" }]),
+      features: JSON.stringify([{ value: "Teto Solar" }]),
+    },
+    files: {
+      image: [{ filename: "mock-porsche.jpg" }],
+      gallery: [{ filename: "gallery-1.jpg" }, { filename: "gallery-2.jpg" }],
     },
   } as any;
 
@@ -76,7 +86,7 @@ describe("CreateCarController", () => {
       ...httpRequest,
       body: {
         ...httpRequest.body,
-        specifications: [{ label: "Motor" }],
+        specifications: JSON.stringify([{ label: "Motor" }]),
       },
     });
 
@@ -90,35 +100,7 @@ describe("CreateCarController", () => {
       ...httpRequest,
       body: {
         ...httpRequest.body,
-        features: "invalid_features",
-      },
-    });
-
-    expect(result.statusCode).toBe(400);
-  });
-
-  it("should return 400 if image is invalid", async () => {
-    const { sut } = makeSut();
-
-    const result = await sut.execute({
-      ...httpRequest,
-      body: {
-        ...httpRequest.body,
-        image: "invalid_url",
-      },
-    });
-
-    expect(result.statusCode).toBe(400);
-  });
-
-  it("should return 400 if gallery is invalid", async () => {
-    const { sut } = makeSut();
-
-    const result = await sut.execute({
-      ...httpRequest,
-      body: {
-        ...httpRequest.body,
-        gallery: ["invalid_url1", "invalid_url2"],
+        features: JSON.stringify([123]),
       },
     });
 
@@ -221,14 +203,29 @@ describe("CreateCarController", () => {
     expect(result.statusCode).toBe(500);
   });
 
-  it("should call CreateCarUseCase with correct params", async () => {
+  it("should call CreateCarUseCase with correct parsed and mapped params", async () => {
     const { sut, createCarUseCase } = makeSut();
     const executeSpy = jest.spyOn(createCarUseCase, "execute");
 
     await sut.execute(httpRequest);
 
     expect(executeSpy).toHaveBeenCalledWith(
-      httpRequest.body,
+      {
+        brand: "Porsche",
+        model: "911 Carrera",
+        category: "esportivo",
+        description: "Carro esportivo de altíssimo desempenho para locação.",
+        year: 2026,
+        pricePerHour: 150.0,
+        available: true,
+        image: "http://localhost:3333/uploads/mock-porsche.jpg",
+        gallery: [
+          "http://localhost:3333/uploads/gallery-1.jpg",
+          "http://localhost:3333/uploads/gallery-2.jpg",
+        ],
+        specifications: [{ label: "Motor", value: "4.0 V8" }],
+        features: ["Teto Solar"],
+      },
       httpRequest.userId,
     );
   });

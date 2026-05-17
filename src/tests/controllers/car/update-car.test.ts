@@ -16,9 +16,21 @@ describe("UpdateCarController", () => {
     carId: faker.string.uuid(),
     userId: faker.string.uuid(),
     body: {
-      ...car,
+      brand: "Porsche",
+      model: "911 Carrera",
+      category: "esportivo",
+      description: "Carro esportivo de altíssimo desempenho para locação.",
+      year: "2026",
+      pricePerHour: "150.00",
+      available: "true",
+      specifications: JSON.stringify([{ label: "Motor", value: "4.0 V8" }]),
+      features: JSON.stringify([{ value: "Teto Solar" }]),
     },
-  };
+    files: {
+      image: [{ filename: "mock-porsche.jpg" }],
+      gallery: [{ filename: "gallery-1.jpg" }],
+    },
+  } as any;
 
   const makeSut = () => {
     const updateCarUseCase =
@@ -87,7 +99,7 @@ describe("UpdateCarController", () => {
       ...httpRequest,
       body: {
         ...httpRequest.body,
-        specifications: [{ label: "Motor" }] as any,
+        specifications: JSON.stringify([{ label: "Motor" }]) as any,
       },
     });
 
@@ -101,7 +113,7 @@ describe("UpdateCarController", () => {
       ...httpRequest,
       body: {
         ...httpRequest.body,
-        features: "invalid_features" as any,
+        features: JSON.stringify([123]) as any,
       },
     });
 
@@ -113,6 +125,7 @@ describe("UpdateCarController", () => {
 
     const result = await sut.execute({
       ...httpRequest,
+      files: undefined,
       body: {
         ...httpRequest.body,
         image: "invalid_url",
@@ -127,6 +140,7 @@ describe("UpdateCarController", () => {
 
     const result = await sut.execute({
       ...httpRequest,
+      files: undefined,
       body: {
         ...httpRequest.body,
         gallery: ["invalid_url1", "invalid_url2"],
@@ -156,7 +170,19 @@ describe("UpdateCarController", () => {
 
     expect(executeSpy).toHaveBeenCalledWith(
       httpRequest.carId,
-      httpRequest.body,
+      {
+        brand: "Porsche",
+        model: "911 Carrera",
+        category: "esportivo",
+        description: "Carro esportivo de altíssimo desempenho para locação.",
+        year: 2026,
+        pricePerHour: 150.0,
+        available: true,
+        image: "http://localhost:3333/uploads/mock-porsche.jpg",
+        gallery: ["http://localhost:3333/uploads/gallery-1.jpg"],
+        specifications: [{ label: "Motor", value: "4.0 V8" }],
+        features: ["Teto Solar"],
+      },
       httpRequest.userId,
     );
   });
