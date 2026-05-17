@@ -1,27 +1,42 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { z } from "zod";
 
 export const createCarSchema = z.object({
   brand: z.string(),
   model: z.string(),
   category: z.string(),
-
-  image: z.string().url(),
-
+  image: z.url(),
   gallery: z.array(z.string().url()).optional(),
-
-  year: z.number().int(),
-  pricePerHour: z.number().positive(),
+  year: z.coerce.number().int().min(1900, "Ano inválido"),
+  pricePerHour: z.coerce
+    .number()
+    .min(0, "O preço deve ser maior ou igual a zero"),
   description: z.string(),
-  available: z.boolean().optional(),
+  available: z
+    .preprocess((val) => val === "true" || val === true, z.boolean())
+    .default(true),
 
-  specifications: z.array(
-    z.object({
-      label: z.string(),
-      value: z.string(),
-    }),
-  ),
+  specifications: z
+    .preprocess(
+      (val) => (typeof val === "string" ? JSON.parse(val) : val),
+      z.array(
+        z.object({
+          label: z.string().min(1),
+          value: z.string().min(1, "O valor é obrigatório"),
+        }),
+      ),
+    )
+    .default([]),
 
-  features: z.array(z.string()),
+  features: z
+    .preprocess((val) => {
+      if (typeof val === "string") {
+        const parsed = JSON.parse(val);
+        return parsed.map((f: any) => (typeof f === "object" ? f.value : f));
+      }
+      return val;
+    }, z.array(z.string()))
+    .default([]),
 });
 
 export const getCarsSchema = z.object({

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { UpdateCarUseCase } from "../../use-cases/car/update-car.js";
 import {
   badRequest,
@@ -18,6 +19,7 @@ interface HttpRequest {
   body: UpdateCarSchema;
   userId: string;
   carId: string;
+  files?: any;
 }
 
 export class UpdateCarController {
@@ -28,13 +30,24 @@ export class UpdateCarController {
     try {
       const { carId, userId } = updateCarParamsSchema.parse(httpRequest);
 
-      const data = httpRequest.body;
+      const params = { ...httpRequest.body };
+      const files = httpRequest.files;
 
-      await updateCarSchema.parseAsync(data);
+      if (files && files["image"] && files["image"][0]) {
+        params.image = `http://localhost:3333/uploads/${files["image"][0].filename}`;
+      }
+
+      if (files && files["gallery"]) {
+        params.gallery = files["gallery"].map(
+          (file: any) => `http://localhost:3333/uploads/${file.filename}`,
+        );
+      }
+
+      const validatedData = await updateCarSchema.parseAsync(params);
 
       const updatedCar = await this.updateCarUseCase.execute(
         carId,
-        data,
+        validatedData,
         userId,
       );
       return successResponse(updatedCar);

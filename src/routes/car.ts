@@ -13,19 +13,26 @@ import {
   makeCancelBookingController,
 } from "../factories/controllers/car.js";
 import { auth } from "../middlewares /auth.js";
+import { uploadCarImages } from "../middlewares /multer.js";
 
 export const carRoutes = Router();
 
-carRoutes.post("/", auth, async (req: Request, res: Response) => {
-  const createCarController = makeCreateCarController();
+carRoutes.post(
+  "/",
+  auth,
+  uploadCarImages,
+  async (req: Request, res: Response) => {
+    const createCarController = makeCreateCarController();
 
-  const response = await createCarController.execute({
-    userId: req.userId,
-    body: req.body,
-  });
+    const response = await createCarController.execute({
+      userId: req.userId,
+      body: req.body,
+      files: req.files,
+    });
 
-  return res.status(response.statusCode).send(response.body);
-});
+    return res.status(response.statusCode).send(response.body);
+  },
+);
 
 carRoutes.get("/:carId/details", auth, async (req: Request, res: Response) => {
   const getCarByIdController = makeGetCarByIdController();
@@ -88,17 +95,23 @@ carRoutes.delete("/:carId", auth, async (req: Request, res: Response) => {
   return res.status(statusCode).send(body);
 });
 
-carRoutes.patch("/:carId", auth, async (req: Request, res: Response) => {
-  const updateCarController = makeUpdateCarController();
+carRoutes.patch(
+  "/:carId",
+  auth,
+  uploadCarImages,
+  async (req: Request, res: Response) => {
+    const updateCarController = makeUpdateCarController();
 
-  const { body, statusCode } = await updateCarController.execute({
-    carId: req.params.carId as string,
-    userId: req.userId,
-    body: req.body,
-  });
+    const { body, statusCode } = await updateCarController.execute({
+      carId: req.params.carId as string,
+      userId: req.userId,
+      body: req.body,
+      files: req.files,
+    });
 
-  return res.status(statusCode).send(body);
-});
+    return res.status(statusCode).send(body);
+  },
+);
 
 carRoutes.post("/reserve/:carId", auth, async (req: Request, res: Response) => {
   const reserveCarController = makeReserveCarController();
