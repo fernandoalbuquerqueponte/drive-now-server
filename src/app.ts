@@ -6,6 +6,7 @@ import { apiReference } from "@scalar/express-api-reference";
 import cors from "cors";
 import swaggerDocument from "./docs/swagger.json" with { type: "json" };
 import { paymentRoutes } from "./routes/payment.js";
+import path from "path";
 
 export const app = express();
 
@@ -21,6 +22,7 @@ app.use(
 app.use("/api/payments/webhook", express.raw({ type: "application/json" }));
 
 app.use(express.json());
+app.use("/uploads", express.static(path.resolve("uploads")));
 
 app.use("/api/users", usersRoutes);
 app.use("/api/cars", carRoutes);
