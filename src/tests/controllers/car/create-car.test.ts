@@ -218,10 +218,10 @@ describe("CreateCarController", () => {
         year: 2026,
         pricePerHour: 150.0,
         available: true,
-        image: "http://localhost:3333/uploads/mock-porsche.jpg",
+        image: "https://drive-now-tezp.onrender.com/uploads/mock-porsche.jpg",
         gallery: [
-          "http://localhost:3333/uploads/gallery-1.jpg",
-          "http://localhost:3333/uploads/gallery-2.jpg",
+          "https://drive-now-tezp.onrender.com/uploads/gallery-1.jpg",
+          "https://drive-now-tezp.onrender.com/uploads/gallery-2.jpg",
         ],
         specifications: [{ label: "Motor", value: "4.0 V8" }],
         features: ["Teto Solar"],
