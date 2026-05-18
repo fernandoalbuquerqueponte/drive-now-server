@@ -34,12 +34,13 @@ export class UpdateCarController {
       const files = httpRequest.files;
 
       if (files && files["image"] && files["image"][0]) {
-        params.image = `http://localhost:3333/uploads/${files["image"][0].filename}`;
+        params.image = `https://drive-now-tezp.onrender.com/${files["image"][0].filename}`;
       }
 
       if (files && files["gallery"]) {
         params.gallery = files["gallery"].map(
-          (file: any) => `http://localhost:3333/uploads/${file.filename}`,
+          (file: any) =>
+            `https://drive-now-tezp.onrender.com/uploads/${file.filename}`,
         );
       }
 
