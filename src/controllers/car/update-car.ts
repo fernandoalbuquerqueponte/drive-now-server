@@ -34,7 +34,7 @@ export class UpdateCarController {
       const files = httpRequest.files;
 
       if (files && files["image"] && files["image"][0]) {
-        params.image = `https://drive-now-tezp.onrender.com/${files["image"][0].filename}`;
+        params.image = `https://drive-now-tezp.onrender.com/uploads/${files["image"][0].filename}`;
       }
 
       if (files && files["gallery"]) {
