@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { UpdateUserUseCase } from "../../use-cases/user/update-user.js";
 import { ZodError } from "zod";
 
@@ -14,6 +15,7 @@ import { UserAlreadyExistsError } from "../../errors/user.js";
 interface UpdateUserRequest {
   userId: string;
   body: UpdateUserSchema;
+  files?: any;
 }
 
 export class UpdateUserController {
@@ -23,14 +25,22 @@ export class UpdateUserController {
   async execute(httpRequest: UpdateUserRequest) {
     try {
       const { userId, body } = httpRequest;
+      const files = httpRequest.files;
       const isIdValid = checkIfIdIsValid(userId);
 
       if (!isIdValid) {
         return invalidIdResponse();
       }
-      await updateUserSchema.parseAsync(body);
+      if (files && files["imageUrl"] && files["imageUrl"][0]) {
+        body.imageUrl = `https://drive-now-tezp.onrender.com/uploads/${files["imageUrl"][0].filename}`;
+      }
 
-      const updatedUser = await this.updateUserUseCase.execute(userId, body);
+      const validatedUser = await updateUserSchema.parseAsync(body);
+
+      const updatedUser = await this.updateUserUseCase.execute(
+        userId,
+        validatedUser,
+      );
 
       return successResponse(updatedUser);
     } catch (error) {

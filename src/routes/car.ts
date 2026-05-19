@@ -12,8 +12,8 @@ import {
   makeUpdateCarController,
   makeCancelBookingController,
 } from "../factories/controllers/car.js";
-import { auth } from "../middlewares /auth.js";
-import { uploadCarImages } from "../middlewares /multer.js";
+import { auth } from "../middlewares/auth.js";
+import { uploadCarImages } from "../middlewares/multer.js";
 
 export const carRoutes = Router();
 

@@ -12,6 +12,10 @@ const storage = multer.diskStorage({
 });
 
 export const uploadCarImages = multer({ storage }).fields([
-  { name: "image", maxCount: 1 }, // Apenas 1 imagem principal
-  { name: "gallery", maxCount: 20 }, // Até 20 imagens na galeria
+  { name: "image", maxCount: 1 },
+  { name: "gallery", maxCount: 20 },
+]);
+
+export const uploadUserImage = multer({ storage }).fields([
+  { name: "imageUrl", maxCount: 1 },
 ]);

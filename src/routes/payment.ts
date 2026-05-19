@@ -1,5 +1,5 @@
 import express, { type Request, type Response } from "express";
-import { auth } from "../middlewares /auth.js";
+import { auth } from "../middlewares/auth.js";
 import {
   makeCreateCheckoutSessionController,
   makeHandleStripeWebhookController,

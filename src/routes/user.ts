@@ -8,7 +8,8 @@ import {
   makeRefreshTokenController,
   makeUpdateUserController,
 } from "../factories/controllers/user.js";
-import { auth } from "../middlewares /auth.js";
+import { auth } from "../middlewares/auth.js";
+import { uploadUserImage } from "../middlewares/multer.js";
 
 export const usersRoutes = Router();
 
@@ -38,16 +39,22 @@ usersRoutes.delete("/", auth, async (request: Request, response: Response) => {
   response.status(statusCode).send(body);
 });
 
-usersRoutes.patch("/", auth, async (request: Request, response: Response) => {
-  const updateUserController = makeUpdateUserController();
+usersRoutes.patch(
+  "/",
+  auth,
+  uploadUserImage,
+  async (request: Request, response: Response) => {
+    const updateUserController = makeUpdateUserController();
 
-  const { body, statusCode } = await updateUserController.execute({
-    userId: request.userId,
-    body: request.body,
-  });
+    const { body, statusCode } = await updateUserController.execute({
+      userId: request.userId,
+      body: request.body,
+      files: request.files,
+    });
 
-  response.status(statusCode).send(body);
-});
+    response.status(statusCode).send(body);
+  },
+);
 
 usersRoutes.post("/login", async (request: Request, response: Response) => {
   const loginUserController = makeLoginUserController();
