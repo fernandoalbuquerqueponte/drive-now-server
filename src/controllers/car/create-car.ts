@@ -3,6 +3,7 @@ import type { CreateCarUseCase } from "../../use-cases/car/create-car.js";
 import { badRequest, created, serverError } from "../helpers/index.js";
 import { createCarSchema } from "../../schemas/car.js";
 import { ZodError } from "zod";
+import { uploadToCloudinary } from "../../middlewares/multer.js";
 
 interface HttpRequest {
   body: any;
@@ -25,13 +26,17 @@ export class CreateCarController {
       }
 
       if (files && files["image"] && files["image"][0]) {
-        params.image = `https://drive-now-tezp.onrender.com/uploads/${files["image"][0].filename}`;
+        params.image = await uploadToCloudinary(
+          files["image"][0].buffer,
+          "drive-now-uploads",
+        );
       }
 
       if (files && files["gallery"]) {
-        params.gallery = files["gallery"].map(
-          (file: any) =>
-            `https://drive-now-tezp.onrender.com/uploads/${file.filename}`,
+        params.gallery = await Promise.all(
+          files["gallery"].map(async (file: any) => {
+            return await uploadToCloudinary(file.buffer, "drive-now-uploads");
+          }),
         );
       }
 

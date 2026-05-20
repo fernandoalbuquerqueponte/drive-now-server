@@ -1,15 +1,33 @@
 import multer from "multer";
-// import path from "path";
-import crypto from "crypto";
+import { v2 as cloudinary } from "cloudinary";
 
-const storage = multer.diskStorage({
-  destination: "uploads/",
-  filename: (req, file, callback) => {
-    const fileHash = crypto.randomBytes(10).toString("hex");
-    const fileName = `${fileHash}-${file.originalname.replace(/\s/g, "")}`;
-    callback(null, fileName);
-  },
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+
+export const uploadToCloudinary = (
+  fileBuffer: Buffer,
+  folder: string,
+): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        folder,
+        allowed_formats: ["jpg", "png", "jpeg", "webp"],
+      },
+      (error, result) => {
+        if (error) return reject(error);
+        resolve(result!.secure_url);
+      },
+    );
+
+    uploadStream.end(fileBuffer);
+  });
+};
+
+const storage = multer.memoryStorage();
 
 export const uploadCarImages = multer({ storage }).fields([
   { name: "image", maxCount: 1 },

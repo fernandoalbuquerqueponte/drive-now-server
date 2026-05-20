@@ -11,6 +11,7 @@ import {
   invalidIdResponse,
 } from "../helpers/index.js";
 import { UserAlreadyExistsError } from "../../errors/user.js";
+import { uploadToCloudinary } from "../../middlewares/multer.js";
 
 interface UpdateUserRequest {
   userId: string;
@@ -31,8 +32,12 @@ export class UpdateUserController {
       if (!isIdValid) {
         return invalidIdResponse();
       }
+
       if (files && files["imageUrl"] && files["imageUrl"][0]) {
-        body.imageUrl = `https://drive-now-tezp.onrender.com/uploads/${files["imageUrl"][0].filename}`;
+        body.imageUrl = await uploadToCloudinary(
+          files["imageUrl"][0].buffer,
+          "drive-now-uploads",
+        );
       }
 
       const validatedUser = await updateUserSchema.parseAsync(body);

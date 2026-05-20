@@ -14,6 +14,7 @@ import {
 import { ForbiddenError } from "../../errors/user.js";
 import { ZodError } from "zod";
 import { CarNotFoundError } from "../../errors/car.js";
+import { uploadToCloudinary } from "../../middlewares/multer.js";
 
 interface HttpRequest {
   body: UpdateCarSchema;
@@ -34,13 +35,17 @@ export class UpdateCarController {
       const files = httpRequest.files;
 
       if (files && files["image"] && files["image"][0]) {
-        params.image = `https://drive-now-tezp.onrender.com/uploads/${files["image"][0].filename}`;
+        params.image = await uploadToCloudinary(
+          files["image"][0].buffer,
+          "drive-now-uploads",
+        );
       }
 
       if (files && files["gallery"]) {
-        params.gallery = files["gallery"].map(
-          (file: any) =>
-            `https://drive-now-tezp.onrender.com/uploads/${file.filename}`,
+        params.gallery = await Promise.all(
+          files["gallery"].map(async (file: any) => {
+            return await uploadToCloudinary(file.buffer, "drive-now-uploads");
+          }),
         );
       }
 

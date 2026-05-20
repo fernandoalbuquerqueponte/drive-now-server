@@ -4,6 +4,12 @@ import { CreateCarController } from "../../../controllers/car/create-car.js";
 import { CreateCarUseCase } from "../../../use-cases/car/create-car.js";
 import type { CreateCarSchema } from "../../../schemas/car.js";
 
+jest.mock("../../../middlewares/multer.js", () => ({
+  uploadToCloudinary: jest
+    .fn()
+    .mockResolvedValue("https://res.cloudinary.com/mock-cloud/image.jpg"),
+}));
+
 describe("CreateCarController", () => {
   class CreateCarUseCaseStub {
     async execute(carData: CreateCarSchema, userId: string) {
@@ -41,8 +47,20 @@ describe("CreateCarController", () => {
       features: JSON.stringify([{ value: "Teto Solar" }]),
     },
     files: {
-      image: [{ filename: "mock-porsche.jpg" }],
-      gallery: [{ filename: "gallery-1.jpg" }, { filename: "gallery-2.jpg" }],
+      image: [
+        {
+          originalname: "porsche.jpg",
+          buffer: Buffer.from("fake"),
+          mimetype: "image/jpeg",
+        },
+      ],
+      gallery: [
+        {
+          originalname: "g1.jpg",
+          buffer: Buffer.from("fake"),
+          mimetype: "image/jpeg",
+        },
+      ],
     },
   } as any;
 
@@ -218,11 +236,8 @@ describe("CreateCarController", () => {
         year: 2026,
         pricePerHour: 150.0,
         available: true,
-        image: "https://drive-now-tezp.onrender.com/uploads/mock-porsche.jpg",
-        gallery: [
-          "https://drive-now-tezp.onrender.com/uploads/gallery-1.jpg",
-          "https://drive-now-tezp.onrender.com/uploads/gallery-2.jpg",
-        ],
+        image: "https://res.cloudinary.com/mock-cloud/image.jpg",
+        gallery: ["https://res.cloudinary.com/mock-cloud/image.jpg"],
         specifications: [{ label: "Motor", value: "4.0 V8" }],
         features: ["Teto Solar"],
       },
