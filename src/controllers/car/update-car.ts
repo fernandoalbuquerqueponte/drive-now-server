@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { UpdateCarUseCase } from "../../use-cases/car/update-car.js";
 import {
   badRequest,
@@ -20,7 +19,9 @@ interface HttpRequest {
   body: UpdateCarSchema;
   userId: string;
   carId: string;
-  files?: any;
+  files?: {
+    [fieldname: string]: Express.Multer.File[];
+  };
 }
 
 export class UpdateCarController {
@@ -43,7 +44,7 @@ export class UpdateCarController {
 
       if (files && files["gallery"]) {
         params.gallery = await Promise.all(
-          files["gallery"].map(async (file: any) => {
+          files["gallery"].map(async (file: Express.Multer.File) => {
             return await uploadToCloudinary(file.buffer, "drive-now-uploads");
           }),
         );
