@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { CreateCarUseCase } from "../../use-cases/car/create-car.js";
 import { badRequest, created, serverError } from "../helpers/index.js";
 import { createCarSchema } from "../../schemas/car.js";
@@ -6,9 +5,11 @@ import { ZodError } from "zod";
 import { uploadToCloudinary } from "../../middlewares/multer.js";
 
 interface HttpRequest {
-  body: any;
+  body: Record<string, unknown>;
   userId: string;
-  files?: any;
+  files?: {
+    [fieldname: string]: Express.Multer.File[];
+  };
 }
 
 export class CreateCarController {
@@ -34,7 +35,7 @@ export class CreateCarController {
 
       if (files && files["gallery"]) {
         params.gallery = await Promise.all(
-          files["gallery"].map(async (file: any) => {
+          files["gallery"].map(async (file: Express.Multer.File) => {
             return await uploadToCloudinary(file.buffer, "drive-now-uploads");
           }),
         );
